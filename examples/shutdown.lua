@@ -1,0 +1,7 @@
+ImportPackage("conio")
+ImportPackage("system")
+SetConsoleTitle("Shutdown")
+Print("Time to shutdown : ")
+local x = GetInput()
+Sleep(tonumber(x),true)
+Shutdown()
