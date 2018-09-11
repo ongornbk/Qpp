@@ -13,10 +13,31 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Packages">
+      <UniqueIdentifier>{1880c379-cb2b-455d-a54f-894b1321c805}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Package.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PackageMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="luaH.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Console.h">
+      <Filter>Packages</Filter>
+    </ClInclude>
+    <ClInclude Include="Math.h">
+      <Filter>Packages</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -25,6 +46,21 @@
     </ClCompile>
     <ClCompile Include="R11.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LuaManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Package.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PackageMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Console.cpp">
+      <Filter>Packages</Filter>
+    </ClCompile>
+    <ClCompile Include="Math.cpp">
+      <Filter>Packages</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
