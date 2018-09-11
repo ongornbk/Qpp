@@ -17,12 +17,12 @@ struct Console
 
 	DWORD events;
 	CONSOLE_CURSOR_INFO cci;
-	cci.bVisible = true;
-	SetConsoleCursorInfo(hout, &cci);
+	//cci.bVisible = true;
+	//SetConsoleCursorInfo(hout, &cci);
 	SetConsoleTextAttribute(hout, 10u);
-	SetConsoleMode(hin, ENABLE_PROCESSED_INPUT | ENABLE_MOUSE_INPUT);
+	//SetConsoleMode(hin, ENABLE_PROCESSED_INPUT | ENABLE_MOUSE_INPUT);
 	SetConsoleTitleA("main.lua");
-	SetConsoleDisplayMode(hout, CONSOLE_FULLSCREEN_MODE, 0);
+	//SetConsoleDisplayMode(hout, CONSOLE_FULLSCREEN_MODE, 0);
 	}
 
 	HWND console_window;

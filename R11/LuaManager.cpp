@@ -32,6 +32,7 @@ LuaManager::LuaManager()
 	m_lua = nullptr;
 	CreatePackage("conio", ConsolePackageInitializer);
 	CreatePackage("math", MathPackageInitializer);
+	CreatePackage("system", SystemPackageInitializer);
 }
 
 LuaManager::~LuaManager()

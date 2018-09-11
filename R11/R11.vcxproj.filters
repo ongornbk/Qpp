@@ -39,6 +39,9 @@
     <ClInclude Include="Math.h">
       <Filter>Packages</Filter>
     </ClInclude>
+    <ClInclude Include="System.h">
+      <Filter>Packages</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -62,5 +65,11 @@
     <ClCompile Include="Math.cpp">
       <Filter>Packages</Filter>
     </ClCompile>
+    <ClCompile Include="System.cpp">
+      <Filter>Packages</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="main.lua" />
   </ItemGroup>
 </Project>

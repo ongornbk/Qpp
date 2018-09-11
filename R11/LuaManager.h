@@ -19,6 +19,8 @@ private:
 
 	friend void _stdcall ConsolePackageInitializer();
 	friend void _stdcall MathPackageInitializer();
+	friend void _stdcall SystemPackageInitializer();
+
 	friend int32_t _cdecl ImportPackage(lua_State* state);
 
 	lua_State* m_lua;
