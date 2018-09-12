@@ -47,14 +47,14 @@ LuaManager::~LuaManager()
 	m_packages.clear();
 }
 
-bool _cdecl LuaManager::Initialize() noexcept
+bool _cdecl LuaManager::Initialize(std::string file) noexcept
 {
 	m_lua = luaL_newstate();
 	OpenLibs();
 	if (!m_lua)return false;
 	bool result;
 	lua_register(m_lua, "ImportPackage", ImportPackage);
-	result = luaL_loadfile(m_lua, "main.lua");
+	result = luaL_loadfile(m_lua, file.c_str());
 	if (result)
 	{
 		fprintf(stderr, "Couldn't load file: %s\n", lua_tostring(m_lua, 1));

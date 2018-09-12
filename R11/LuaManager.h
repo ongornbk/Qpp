@@ -8,7 +8,7 @@ public:
 	LuaManager();
 	~LuaManager();
 
-	bool _cdecl Initialize() noexcept;
+	bool _cdecl Initialize(std::string file) noexcept;
 	bool _cdecl Execute(std::string filename) noexcept;
 	
 	static LuaManager* GetInstance() noexcept;
