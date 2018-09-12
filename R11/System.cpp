@@ -11,28 +11,10 @@ namespace
 static int32_t _cdecl __Sleep(lua_State* state)
 {
 	int32_t time = lua_tointeger(state, 1);
-	bool cnt = lua_toboolean(state, 2);
-	if (cnt)
-	{
-		printf("\n");
-		while (time > 0)
-		{
-			printf("%d seconds\r",time);
-			Sleep(1000);
-			time--;
-		}
-	}
-	else
-	{
-		while (time > 0)
-		{
-			Sleep(1000);
-			time--;
-		}
-	}
-
+    Sleep(time);
 	return 0;
 }
+
 
 
 
@@ -42,9 +24,17 @@ static int32_t _cdecl __Shutdown(lua_State* state)
 	return 0;
 }
 
+static int32_t _cdecl __System(lua_State* state)
+{
+	std::string str = lua_tostring(state, 1);
+	system(str.c_str());
+	return 0;
+}
+
 void _stdcall SystemPackageInitializer()
 {
 	m_lua = LuaManager::GetInstance()->m_lua;
 	lua_register(m_lua, "Sleep", __Sleep);
 	lua_register(m_lua, "Shutdown", __Shutdown);
+	lua_register(m_lua, "System", __System);
 }

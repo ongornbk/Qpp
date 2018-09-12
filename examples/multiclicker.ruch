@@ -1,0 +1,14 @@
+ImportPackage("system")
+ImportPackage("windows")
+while(true)
+do
+while(GetKeyState(1))
+do
+PickForegroundWindow()
+local x,y = GetCursorPosition()
+SendMessage(514,0,x,y);
+Sleep(1)
+SendMessage(513,1,x,y);
+end
+Sleep(1)
+end

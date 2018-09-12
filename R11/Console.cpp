@@ -47,6 +47,12 @@ static int32_t _cdecl Print(lua_State* state)
 	return 0;
 }
 
+static int32_t _cdecl Endline(lua_State* state)
+{
+	printf("\n");
+	return 0;
+}
+
 static int32_t _cdecl Println(lua_State* state)
 {
 	std::string output;
@@ -64,7 +70,7 @@ static int32_t _cdecl Pause(lua_State* state)
 static int32_t _cdecl GetInput(lua_State* state)
 {
 	std::string input;
-	std::cin >> input;
+	std::getline(std::cin, input);
 	lua_pushstring(state, input.c_str());
 	return 1;
 }
@@ -85,8 +91,41 @@ static int32_t _cdecl GotoXY(lua_State* state)
 	return 0;
 }
 
-void DrawPixel(COORD p, COLORREF	color, int cscale) {
+static int32_t _cdecl GetConsoleCursorPosition(lua_State* state)
+{
+	CONSOLE_SCREEN_BUFFER_INFO csbi;
+	int32_t x, y;
+	if (GetConsoleScreenBufferInfo(m_console->hout, &csbi)) {
+		x = csbi.dwCursorPosition.X;
+		y = csbi.dwCursorPosition.Y;
+	}
+	lua_pushinteger(m_lua, x);
+	lua_pushinteger(m_lua, y);
+	return 2;
+}
 
+static int32_t _cdecl GotoX(lua_State* state)
+{
+	CONSOLE_SCREEN_BUFFER_INFO csbi;
+	COORD pos;
+	pos.X = (SHORT)lua_tointeger(state, 1);
+	if (GetConsoleScreenBufferInfo(m_console->hout, &csbi)) {
+		pos.Y = csbi.dwCursorPosition.Y;
+	}
+	SetConsoleCursorPosition(m_console->hout, pos);
+	return 0;
+}
+
+static int32_t _cdecl GotoY(lua_State* state)
+{
+	CONSOLE_SCREEN_BUFFER_INFO csbi;
+	COORD pos;
+	pos.Y = (SHORT)lua_tointeger(state, 1);
+	if (GetConsoleScreenBufferInfo(m_console->hout, &csbi)) {
+		pos.X = csbi.dwCursorPosition.X;
+	}
+	SetConsoleCursorPosition(m_console->hout, pos);
+	return 0;
 }
 
 static int32_t _cdecl ConsoleDrawPixel(lua_State* state)
@@ -103,15 +142,30 @@ static int32_t _cdecl ConsoleDrawPixel(lua_State* state)
 	return 0;
 }
 
+static int32_t _cdecl CleanConsole(lua_State* state)
+{
+	SetConsoleCursorPosition(m_console->hout, { 0,0 });
+	system("cls");
+	return 0;
+}
+
+
+
 void _stdcall ConsolePackageInitializer()
 {
 	m_console = std::make_unique<Console>();
 	m_lua = LuaManager::GetInstance()->m_lua;
-	lua_register(m_lua,"Print", Print);
+	lua_register(m_lua,"Print", Print); 
 	lua_register(m_lua, "Println", Println);
+	lua_register(m_lua, "Endline", Endline);
 	lua_register(m_lua, "Pause", Pause);
 	lua_register(m_lua, "GetInput", GetInput);
 	lua_register(m_lua, "SetConsoleTitle", __SetConsoleTitle);
 	lua_register(m_lua, "Gotoxy", GotoXY);
+	lua_register(m_lua, "Gotox", GotoX);
+	lua_register(m_lua, "Gotoy", GotoY);
+	lua_register(m_lua, "CleanConsole", CleanConsole);
 	lua_register(m_lua, "ConsoleDrawPixel", ConsoleDrawPixel);
+	lua_register(m_lua, "GetConsoleCursorPosition", GetConsoleCursorPosition);
+
 }

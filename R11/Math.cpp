@@ -19,9 +19,20 @@ static int32_t _cdecl RandomInteger(lua_State* state)
 	return 1;
 }
 
+static int32_t _cdecl IntegerLength(lua_State* state)
+{
+	int32_t i = lua_tointeger(state, 1);
+		int32_t l = 0;
+		for (; i; i /= 10) l++;
+		l == 0 ? 1 : l;
+		lua_pushinteger(state, l);
+		return 1;
+}
+
 void _stdcall MathPackageInitializer()
 {
 	srand(time(NULL));
 	m_lua = LuaManager::GetInstance()->m_lua;
 	lua_register(m_lua, "RandomInteger", RandomInteger);
+	lua_register(m_lua, "IntegerLength", IntegerLength);
 }

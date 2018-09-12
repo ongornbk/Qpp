@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "LuaManager.h"
 #include "Console.h"
+#include "Windows.h"
 
 namespace
 {
@@ -33,6 +34,7 @@ LuaManager::LuaManager()
 	CreatePackage("conio", ConsolePackageInitializer);
 	CreatePackage("math", MathPackageInitializer);
 	CreatePackage("system", SystemPackageInitializer);
+	CreatePackage("windows", WindowsPackageInitializer);
 }
 
 LuaManager::~LuaManager()

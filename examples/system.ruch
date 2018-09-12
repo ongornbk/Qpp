@@ -1,0 +1,7 @@
+ImportPackage("conio")
+ImportPackage("system")
+SetConsoleTitle("System testing...")
+System("@echo off")
+System("date /t")
+System("time /t")
+Pause()

@@ -20,6 +20,7 @@ private:
 	friend void _stdcall ConsolePackageInitializer();
 	friend void _stdcall MathPackageInitializer();
 	friend void _stdcall SystemPackageInitializer();
+	friend void _stdcall WindowsPackageInitializer();
 
 	friend int32_t _cdecl ImportPackage(lua_State* state);
 

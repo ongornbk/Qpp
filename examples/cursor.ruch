@@ -1,0 +1,8 @@
+ImportPackage("conio")
+ImportPackage("windows")
+while(true)
+do
+local x,y = GetCursorPosition()
+ConsoleDrawPixel(x,y,x*y,30);
+end
+Pause()

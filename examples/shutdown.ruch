@@ -3,5 +3,15 @@ ImportPackage("system")
 SetConsoleTitle("Shutdown")
 Print("Time to shutdown : ")
 local x = GetInput()
-Sleep(tonumber(x),true)
+CleanConsole()
+local t = tonumber(x)
+while(t>0)
+do
+Gotoxy(0,0)
+Print("Remaining time ")
+Print(tostring(t))
+Println(" seconds...           ")
+Sleep(999)
+t = t -1
+end
 Shutdown()
