@@ -2,6 +2,9 @@
 #include "System.h"
 #include "LuaManager.h"
 #include <stdio.h>
+#include <thread>
+
+using namespace std::chrono;
 
 namespace
 {
@@ -10,8 +13,8 @@ namespace
 
 static int32_t _cdecl __Sleep(lua_State* state)
 {
-	int32_t time = lua_tointeger(state, 1);
-    Sleep(time);
+	uint64_t time = (uint64_t)lua_tointeger(state, 1);
+	std::this_thread::sleep_for(1ns*time);
 	return 0;
 }
 

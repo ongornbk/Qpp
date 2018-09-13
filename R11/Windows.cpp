@@ -134,7 +134,7 @@ static int32_t _cdecl __GetWindowRect(lua_State* state)
 
 static int32_t _cdecl __GetKeyState(lua_State* state)
 {
-	bool st = GetKeyState(lua_tointeger(state,1) & 0x100);
+	bool st = GetKeyState(lua_tointeger(state,1)) < 0;
 	lua_pushboolean(state, st);
 	return 1;
 }

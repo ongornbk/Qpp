@@ -11,7 +11,7 @@ Gotoxy(0,0)
 Print("Remaining time ")
 Print(tostring(t))
 Println(" seconds...           ")
-Sleep(999)
+Sleep(999999999)
 t = t -1
 end
 Shutdown()

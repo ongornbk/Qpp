@@ -1,14 +1,20 @@
+ImportPackage("conio")
 ImportPackage("system")
 ImportPackage("windows")
+SetConsoleTitle("Multiclicker")
+
+
+local lock = true
 while(true)
 do
-while(GetKeyState(1))
-do
+if(GetKeyState(1))
+then
 PickForegroundWindow()
 local x,y = GetCursorPosition()
-SendMessage(514,0,x,y);
-Sleep(1)
-SendMessage(513,1,x,y);
+SendMessage(513,1,x,y)
+Sleep(15)
+SendMessage(514,0,x,y)
+Sleep(10)
 end
-Sleep(1)
+Sleep(123)
 end
