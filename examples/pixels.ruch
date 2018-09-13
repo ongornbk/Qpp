@@ -1,9 +1,10 @@
 ImportPackage("conio")
-for x = 0,1400,2 
+ImportPackage("math")
+for x = 0,1400,3 
 do
-   for y = 0,1000,2 
+   for y = 0,1000,3 
    do
-   ConsoleDrawPixel(x,y,y*x,3)
+   ConsoleDrawPixel(x,y,ToColor(x*y,x,y),4)
 end
 end
 Pause()

@@ -1,8 +1,9 @@
 ImportPackage("conio")
 ImportPackage("windows")
+ImportPackage("math")
 while(true)
 do
 local x,y = GetCursorPosition()
-ConsoleDrawPixel(x,y,x*y,30);
+ConsoleDrawPixel(x,y,ToColor(x,y,x*y),30);
 end
 Pause()
