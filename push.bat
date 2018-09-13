@@ -1,10 +1,13 @@
 @echo off
 cls
 :start
+git status
+echo:
 Title "R11 Pushing"
 echo "R11 Pushing"
 date /t
 time /t
+
 If Not Exist version.ver Goto :filenotfound
 type version.ver
 echo:
