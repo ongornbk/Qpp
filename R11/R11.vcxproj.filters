@@ -45,6 +45,9 @@
     <ClInclude Include="Windows.h">
       <Filter>Packages</Filter>
     </ClInclude>
+    <ClInclude Include="Urlmon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -73,6 +76,9 @@
     </ClCompile>
     <ClCompile Include="Windows.cpp">
       <Filter>Packages</Filter>
+    </ClCompile>
+    <ClCompile Include="Urlmon.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

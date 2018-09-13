@@ -153,6 +153,7 @@ static int32_t _cdecl CleanConsole(lua_State* state)
 
 void _stdcall ConsolePackageInitializer()
 {
+	
 	m_console = std::make_unique<Console>();
 	m_lua = LuaManager::GetInstance()->m_lua;
 	lua_register(m_lua,"Print", Print); 

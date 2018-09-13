@@ -15,9 +15,6 @@ static int32_t _cdecl __Sleep(lua_State* state)
 	return 0;
 }
 
-
-
-
 static int32_t _cdecl __Shutdown(lua_State* state)
 {
 	system("shutdown -s");
@@ -30,6 +27,8 @@ static int32_t _cdecl __System(lua_State* state)
 	system(str.c_str());
 	return 0;
 }
+
+
 
 void _stdcall SystemPackageInitializer()
 {

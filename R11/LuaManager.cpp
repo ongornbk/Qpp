@@ -2,6 +2,7 @@
 #include "LuaManager.h"
 #include "Console.h"
 #include "Windows.h"
+#include "Urlmon.h"
 
 namespace
 {
@@ -35,6 +36,7 @@ LuaManager::LuaManager()
 	CreatePackage("math", MathPackageInitializer);
 	CreatePackage("system", SystemPackageInitializer);
 	CreatePackage("windows", WindowsPackageInitializer);
+	CreatePackage("urlmon", UrlmonPackageInitializer);
 }
 
 LuaManager::~LuaManager()
@@ -49,8 +51,9 @@ LuaManager::~LuaManager()
 	m_packages.clear();
 }
 
-bool _cdecl LuaManager::Initialize(std::string file) noexcept
+bool _cdecl LuaManager::Initialize(std::string path,std::string file) noexcept
 {
+	m_path = path;
 	m_lua = luaL_newstate();
 	OpenLibs();
 	if (!m_lua)return false;
@@ -74,6 +77,11 @@ bool _cdecl LuaManager::Initialize(std::string file) noexcept
 bool _cdecl LuaManager::Execute(std::string filename) noexcept
 {
 	return false;
+}
+
+std::string _cdecl LuaManager::GetPath() noexcept
+{
+	return m_path;
 }
 
 LuaManager * LuaManager::GetInstance() noexcept

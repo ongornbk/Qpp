@@ -7,16 +7,9 @@ struct Window
 	Window()
 	{
 		
-	}
+	}                        
 
-	// Global Variables:
-	HINSTANCE hInst;                               
-	WCHAR szTitle[100];                 
-	WCHAR szWindowClass[100];           
 
-	ATOM                MyRegisterClass(HINSTANCE hInstance);
-	BOOL                InitInstance(HINSTANCE, int);
-	LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 };
 
 namespace
@@ -63,6 +56,14 @@ static int32_t _cdecl CursorPosition(lua_State* state)
 	return 2;
 }
 
+static int32_t _cdecl Execute(lua_State* state)
+{	
+	ShellExecuteA(NULL, lua_tostring(state,1), lua_tostring(state, 2), NULL, NULL, SW_SHOWNORMAL);
+	return 0;
+}
+
+
+
 void _stdcall WindowsPackageInitializer()
 {
 	m_window = std::make_unique<Window>();
@@ -72,4 +73,5 @@ void _stdcall WindowsPackageInitializer()
 	lua_register(m_lua, "GetKeyState", __GetKeyState);
 	lua_register(m_lua, "SendMessage", __SendMessage);
 	lua_register(m_lua, "GetCursorPosition", CursorPosition);
+	lua_register(m_lua, "Execute", Execute);
 }

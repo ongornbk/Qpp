@@ -1,0 +1,7 @@
+ImportPackage("conio")
+ImportPackage("urlmon")
+ImportPackage("windows")
+SetConsoleTitle("Browser")
+SetUrlOutputPath("result.html")
+UrlRequestToFile("www.github.com/ongornbk")
+Execute("open","result.html")
