@@ -12,6 +12,27 @@ namespace
 	static HANDLE m_handle = NULL;
 }
 
+LRESULT __stdcall WindowProcedure(HWND window, uint32_t msg, WPARAM wp, LPARAM lp)
+
+{
+
+	switch (msg)
+
+	{
+
+	case WM_DESTROY:
+
+		PostQuitMessage(0);
+		return 0;
+		break;
+	default:
+		return DefWindowProc(window, msg, wp, lp);
+
+	}
+
+}
+
+
 struct Window
 {
 	Window()
@@ -28,6 +49,37 @@ struct Window
 		}
 	}
 
+	void Initialize()
+	{
+		const wchar_t* myclass = L"myclass";
+
+		WNDCLASSEX wndclass;
+		wndclass.cbSize = sizeof(WNDCLASSEX);
+		wndclass.style = CS_DBLCLKS;
+		wndclass.lpfnWndProc = WindowProcedure;
+		wndclass.cbClsExtra = NULL;
+		wndclass.cbWndExtra = NULL;
+		wndclass.hInstance = GetModuleHandle(NULL);
+		wndclass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+		wndclass.hCursor = LoadCursor(NULL, IDC_ARROW);
+		wndclass.hbrBackground = HBRUSH(COLOR_WINDOW + 1);
+		wndclass.lpszMenuName = NULL;
+		wndclass.lpszClassName = myclass;
+		wndclass.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
+
+		if (RegisterClassEx(&wndclass))
+		{
+			m_pickedWindow = CreateWindowEx(0, myclass, L"Window",WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT,CW_USEDEFAULT, CW_USEDEFAULT, 0, 0, GetModuleHandle(0), 0);
+			if (m_pickedWindow)
+			{
+				ShowWindow(m_pickedWindow, SW_SHOWDEFAULT);
+				MSG msg;
+				while (GetMessage(&msg, 0, 0, 0)) DispatchMessage(&msg);
+			}
+
+		}
+	}
+
 
 };
 
@@ -36,6 +88,12 @@ struct Window
 static int32_t _cdecl __PickForegroundWindow(lua_State* state)
 {
 	m_pickedWindow = GetForegroundWindow();
+	return 0;
+}
+
+static int32_t _cdecl __PickConsoleWindow(lua_State* state)
+{
+	m_pickedWindow = GetConsoleWindow();
 	return 0;
 }
 
@@ -121,7 +179,7 @@ static int32_t _cdecl PickCurrentProcess(lua_State* state)
 
 static int32_t _cdecl OpenProcess(lua_State* state)
 {
-HANDLE m_handle = OpenProcess(PROCESS_ALL_ACCESS | PROCESS_TERMINATE | PROCESS_VM_OPERATION | PROCESS_VM_READ |PROCESS_VM_WRITE, FALSE, (DWORD)lua_tointeger(state,1));
+HANDLE m_handle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, (DWORD)lua_tointeger(state,1));
 if (m_handle)
 {
 	lua_pushboolean(state, true);
@@ -133,12 +191,20 @@ else
 return 1;
 }
 
+static int32_t _cdecl __CreateWindow(lua_State* state)
+{
+	m_window->Initialize();
+	return 0;
+}
+
 void _stdcall WindowsPackageInitializer()
 {
 	m_window = std::make_unique<Window>();
 	m_lua = LuaManager::GetInstance()->m_lua;
+	lua_register(m_lua, "CreateWindow", __CreateWindow);
 	lua_register(m_lua, "PickForegroundWindow", __PickForegroundWindow); 
 	lua_register(m_lua, "PickDesktopWindow", __PickDesktopWindow);
+	lua_register(m_lua, "PickConsoleWindow", __PickConsoleWindow);
 	lua_register(m_lua, "GetWindowProcessID", GetWindowProcessID);
 	lua_register(m_lua, "OpenProcess", OpenProcess);
 	lua_register(m_lua, "PickCurrentProcess", PickCurrentProcess);

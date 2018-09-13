@@ -1,0 +1,3 @@
+ImportPackage("windows")
+CreateWindow()
+Pause()
