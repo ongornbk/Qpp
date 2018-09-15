@@ -10,6 +10,8 @@ namespace
 	static std::unique_ptr<Window> m_window = nullptr;
 	static HWND m_pickedWindow = NULL;
 	static HANDLE m_handle = NULL;
+	static HDC m_pickedDC = NULL;
+	static std::unique_ptr<HBITMAP> m_bitmap = NULL;
 }
 
 LRESULT __stdcall WindowProcedure(HWND window, uint32_t msg, WPARAM wp, LPARAM lp)
@@ -134,7 +136,7 @@ static int32_t _cdecl __GetWindowRect(lua_State* state)
 
 static int32_t _cdecl __GetKeyState(lua_State* state)
 {
-	bool st = GetKeyState(lua_tointeger(state,1)) < 0;
+	bool st = (bool)GetKeyState(lua_tointeger(state,1)) < 0;
 	lua_pushboolean(state, st);
 	return 1;
 }
@@ -144,6 +146,18 @@ static int32_t _cdecl __GetKeyState(lua_State* state)
 static int32_t _cdecl __SendMessage(lua_State* state)
 {
 	SendMessage(m_pickedWindow, lua_tointeger(state, 1), lua_tointeger(state, 2), MAKELPARAM(lua_tointeger(state, 3), lua_tointeger(state, 4)));
+	return 0;
+}
+
+static int32_t _cdecl __SendBroadcastMessage(lua_State* state)
+{
+	SendMessage(HWND_BROADCAST, lua_tointeger(state, 1), lua_tointeger(state, 2), MAKELPARAM(lua_tointeger(state, 3), lua_tointeger(state, 4)));
+	return 0;
+}
+
+static int32_t _cdecl __PostMessage(lua_State* state)
+{
+	PostMessage(m_pickedWindow, lua_tointeger(state, 1), lua_tointeger(state, 2), MAKELPARAM(lua_tointeger(state, 3), lua_tointeger(state, 4)));
 	return 0;
 }
 
@@ -197,6 +211,78 @@ static int32_t _cdecl __CreateWindow(lua_State* state)
 	return 0;
 }
 
+static int32_t _cdecl __ClientToScreen(lua_State* state)
+{
+	POINT p;
+	p.x = lua_tointeger(state, 1);
+	p.y = lua_tointeger(state, 2);
+	ClientToScreen(m_pickedWindow, &p);
+	return 0;
+}
+
+static int32_t _cdecl __SetCursorPosition(lua_State* state)
+{
+	SetCursorPos(lua_tointeger(state, 1), lua_tointeger(state, 2));
+	return 0;
+}
+
+static int32_t _cdecl __GetDC(lua_State* state)
+{
+	m_pickedDC = GetDC(m_pickedWindow);
+	return 0;
+}
+
+static int32_t _cdecl __CreateCompatibleDC(lua_State* state)
+{
+	m_pickedDC = CreateCompatibleDC(0);
+	return 0;
+}
+
+static int32_t _cdecl __CreateCompatibleBitmap(lua_State* state)
+{
+	m_bitmap = std::make_unique<HBITMAP>(CreateCompatibleBitmap(m_pickedDC, lua_tointeger(state, 1), lua_tointeger(state, 2)));
+	return 0;
+}
+
+static int32_t _cdecl __SelectObject(lua_State* state)
+{
+	SelectObject(m_pickedDC, m_bitmap.get());
+	return 0;
+}
+
+static int32_t _cdecl __BitBlt(lua_State* state)
+{
+	BitBlt(m_pickedDC, 0,0,lua_tointeger(state,1),lua_tointeger(state,2),GetDC(0),0,0,SRCCOPY);
+	return 0;
+}
+
+static int32_t _cdecl __MaximizeWindow(lua_State* state)
+{
+	ShowWindow(m_pickedWindow, SW_SHOWMAXIMIZED);
+	return 0;
+}
+
+static int32_t _cdecl __MinimizeWindow(lua_State* state)
+{
+	ShowWindow(m_pickedWindow, SW_SHOWMINIMIZED);
+	return 0;
+}
+
+static int32_t _cdecl __UpdateWindow(lua_State* state)
+{
+	UpdateWindow(m_pickedWindow);
+	return 0;
+}
+
+static int32_t _cdecl __SetWindowTitle(lua_State* state)
+{
+	SetWindowTextA(m_pickedWindow,lua_tostring(state,1));
+	return 0;
+}
+
+
+
+
 void _stdcall WindowsPackageInitializer()
 {
 	m_window = std::make_unique<Window>();
@@ -209,11 +295,24 @@ void _stdcall WindowsPackageInitializer()
 	lua_register(m_lua, "OpenProcess", OpenProcess);
 	lua_register(m_lua, "PickCurrentProcess", PickCurrentProcess);
 	lua_register(m_lua, "ShowWindow", __ShowWindow);
-	lua_register(m_lua, "SetActiveWindow", __SetActiveWindow);
+	lua_register(m_lua, "SetActiveWindow", __SetActiveWindow); 
 	lua_register(m_lua, "SetFocus", __SetFocus);
 	lua_register(m_lua, "GetWindowRect", __GetWindowRect);
 	lua_register(m_lua, "GetKeyState", __GetKeyState);
 	lua_register(m_lua, "SendMessage", __SendMessage);
+	lua_register(m_lua, "SendBroadcastMessage", __SendBroadcastMessage);
+	lua_register(m_lua, "PostMessage", __PostMessage);
 	lua_register(m_lua, "GetCursorPosition", CursorPosition);
+	lua_register(m_lua, "ClientToScreen", __ClientToScreen);
+	lua_register(m_lua, "SetCursorPosition", __SetCursorPosition);
+	lua_register(m_lua, "UpdateWindow", __UpdateWindow);
+	lua_register(m_lua, "GetDC", __GetDC);
+	lua_register(m_lua, "CreateCompatibleDC", __CreateCompatibleDC);
+	lua_register(m_lua, "CreateCompatibleBitmap", __CreateCompatibleBitmap);
+	lua_register(m_lua, "SelectObject", __SelectObject);
+	lua_register(m_lua, "BitBlt", __BitBlt);
+	lua_register(m_lua, "MinimizeWindow", __MinimizeWindow);
+	lua_register(m_lua, "MaximizeWindow", __MaximizeWindow);
 	lua_register(m_lua, "Execute", Execute);
+	lua_register(m_lua, "SetWindowTitle", __SetWindowTitle);
 }

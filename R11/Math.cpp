@@ -29,8 +29,8 @@ namespace
 static int32_t _cdecl RandomInteger(lua_State* state)
 {
 
-	int32_t min = lua_tointeger(state, 1);
-	int32_t max = lua_tointeger(state, 2);
+	int32_t min = (int32_t)lua_tointeger(state, 1);
+	int32_t max = (int32_t)lua_tointeger(state, 2);
 	int32_t ret = rand() % (max - min + 1) + min;
 	lua_pushinteger(state, ret);
 	return 1;
@@ -38,7 +38,7 @@ static int32_t _cdecl RandomInteger(lua_State* state)
 
 static int32_t _cdecl IntegerLength(lua_State* state)
 {
-	int32_t i = lua_tointeger(state, 1);
+	int32_t i = (int32_t)lua_tointeger(state, 1);
 		int32_t l = 0;
 		for (; i; i /= 10) l++;
 		l == 0 ? 1 : l;
@@ -49,16 +49,16 @@ static int32_t _cdecl IntegerLength(lua_State* state)
 static int32_t _cdecl ToColor(lua_State* state)
 {
 	COLOR rgb;
-	rgb.r = lua_tointeger(state, 1);
-	rgb.g = lua_tointeger(state, 2);
-	rgb.b = lua_tointeger(state, 3);
+	rgb.r = (uint8_t)lua_tointeger(state, 1);
+	rgb.g = (uint8_t)lua_tointeger(state, 2);
+	rgb.b = (uint8_t)lua_tointeger(state, 3);
 	lua_pushinteger(state, rgb.color);
 	return 1;
 }
 
 void _stdcall MathPackageInitializer()
 {
-	srand(time(NULL));
+	srand((uint32_t)time(NULL));
 	m_lua = LuaManager::GetInstance()->m_lua;
 	lua_register(m_lua, "RandomInteger", RandomInteger);
 	lua_register(m_lua, "IntegerLength", IntegerLength);

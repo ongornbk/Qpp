@@ -5,7 +5,7 @@ do
    for y = 0,1000,4
    do
    local r = RandomInteger(0,255)
-   ConsoleDrawPixel(x,y,ToColor(x,y,r,5)
+   ConsoleDrawPixel(x,y,ToColor(x,y,r),5)
    end
 end
 Pause()

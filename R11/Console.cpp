@@ -15,8 +15,8 @@ struct Console
 	hout = GetStdHandle(STD_OUTPUT_HANDLE);
 	hin = GetStdHandle(STD_INPUT_HANDLE);
 
-	DWORD events;
-	CONSOLE_CURSOR_INFO cci;
+	//DWORD events;
+	//CONSOLE_CURSOR_INFO cci;
 	//cci.bVisible = true;
 	//SetConsoleCursorInfo(hout, &cci);
 	SetConsoleTextAttribute(hout, 10u);
@@ -133,8 +133,8 @@ static int32_t _cdecl ConsoleDrawPixel(lua_State* state)
 	COORD pos;
 	pos.X = (SHORT)lua_tointeger(state, 1);
 	pos.Y = (SHORT)lua_tointeger(state, 2);
-	COLORREF color = lua_tointeger(state, 3);
-	int32_t scale = lua_tointeger(state, 4);
+	COLORREF color = (DWORD)lua_tointeger(state, 3);
+	int32_t scale = (int32_t)lua_tointeger(state, 4);
 	HDC dc = m_console->console_dc;
 	for (int i = 0; i < scale; i++)
 		for (int j = 0; j <= scale; j++)
@@ -146,6 +146,18 @@ static int32_t _cdecl CleanConsole(lua_State* state)
 {
 	SetConsoleCursorPosition(m_console->hout, { 0,0 });
 	system("cls");
+	return 0;
+}
+
+static int32_t _cdecl __FreeConsole(lua_State* state)
+{
+	FreeConsole();
+	return 0;
+}
+
+static int32_t _cdecl __AllocConsole(lua_State* state)
+{
+	AllocConsole();
 	return 0;
 }
 
@@ -168,5 +180,6 @@ void _stdcall ConsolePackageInitializer()
 	lua_register(m_lua, "CleanConsole", CleanConsole);
 	lua_register(m_lua, "ConsoleDrawPixel", ConsoleDrawPixel);
 	lua_register(m_lua, "GetConsoleCursorPosition", GetConsoleCursorPosition);
-
+	lua_register(m_lua, "FreeConsole", __FreeConsole);
+	lua_register(m_lua, "AllocConsole", __AllocConsole);
 }

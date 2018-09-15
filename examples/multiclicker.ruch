@@ -3,18 +3,17 @@ ImportPackage("system")
 ImportPackage("windows")
 SetConsoleTitle("Multiclicker")
 
-
-local lock = true
+Println("Press any button to start")
+Pause()
 while(true)
 do
-if(GetKeyState(1))
-then
+while(GetKeyState(1))
+do
 PickForegroundWindow()
-local x,y = GetCursorPosition()
-SendMessage(513,1,x,y)
-Sleep(15)
-SendMessage(514,0,x,y)
-Sleep(10)
+SendMessage(513,1,0,0)
+Sleep(18)
+SendMessage(514,0,0,0)
+Sleep(21)
 end
-Sleep(123)
+Sleep(100)
 end
