@@ -38,6 +38,7 @@ LuaManager::LuaManager()
 	CreatePackage("windows", WindowsPackageInitializer);
 	CreatePackage("urlmon", UrlmonPackageInitializer);
 	CreatePackage("filesystem", FilesystemPackageInitializer);
+	CreatePackage("input", InputPackageInitializer);
 }
 
 LuaManager::~LuaManager()

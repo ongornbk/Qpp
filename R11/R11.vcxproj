@@ -156,7 +156,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Console.h" />
+    <ClInclude Include="DirectInput.h" />
     <ClInclude Include="Filesystem.h" />
+    <ClInclude Include="Input.h" />
     <ClInclude Include="luaH.h" />
     <ClInclude Include="LuaManager.h" />
     <ClInclude Include="Math.h" />
@@ -165,11 +167,14 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="Urlmon.h" />
+    <ClInclude Include="WindowC.h" />
     <ClInclude Include="Windows.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Console.cpp" />
+    <ClCompile Include="DirectInput.cpp" />
     <ClCompile Include="Filesystem.cpp" />
+    <ClCompile Include="Input.cpp" />
     <ClCompile Include="LuaManager.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="Package.cpp" />

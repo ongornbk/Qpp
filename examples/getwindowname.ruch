@@ -1,0 +1,13 @@
+ImportPackage("system")
+ImportPackage("windows")
+ImportPackage("conio")
+SetConsoleTitle("Get Foreground Window Name")
+
+while(true)
+do
+PickForegroundWindow()
+local name = GetWindowName()
+local class = GetClassName()
+Println("name @" .. name .. "@ class @" .. class .."@")
+Sleep(300000000)
+end

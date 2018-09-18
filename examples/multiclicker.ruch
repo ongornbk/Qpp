@@ -1,19 +1,18 @@
 ImportPackage("conio")
 ImportPackage("system")
 ImportPackage("windows")
+local result = FindWindow("CoD4","Call of Duty 4 X")
+Println(tostring(result))
+ImportPackage("input")
 SetConsoleTitle("Multiclicker")
-
 Println("Press any button to start")
 Pause()
 while(true)
 do
-while(GetKeyState(1))
-do
+UpdateInput()
 PickForegroundWindow()
 SendMessage(513,1,0,0)
 Sleep(18)
 SendMessage(514,0,0,0)
 Sleep(21)
-end
-Sleep(100)
 end

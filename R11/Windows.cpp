@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Windows.h"
 #include "LuaManager.h"
+#include "WindowC.h"
 
 struct Window;
 
@@ -8,8 +9,8 @@ namespace
 {
 	static lua_State* m_lua = nullptr;
 	static std::unique_ptr<Window> m_window = nullptr;
-	static HWND m_pickedWindow = NULL;
 	static HANDLE m_handle = NULL;
+	static HINSTANCE m_hinstance = NULL;
 	static HDC m_pickedDC = NULL;
 	static std::unique_ptr<HBITMAP> m_bitmap = NULL;
 }
@@ -133,15 +134,6 @@ static int32_t _cdecl __GetWindowRect(lua_State* state)
 	lua_pushinteger(state, rect.top);
 	return 4;
 }
-
-static int32_t _cdecl __GetKeyState(lua_State* state)
-{
-	bool st = (bool)GetKeyState(lua_tointeger(state,1)) < 0;
-	lua_pushboolean(state, st);
-	return 1;
-}
-
-
 
 static int32_t _cdecl __SendMessage(lua_State* state)
 {
@@ -280,8 +272,29 @@ static int32_t _cdecl __SetWindowTitle(lua_State* state)
 	return 0;
 }
 
+static int32_t _cdecl __FindWindow(lua_State* state)
+{
+	m_pickedWindow = ::FindWindowExA(0,0, lua_tostring(state, 1),lua_tostring(state,2));
+	if (m_pickedWindow)lua_pushboolean(state, true);
+	else lua_pushboolean(state, false);
+	return 1;
+}
 
+static int32_t _cdecl __GetWindowName(lua_State* state)
+{
+	char name[100];
+	GetWindowTextA(m_pickedWindow, name, 100);
+	lua_pushstring(state, name);
+	return 1;
+}
 
+static int32_t _cdecl __GetClassName(lua_State* state)
+{
+	char name[100];
+	GetClassNameA(m_pickedWindow, name, 100);
+	lua_pushstring(state, name);
+	return 1;
+}
 
 void _stdcall WindowsPackageInitializer()
 {
@@ -298,7 +311,6 @@ void _stdcall WindowsPackageInitializer()
 	lua_register(m_lua, "SetActiveWindow", __SetActiveWindow); 
 	lua_register(m_lua, "SetFocus", __SetFocus);
 	lua_register(m_lua, "GetWindowRect", __GetWindowRect);
-	lua_register(m_lua, "GetKeyState", __GetKeyState);
 	lua_register(m_lua, "SendMessage", __SendMessage);
 	lua_register(m_lua, "SendBroadcastMessage", __SendBroadcastMessage);
 	lua_register(m_lua, "PostMessage", __PostMessage);
@@ -315,4 +327,7 @@ void _stdcall WindowsPackageInitializer()
 	lua_register(m_lua, "MaximizeWindow", __MaximizeWindow);
 	lua_register(m_lua, "Execute", Execute);
 	lua_register(m_lua, "SetWindowTitle", __SetWindowTitle);
+	lua_register(m_lua, "FindWindow", __FindWindow);
+	lua_register(m_lua, "GetWindowName", __GetWindowName);
+	lua_register(m_lua, "GetClassName", __GetClassName);
 }
