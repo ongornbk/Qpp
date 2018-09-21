@@ -1,18 +1,56 @@
 ImportPackage("conio")
 ImportPackage("system")
 ImportPackage("windows")
-local result = FindWindow("CoD4","Call of Duty 4 X")
-Println(tostring(result))
-ImportPackage("input")
-SetConsoleTitle("Multiclicker")
-Println("Press any button to start")
-Pause()
-while(true)
+SetConsoleTitle("KEYREG")
+
+RegisterHotKey(1,0x70)
+RegisterHotKey(2,0x71)
+
+::BEGIN::
+CleanConsole()
+Println("Press f1 key to start... or to pause...")
+Println("Press f2 key to exit... ")
+
+while(GetMessage())
 do
-UpdateInput()
+PeekMessage()
+local wparam,lparam,msg = RetrieveMessage()
+if lparam == 1 
+then
+goto RUN
+else
+if lparam == 2
+then goto END
+else
+Sleep(10000)
+end
+end
+
+end
+
+::RUN::
+
+CleanConsole()
+Println("Running...")
+
+while(GetMessage())
+do
+while(KeyDown(0x1))
+do
 PickForegroundWindow()
 SendMessage(513,1,0,0)
 Sleep(18)
 SendMessage(514,0,0,0)
 Sleep(21)
 end
+
+PeekMessage()
+local wparam,lparam,msg = RetrieveMessage()
+if lparam == 1 
+then
+goto BEGIN
+end
+
+end
+
+::END::

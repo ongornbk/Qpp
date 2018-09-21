@@ -13,6 +13,7 @@ namespace
 	static HINSTANCE m_hinstance = NULL;
 	static HDC m_pickedDC = NULL;
 	static std::unique_ptr<HBITMAP> m_bitmap = NULL;
+	static MSG m_msg;
 }
 
 LRESULT __stdcall WindowProcedure(HWND window, uint32_t msg, WPARAM wp, LPARAM lp)
@@ -296,8 +297,57 @@ static int32_t _cdecl __GetClassName(lua_State* state)
 	return 1;
 }
 
+static int32_t _cdecl __RegisterHotKey(lua_State* state)
+{
+	RegisterHotKey(NULL, int32_t(lua_tointeger(state, 1)), MOD_NOREPEAT, uint32_t(lua_tointeger(state, 2)));
+	return 1;
+}
+
+static int32_t _cdecl __GetMessage(lua_State* state)
+{
+	lua_pushboolean(state,GetMessage(&m_msg, NULL, NULL, NULL));
+	return 1;
+}
+
+static int32_t _cdecl __PeekMessage(lua_State* state)
+{
+	lua_pushboolean(state, PeekMessage(&m_msg, NULL, NULL,NULL, 0x0001));
+	return 1;
+}
+
+static int32_t _cdecl RetrieveMessage(lua_State* state)
+{
+	lua_pushinteger(state, (int32_t)m_msg.lParam);
+	lua_pushinteger(state, (int32_t)m_msg.wParam);
+	lua_pushinteger(state, (int32_t)m_msg.message);
+	return 3;
+}
+
+int32_t _cdecl keyPressed(int key) noexcept
+{
+	return (GetKeyState(key) & 0x8000 != 0);
+}
+
+int32_t _cdecl keyDown(int key) noexcept
+{
+	return ((GetKeyState(key) & 0x100) != 0);
+}
+
+static int32_t _cdecl KeyPressed(lua_State* state)
+{
+	lua_pushboolean(state, keyPressed(lua_tointeger(state, 1)));
+	return 1;
+}
+
+static int32_t _cdecl KeyDown(lua_State* state)
+{
+	lua_pushboolean(state, keyDown(lua_tointeger(state, 1)));
+	return 1;
+}
+
 void _stdcall WindowsPackageInitializer()
 {
+	ZeroMemory(&m_msg, sizeof(MSG));
 	m_window = std::make_unique<Window>();
 	m_lua = LuaManager::GetInstance()->m_lua;
 	lua_register(m_lua, "CreateWindow", __CreateWindow);
@@ -330,4 +380,10 @@ void _stdcall WindowsPackageInitializer()
 	lua_register(m_lua, "FindWindow", __FindWindow);
 	lua_register(m_lua, "GetWindowName", __GetWindowName);
 	lua_register(m_lua, "GetClassName", __GetClassName);
+	lua_register(m_lua, "RegisterHotKey", __RegisterHotKey);
+	lua_register(m_lua, "GetMessage", __GetMessage);
+	lua_register(m_lua, "PeekMessage", __PeekMessage);
+	lua_register(m_lua, "RetrieveMessage", RetrieveMessage);
+	lua_register(m_lua, "KeyPressed", KeyPressed);
+	lua_register(m_lua, "KeyDown", KeyDown);
 }
