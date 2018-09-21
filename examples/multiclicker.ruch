@@ -5,11 +5,13 @@ SetConsoleTitle("KEYREG")
 
 RegisterHotKey(1,0x70)
 RegisterHotKey(2,0x71)
+RegisterHotKey(3,0x72)
 
 ::BEGIN::
 CleanConsole()
-Println("Press f1 key to start... or to pause...")
-Println("Press f2 key to exit... ")
+Println("Press f1 key to start...")
+Println("Press f2 key to puase...")
+Println("Press f3 key to exit... ")
 
 while(GetMessage())
 do
@@ -19,7 +21,7 @@ if lparam == 1
 then
 goto RUN
 else
-if lparam == 2
+if lparam == 3
 then goto END
 else
 Sleep(10000)
@@ -33,7 +35,7 @@ end
 CleanConsole()
 Println("Running...")
 
-while(GetMessage())
+while(true)
 do
 while(KeyDown(0x1))
 do
@@ -43,10 +45,9 @@ Sleep(18)
 SendMessage(514,0,0,0)
 Sleep(21)
 end
-
 PeekMessage()
 local wparam,lparam,msg = RetrieveMessage()
-if lparam == 1 
+if lparam == 2 
 then
 goto BEGIN
 end
