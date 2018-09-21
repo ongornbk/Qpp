@@ -345,6 +345,40 @@ static int32_t _cdecl KeyDown(lua_State* state)
 	return 1;
 }
 
+void __private__DrawLine(HDC hdc, float StartX, float StartY, float EndX, float EndY, COLORREF Pen)
+{
+	int a, b = 0;
+	HPEN hOPen;
+	HPEN hNPen = CreatePen(PS_SOLID, 2, Pen);
+	hOPen = (HPEN)SelectObject(hdc, hNPen);
+	MoveToEx(hdc, StartX, StartY, NULL);
+	a = LineTo(hdc, EndX, EndY);
+	DeleteObject(SelectObject(hdc, hOPen));
+}
+
+void __private__DrawString(HDC hdc, HFONT font, int x, int y, COLORREF color, const  char* text)
+{
+	SetTextAlign(hdc, TA_CENTER | TA_NOUPDATECP);
+	SetBkColor(hdc, RGB(0, 0, 0));
+	SetBkMode(hdc, TRANSPARENT);
+	SetTextColor(hdc, color);
+	SelectObject(hdc, font);
+	TextOutA(hdc, x, y, text, strlen(text));
+	DeleteObject(font);
+}
+
+static int32_t _cdecl __DrawLine(lua_State* state)
+{
+	__private__DrawLine(m_pickedDC, lua_tointeger(state, 1), lua_tointeger(state, 2), lua_tointeger(state, 3), lua_tointeger(state, 4), lua_tointeger(state, 5));
+	return 0;
+}
+
+static int32_t _cdecl _DrawString(lua_State* state)
+{
+	lua_pushboolean(state, keyDown(lua_tointeger(state, 1)));
+	return 1;
+}
+
 void _stdcall WindowsPackageInitializer()
 {
 	ZeroMemory(&m_msg, sizeof(MSG));
@@ -386,4 +420,5 @@ void _stdcall WindowsPackageInitializer()
 	lua_register(m_lua, "RetrieveMessage", RetrieveMessage);
 	lua_register(m_lua, "KeyPressed", KeyPressed);
 	lua_register(m_lua, "KeyDown", KeyDown);
+	lua_register(m_lua, "DrawLine", __DrawLine);
 }

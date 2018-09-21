@@ -1,7 +1,8 @@
 ImportPackage("conio")
 ImportPackage("system")
 ImportPackage("windows")
-SetConsoleTitle("KEYREG")
+ImportPackage("math")
+SetConsoleTitle("Multiclicker")
 
 RegisterHotKey(1,0x70)
 RegisterHotKey(2,0x71)
@@ -13,12 +14,31 @@ Println("Press f1 key to start...")
 Println("Press f2 key to puase...")
 Println("Press f3 key to exit... ")
 
+local process = 0
+
 while(GetMessage())
 do
 PeekMessage()
 local wparam,lparam,msg = RetrieveMessage()
 if lparam == 1 
 then
+PickForegroundWindow()
+GetDC()
+process = GetWindowProcessID()
+if process > 0
+then
+
+if OpenProcess(process)
+then
+
+else
+Println("Error cannot open process : " .. tostring(process))
+end
+
+else
+Println("Error cannot get process ID")
+
+end
 goto RUN
 else
 if lparam == 3
@@ -35,16 +55,19 @@ end
 CleanConsole()
 Println("Running...")
 
+local color = ToColor(255,0,0)
+
 while(true)
 do
+
 while(KeyDown(0x1))
 do
-PickForegroundWindow()
 SendMessage(513,1,0,0)
 Sleep(18)
 SendMessage(514,0,0,0)
 Sleep(21)
 end
+--DrawLine(950,970,540,540,color)
 PeekMessage()
 local wparam,lparam,msg = RetrieveMessage()
 if lparam == 2 
