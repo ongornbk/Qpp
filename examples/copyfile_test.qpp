@@ -1,0 +1,8 @@
+ImportPackage("conio")
+ImportPackage("system")
+ImportPackage("filesystem")
+SetConsoleTitle("File copy testing...")
+
+CopyFile("copyfile_test.ruch","sddfdf.lol")
+
+Pause()

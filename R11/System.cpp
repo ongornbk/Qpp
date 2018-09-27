@@ -32,32 +32,7 @@ static int32_t _cdecl __System(lua_State* state)
 	return 0;
 }
 
-static int32_t _cdecl __CopyFile(lua_State* state)
-{
 
-#pragma warning(disable : 4996)
-
-	char buf[BUFSIZ];
-	size_t size;
-
-	std::string out = lua_tostring(state,2);
-	std::string in = lua_tostring(state,1);
-
-	FILE* source = fopen(in.c_str(), "rb");
-	FILE* dest = fopen(out.c_str(), "wb");
-
-	// clean and more secure
-	// feof(FILE* stream) returns non-zero if the end of file indicator for stream is set
-
-	while (size = fread(buf, 1, BUFSIZ, source)) {
-		fwrite(buf, 1, size, dest);
-	}
-
-	fclose(source);
-	fclose(dest);
-
-	return 0;
-}
 
 
 
@@ -67,5 +42,4 @@ void _stdcall SystemPackageInitializer()
 	lua_register(m_lua, "Sleep", __Sleep);
 	lua_register(m_lua, "Shutdown", __Shutdown);
 	lua_register(m_lua, "System", __System);
-	lua_register(m_lua, "CopyFile", __CopyFile);
 }
