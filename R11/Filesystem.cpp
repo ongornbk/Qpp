@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Windows.h"
 #include "LuaManager.h"
+#include <sys/stat.h>
 
 namespace
 {
