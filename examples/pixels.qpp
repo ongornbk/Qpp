@@ -1,5 +1,6 @@
 ImportPackage("conio")
 ImportPackage("math")
+SetConsoleTitle("Pixels")
 for x = 0,1400,4 
 do
    for y = 0,1000,4

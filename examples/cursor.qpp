@@ -1,6 +1,7 @@
 ImportPackage("conio")
 ImportPackage("windows")
 ImportPackage("math")
+SetConsoleTitle("Cursor")
 while(true)
 do
 local x,y = GetCursorPosition()

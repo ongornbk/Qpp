@@ -3,11 +3,14 @@ ImportPackage("windows")
 ImportPackage("conio")
 SetConsoleTitle("Get Foreground Window Name")
 
+Print("Delay time in milliseconds: ")
+local sleep_time = tonumber(GetInput())
+sleep_time = sleep_time * 100000
 while(true)
 do
 PickForegroundWindow()
 local name = GetWindowName()
 local class = GetClassName()
 Println("name @" .. name .. "@ class @" .. class .."@")
-Sleep(300000000)
+Sleep(sleep_time)
 end

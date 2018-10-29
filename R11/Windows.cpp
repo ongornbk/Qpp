@@ -142,6 +142,19 @@ static int32_t _cdecl __SendMessage(lua_State* state)
 	return 0;
 }
 
+static int32_t _cdecl __SendInput(lua_State* state)
+{
+	INPUT ip;
+	ip.type = lua_tointeger(state, 1);
+	ip.ki.wScan = 0;
+	ip.ki.time = 0;
+	ip.ki.dwExtraInfo = 0;
+	ip.ki.wVk = lua_tointeger(state, 3);
+	ip.ki.dwFlags = lua_tointeger(state,2);
+	SendInput(1, &ip, sizeof(INPUT));
+	return 0;
+}
+
 static int32_t _cdecl __SendBroadcastMessage(lua_State* state)
 {
 	SendMessage(HWND_BROADCAST, lua_tointeger(state, 1), lua_tointeger(state, 2), MAKELPARAM(lua_tointeger(state, 3), lua_tointeger(state, 4)));
@@ -373,6 +386,12 @@ static int32_t _cdecl __DrawLine(lua_State* state)
 	return 0;
 }
 
+static int32_t _cdecl __BlockInput(lua_State* state)
+{
+	lua_pushboolean(state,BlockInput(lua_toboolean(state, 1)));
+	return 1;
+}
+
 static int32_t _cdecl _DrawString(lua_State* state)
 {
 	lua_pushboolean(state, keyDown(lua_tointeger(state, 1)));
@@ -397,6 +416,7 @@ void _stdcall WindowsPackageInitializer()
 	lua_register(m_lua, "GetWindowRect", __GetWindowRect);
 	lua_register(m_lua, "SendMessage", __SendMessage);
 	lua_register(m_lua, "SendBroadcastMessage", __SendBroadcastMessage);
+	lua_register(m_lua, "SendInput", __SendInput);
 	lua_register(m_lua, "PostMessage", __PostMessage);
 	lua_register(m_lua, "GetCursorPosition", CursorPosition);
 	lua_register(m_lua, "ClientToScreen", __ClientToScreen);
@@ -407,6 +427,7 @@ void _stdcall WindowsPackageInitializer()
 	lua_register(m_lua, "CreateCompatibleBitmap", __CreateCompatibleBitmap);
 	lua_register(m_lua, "SelectObject", __SelectObject);
 	lua_register(m_lua, "BitBlt", __BitBlt);
+	lua_register(m_lua, "BlockInput", __BlockInput);
 	lua_register(m_lua, "MinimizeWindow", __MinimizeWindow);
 	lua_register(m_lua, "MaximizeWindow", __MaximizeWindow);
 	lua_register(m_lua, "Execute", Execute);

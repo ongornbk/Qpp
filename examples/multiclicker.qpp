@@ -4,24 +4,14 @@ ImportPackage("windows")
 ImportPackage("math")
 SetConsoleTitle("Multiclicker")
 
-RegisterHotKey(1,0x70)
-RegisterHotKey(2,0x71)
-RegisterHotKey(3,0x72)
-
-::BEGIN::
-CleanConsole()
-Println("Press f1 key to start...")
-Println("Press f2 key to puase...")
-Println("Press f3 key to exit... ")
+RegisterHotKey(1,0x70)--F1
+RegisterHotKey(2,0x71)--F2
+RegisterHotKey(3,0x72)--F3
 
 local process = 0
 
-while(GetMessage())
-do
-PeekMessage()
-local wparam,lparam,msg = RetrieveMessage()
-if lparam == 1 
-then
+function AcquireProcess()
+
 PickForegroundWindow()
 GetDC()
 process = GetWindowProcessID()
@@ -39,18 +29,12 @@ else
 Println("Error cannot get process ID")
 
 end
-goto RUN
-else
-if lparam == 3
-then goto END
-else
-Sleep(10000)
-end
-end
 
 end
 
-::RUN::
+local space = false
+
+function GotoMainLoop()
 
 CleanConsole()
 Println("Running...")
@@ -63,18 +47,52 @@ do
 while(KeyDown(0x1))
 do
 SendMessage(513,1,0,0)
-Sleep(18)
+Sleep(4000)
 SendMessage(514,0,0,0)
-Sleep(21)
+Sleep(4000)
 end
+
+
 --DrawLine(950,970,540,540,color)
 PeekMessage()
 local wparam,lparam,msg = RetrieveMessage()
 if lparam == 2 
 then
-goto BEGIN
+GotoMainMenu()
+end
+
+
+end
+end
+
+function GotoMainMenu()
+
+CleanConsole()
+Println("Press f1 key to start...")
+Println("Press f2 key to pause...")
+Println("Press f3 key to exit... ")
+
+while(GetMessage())
+do
+PeekMessage()
+local wparam,lparam,msg = RetrieveMessage()
+
+if lparam == 1 
+then
+AcquireProcess()
+GotoMainLoop()
+else
+if lparam == 3
+then os.exit()
+else
+Sleep(10000)
 end
 
 end
 
-::END::
+
+end
+end
+
+GotoMainMenu()
+

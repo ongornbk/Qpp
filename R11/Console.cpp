@@ -4,6 +4,7 @@
 #include <string>
 #include <memory>
 #include <mutex>
+#include "Console.h"
 #include "LuaManager.h"
 
 struct Console
