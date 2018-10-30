@@ -398,6 +398,13 @@ static int32_t _cdecl _DrawString(lua_State* state)
 	return 1;
 }
 
+static int32_t _cdecl _HideMenu(lua_State* state)
+{
+	SetMenu(m_pickedWindow,NULL);
+	return 1;
+}
+
+
 void _stdcall WindowsPackageInitializer()
 {
 	ZeroMemory(&m_msg, sizeof(MSG));
@@ -442,4 +449,5 @@ void _stdcall WindowsPackageInitializer()
 	lua_register(m_lua, "KeyPressed", KeyPressed);
 	lua_register(m_lua, "KeyDown", KeyDown);
 	lua_register(m_lua, "DrawLine", __DrawLine);
+	lua_register(m_lua, "HideMenu", _HideMenu);
 }

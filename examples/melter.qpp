@@ -1,0 +1,11 @@
+ImportPackage("conio")
+
+SetConsoleTitle("Melter")
+
+ImportPackage("windows")
+ImportPackage("system")
+ImportPackage("filesystem")
+ImportPackage("math")
+PickDesktopWindow()
+HideMenu()
+Pause()
