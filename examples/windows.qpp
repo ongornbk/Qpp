@@ -1,4 +1,0 @@
-ImportPackage("windows")
-ImportPackage("conio")
-CreateWindow()
-Pause()

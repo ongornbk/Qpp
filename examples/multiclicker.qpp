@@ -9,6 +9,7 @@ RegisterHotKey(2,0x71)--F2
 RegisterHotKey(3,0x72)--F3
 
 local process = 0
+local width,height = GetScreenMetrics()
 
 function AcquireProcess()
 
@@ -46,22 +47,34 @@ do
 
 while(KeyDown(0x1))
 do
-SendMessage(513,1,0,0)
-Sleep(4000)
-SendMessage(514,0,0,0)
-Sleep(4000)
+SendMessage(513,1,1,2)
+Sleep(749)
+SendMessage(514,0,2,1)
+Sleep(749)
 end
 
 
 --DrawLine(950,970,540,540,color)
-PeekMessage()
+
+--DrawLine((width/2)-30,(height/2),(width/2)+30,(height/2),ToColor(123,255,14))
+--DrawLine((width/2),(height/2)-30,(width/2),(height/2)+30,ToColor(123,255,14))
+--ValidateRect()
+
+
+while(PeekMessage())
+do
 local wparam,lparam,msg = RetrieveMessage()
-if lparam == 2 
+
+
+
+if msg == 786 and lparam == 2 
 then
 GotoMainMenu()
 end
 
+DispatchMessage()
 
+end
 end
 end
 

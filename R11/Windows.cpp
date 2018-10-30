@@ -24,8 +24,13 @@ LRESULT __stdcall WindowProcedure(HWND window, uint32_t msg, WPARAM wp, LPARAM l
 
 	{
 
-	case WM_DESTROY:
+	case WM_PAINT:
 
+		InvalidateRect(m_pickedWindow, 0, false);
+		return 0;
+		break;
+	case WM_DESTROY:
+		m_pickedWindow = NULL;
 		PostQuitMessage(0);
 		return 0;
 		break;
@@ -76,9 +81,9 @@ struct Window
 			m_pickedWindow = CreateWindowEx(0, myclass, L"Window",WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT,CW_USEDEFAULT, CW_USEDEFAULT, 0, 0, GetModuleHandle(0), 0);
 			if (m_pickedWindow)
 			{
-				ShowWindow(m_pickedWindow, SW_SHOWDEFAULT);
-				MSG msg;
-				while (GetMessage(&msg, 0, 0, 0)) DispatchMessage(&msg);
+				//ShowWindow(m_pickedWindow, SW_SHOWDEFAULT);
+				//MSG msg;
+				//while (GetMessage(&msg, 0, 0, 0)) DispatchMessage(&msg);
 			}
 
 		}
@@ -258,7 +263,7 @@ static int32_t _cdecl __SelectObject(lua_State* state)
 
 static int32_t _cdecl __BitBlt(lua_State* state)
 {
-	BitBlt(m_pickedDC, 0,0,lua_tointeger(state,1),lua_tointeger(state,2),GetDC(0),0,0,SRCCOPY);
+	BitBlt(m_pickedDC, 0,0,lua_tointeger(state,1),lua_tointeger(state,2),GetDC(m_pickedWindow),0,0,SRCCOPY);
 	return 0;
 }
 
@@ -394,15 +399,94 @@ static int32_t _cdecl __BlockInput(lua_State* state)
 
 static int32_t _cdecl _DrawString(lua_State* state)
 {
-	lua_pushboolean(state, keyDown(lua_tointeger(state, 1)));
+	HFONT font = CreateFontA(20, 20, 2, 0, 3, 0, 0, 0, 0, 0, 0, 1, 0, 0);
+	__private__DrawString(m_pickedDC, font, lua_tointeger(state, 1), lua_tointeger(state, 2), lua_tointeger(state, 3), lua_tostring(state, 4));
 	return 1;
 }
 
 static int32_t _cdecl _HideMenu(lua_State* state)
 {
 	SetMenu(m_pickedWindow,NULL);
-	return 1;
+	return 0;
 }
+
+static int32_t _cdecl GetScreenMetrics(lua_State* state)
+{
+	lua_pushinteger(state, GetSystemMetrics(SM_CXSCREEN));
+	lua_pushinteger(state, GetSystemMetrics(SM_CYSCREEN));
+	return 2;
+}
+
+static int32_t _cdecl _ReleaseDC(lua_State* state)
+{
+	ReleaseDC(m_pickedWindow, m_pickedDC);
+	return 0;
+}
+
+static int32_t _cdecl _SetPixel(lua_State* state)
+{
+
+
+
+	COORD pos;
+	pos.X = (SHORT)lua_tointeger(state, 1);
+	pos.Y = (SHORT)lua_tointeger(state, 2);
+	COLORREF color = (DWORD)lua_tointeger(state, 3);
+	int32_t scale = (int32_t)lua_tointeger(state, 4);
+	for (int i = 0; i < scale; i++)
+		for (int j = 0; j <= scale; j++)
+			SetPixel(m_pickedDC, pos.X + i, pos.Y + j, color);
+	return 0;
+}
+
+static int32_t _cdecl _ValidateRect(lua_State* state)
+{
+	ValidateRect(m_pickedWindow, 0);
+	return 0;
+}
+
+static int32_t _cdecl _InvalidateRect(lua_State* state)
+{
+	InvalidateRect(m_pickedWindow, 0,false);
+	return 0;
+}
+
+static int32_t _cdecl _SetTimer(lua_State* state)
+{
+	SetTimer(m_pickedWindow, lua_tointeger(state, 2),lua_tointeger(state,1), 0);
+	return 0;
+}
+
+static int32_t _cdecl _KillTimer(lua_State* state)
+{
+	KillTimer(m_pickedWindow, lua_tointeger(state, 1));
+	return 0;
+}
+
+static int32_t _cdecl WindowProc(lua_State* state)
+{
+	WindowProcedure(m_pickedWindow, lua_tointeger(state, 1), lua_tointeger(state, 2), lua_tointeger(state, 3));
+	return 0;
+}
+
+static int32_t _cdecl _DispatchMessage(lua_State* state)
+{
+	DispatchMessage(&m_msg);
+	return 0;
+}
+
+static int32_t _cdecl _PostQuitMessage(lua_State* state)
+{
+	PostQuitMessage(0);
+	return 0;
+}
+
+static int32_t _cdecl WindowExist(lua_State* state)
+{
+	lua_pushboolean(state, (bool)m_pickedWindow);
+	return 0;
+}
+
 
 
 void _stdcall WindowsPackageInitializer()
@@ -449,5 +533,17 @@ void _stdcall WindowsPackageInitializer()
 	lua_register(m_lua, "KeyPressed", KeyPressed);
 	lua_register(m_lua, "KeyDown", KeyDown);
 	lua_register(m_lua, "DrawLine", __DrawLine);
+	lua_register(m_lua, "DrawString", _DrawString);
 	lua_register(m_lua, "HideMenu", _HideMenu);
+	lua_register(m_lua, "GetScreenMetrics", GetScreenMetrics);
+	lua_register(m_lua, "ReleaseDC", _ReleaseDC);
+	lua_register(m_lua, "SetPixel", _SetPixel);
+	lua_register(m_lua, "ValidateRect", _ValidateRect);
+	lua_register(m_lua, "InvalidateRect", _InvalidateRect);
+	lua_register(m_lua, "SetTimer", _SetTimer);
+	lua_register(m_lua, "KillTimer", _KillTimer);
+	lua_register(m_lua, "WindowProc", WindowProc);
+	lua_register(m_lua, "DispatchMessage", _DispatchMessage);
+	lua_register(m_lua, "PostQuitMessage", _PostQuitMessage);
+	lua_register(m_lua, "WindowExist", WindowExist);
 }

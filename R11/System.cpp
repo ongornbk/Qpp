@@ -49,6 +49,9 @@ static int32_t _cdecl __SetAttributes(lua_State* state)
 }
 
 
+
+
+
 void _stdcall SystemPackageInitializer()
 {
 	m_lua = LuaManager::GetInstance()->m_lua;

@@ -1,0 +1,26 @@
+ImportPackage("conio")
+--FreeConsole()
+
+ImportPackage("windows")
+ImportPackage("system")
+ImportPackage("filesystem")
+ImportPackage("math")
+
+CreateWindow()
+ShowWindow(true)
+UpdateWindow()
+GetDC()
+
+while(true)
+do
+if(GetMessage())
+then
+msg,wparam,lparam = RetrieveMessage()
+DrawString(500,70,ToColor(0,255,0),"Window Qpp Example")
+local x,y = GetCursorPosition()
+DrawLine(x-5,y-5,x+5,y+5,ToColor(x,y,x*y))
+WindowProc(msg,wparam,lparam)
+DispatchMessage()
+end
+Sleep(1000)
+end
