@@ -25,6 +25,7 @@ private:
 	friend void _stdcall UrlmonPackageInitializer();
 	friend void _stdcall FilesystemPackageInitializer();
 	friend void _stdcall InputPackageInitializer();
+	friend void _stdcall XMLPackageInitializer();
 
 	friend int32_t _cdecl ImportPackage(lua_State* state);
 

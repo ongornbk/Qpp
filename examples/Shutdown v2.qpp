@@ -1,0 +1,59 @@
+ImportPackage("conio")
+SetConsoleTitle("Shutdown V2")
+Print("Time to shutdown : ")
+local ti = tonumber(GetInput())
+local cti = ti
+CleanConsole()
+ImportPackage("system")
+ImportPackage("windows")
+ImportPackage("math")
+CreateWindow()
+SetTimer(1000,0)
+ShowWindow(false)
+GetDC()
+
+Gotoxy(5,1)
+Print("Remaining time: ")
+Gotoxy(25,3)
+Print(" Hours...           ")
+Gotoxy(25,4)
+Print(" Minutes...           ")
+Gotoxy(25,5)
+Print(" Seconds...           ")
+
+while(true)
+do
+while(GetMessage())
+do
+
+local lparam,wparam,msg = RetrieveMessage()
+
+if msg == 0x113
+then
+
+if ti > 0
+then ti = ti - 1
+Gotoxy(5,3)
+Print(tostring(ti/3600))
+Gotoxy(7,3)
+Print("                   ")
+Gotoxy(5,4)
+Print(tostring((ti/60)%60))
+Gotoxy(7,4)
+Print("                   ")
+Gotoxy(5,5)
+Print(tostring(ti%60))
+
+else
+KillTimer(0)
+Shutdown()
+os.exit()
+end
+else
+
+WindowProc(msg,wparam,lparam)
+end
+DispatchMessage()
+end
+Sleep(10000)
+end

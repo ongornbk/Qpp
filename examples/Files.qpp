@@ -1,0 +1,8 @@
+ImportPackage("conio")
+ImportPackage("filesystem")
+SetConsoleTitle("Files testing...")
+OpenFile("text.txt")
+local text = LoadFileToString()
+Println(tostring(text))
+CloseFile()
+Pause()

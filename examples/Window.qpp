@@ -18,7 +18,10 @@ then
 msg,wparam,lparam = RetrieveMessage()
 DrawString(500,70,ToColor(0,255,0),"Window Qpp Example")
 local x,y = GetCursorPosition()
-DrawLine(x-5,y-5,x+5,y+5,ToColor(x,y,x*y))
+DrawLine(x-25,y-15,x+15,y+25,ToColor(x-y,y+x,x*y))
+DrawLine(x-15,y-25,x+25,y+15,ToColor(x+y,y-x,x*y))
+DrawLine(x-15,y-25,x+15,y+25,ToColor(x*x,y*y,x*y))
+DrawLine(x-25,y-15,x+25,y+15,ToColor(x+x,y+x,x*y))
 WindowProc(msg,wparam,lparam)
 DispatchMessage()
 end

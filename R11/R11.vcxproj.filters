@@ -22,6 +22,9 @@
     <Filter Include="Shared">
       <UniqueIdentifier>{8b8f8fb1-9f34-44e8-8beb-eeab2d397bd5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Packages\Source">
+      <UniqueIdentifier>{1d06c626-b830-4fec-b770-c48ad72dee15}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -69,6 +72,9 @@
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="XML.h">
+      <Filter>Packages\Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -86,29 +92,32 @@
     <ClCompile Include="PackageMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Console.cpp">
-      <Filter>Packages</Filter>
-    </ClCompile>
-    <ClCompile Include="Math.cpp">
-      <Filter>Packages</Filter>
-    </ClCompile>
-    <ClCompile Include="System.cpp">
-      <Filter>Packages</Filter>
-    </ClCompile>
-    <ClCompile Include="Windows.cpp">
-      <Filter>Packages</Filter>
-    </ClCompile>
-    <ClCompile Include="Filesystem.cpp">
-      <Filter>Packages</Filter>
-    </ClCompile>
-    <ClCompile Include="Urlmon.cpp">
-      <Filter>Packages</Filter>
-    </ClCompile>
     <ClCompile Include="DirectInput.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Console.cpp">
+      <Filter>Packages\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Filesystem.cpp">
+      <Filter>Packages\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Math.cpp">
+      <Filter>Packages\Source</Filter>
+    </ClCompile>
     <ClCompile Include="Input.cpp">
-      <Filter>Packages</Filter>
+      <Filter>Packages\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="System.cpp">
+      <Filter>Packages\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Urlmon.cpp">
+      <Filter>Packages\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows.cpp">
+      <Filter>Packages\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="XML.cpp">
+      <Filter>Packages\Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -2,10 +2,66 @@
 #include "Windows.h"
 #include "LuaManager.h"
 #include <sys/stat.h>
+#include <fstream>
+#include <sstream>
+#include <stack>
+#include <exception>
+#include <memory>
+
+
+
+struct File
+{
+	File()
+	{
+	}
+
+	~File()
+	{
+		
+	}
+
+	void open(const char* path)
+	{
+		m_stream.open(path);
+	}
+
+	void close()
+	{
+		if (m_stream.is_open())
+		{
+			m_stream.close();
+		}
+	}
+
+	bool is_open()
+	{
+		return m_stream.is_open();
+	}
+
+	std::string to_string()
+	{
+		std::stringstream ss;
+		if (m_stream.is_open())
+		{
+			while (m_stream.peek() != EOF)
+			{
+				ss << (char)m_stream.get();
+			}
+			
+		}
+		return ss.str();
+	}
+
+	
+
+	std::ifstream m_stream;
+};
 
 namespace
 {
 	static lua_State* m_lua = nullptr;
+	static std::stack<File*> m_files;
 }
 
 static int32_t _cdecl Mkdir(lua_State* state)
@@ -56,6 +112,62 @@ static int32_t _cdecl __RemoveFile(lua_State* state)
 	return 0;
 }
 
+static int32_t _cdecl __OpenFile(lua_State* state)
+{
+
+	std::string path = lua_tostring(state, 1);
+	File* file = new File();
+	file->open(path.c_str());
+	if (file->is_open())
+	{
+		m_files.push(file);
+	}
+	else
+	{
+		file->close();
+		throw std::runtime_error("Error file not opened");
+	}
+	return 0;
+}
+
+#include <iostream>
+
+static int32_t _cdecl __CloseFile(lua_State* state)
+{
+	if (m_files.empty())
+	{
+		throw std::runtime_error("Error no file to close!");
+	}
+	else
+	{
+		File* file = m_files.top();
+		if (file)
+		{
+			file->close();
+			delete file;
+			file = nullptr;
+		}
+		m_files.pop();
+
+	}
+	return 0;
+}
+
+static int32_t _cdecl __LoadFileToString(lua_State* state)
+{
+	std::string str;
+	if (m_files.empty())
+	{
+		throw std::runtime_error("Error! No opened files to load!");
+	}
+	else
+	{
+		str = m_files.top()->to_string();
+	}
+	lua_pushstring(m_lua, str.c_str());
+	return 1;
+}
+
 void _stdcall FilesystemPackageInitializer()
 {
 
@@ -64,4 +176,7 @@ void _stdcall FilesystemPackageInitializer()
 	lua_register(m_lua, "GetEnv", __GetEnv);
 	lua_register(m_lua, "CopyFile", __CopyFile);
 	lua_register(m_lua, "RemoveFile", __RemoveFile);
+	lua_register(m_lua, "OpenFile", __OpenFile);
+	lua_register(m_lua, "CloseFile", __CloseFile);
+	lua_register(m_lua, "LoadFileToString", __LoadFileToString);
 }
