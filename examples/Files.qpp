@@ -1,7 +1,7 @@
 ImportPackage("conio")
 ImportPackage("filesystem")
 SetConsoleTitle("Files testing...")
-OpenFile("text.txt")
+OpenFileAppend("text.txt")
 local text = LoadFileToString()
 Println(tostring(text))
 CloseFile()

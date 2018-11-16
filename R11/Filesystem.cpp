@@ -21,9 +21,9 @@ struct File
 		
 	}
 
-	void open(const char* path)
+	void open(const char* path,uint32_t mode = 3)
 	{
-		m_stream.open(path);
+		m_stream.open(path,mode);
 	}
 
 	void close()
@@ -50,12 +50,27 @@ struct File
 			}
 			
 		}
+		else
+		{
+			throw std::runtime_error("Error! file was not opened!");
+		}
 		return ss.str();
 	}
 
-	
+	void append_string(std::string str)
+	{
+		if (m_stream.is_open())
+		{
+			m_stream << str;
+		}
+		else
+		{
+			throw std::runtime_error("Error! file was not opened!");
+		}
+	}
 
-	std::ifstream m_stream;
+	std::fstream m_stream;
+
 };
 
 namespace
@@ -112,12 +127,12 @@ static int32_t _cdecl __RemoveFile(lua_State* state)
 	return 0;
 }
 
-static int32_t _cdecl __OpenFile(lua_State* state)
+static int32_t _cdecl __OpenFileAppend(lua_State* state)
 {
 
 	std::string path = lua_tostring(state, 1);
 	File* file = new File();
-	file->open(path.c_str());
+	file->open(path.c_str(),std::ios::app | std::ios::in | std::ios::out);
 	if (file->is_open())
 	{
 		m_files.push(file);
@@ -130,7 +145,23 @@ static int32_t _cdecl __OpenFile(lua_State* state)
 	return 0;
 }
 
-#include <iostream>
+static int32_t _cdecl __OpenFileTrunc(lua_State* state)
+{
+
+	std::string path = lua_tostring(state, 1);
+	File* file = new File();
+	file->open(path.c_str(), std::ios::trunc | std::ios::in | std::ios::out);
+	if (file->is_open())
+	{
+		m_files.push(file);
+	}
+	else
+	{
+		file->close();
+		throw std::runtime_error("Error file not opened");
+	}
+	return 0;
+}
 
 static int32_t _cdecl __CloseFile(lua_State* state)
 {
@@ -168,6 +199,20 @@ static int32_t _cdecl __LoadFileToString(lua_State* state)
 	return 1;
 }
 
+static int32_t _cdecl __AppendStringToFile(lua_State* state)
+{
+	std::string str = lua_tostring(m_lua, 1);
+	if (m_files.empty())
+	{
+		throw std::runtime_error("Error! No opened files to load!");
+	}
+	else
+	{
+		m_files.top()->append_string(str);
+	}
+	return 0;
+}
+
 void _stdcall FilesystemPackageInitializer()
 {
 
@@ -176,7 +221,9 @@ void _stdcall FilesystemPackageInitializer()
 	lua_register(m_lua, "GetEnv", __GetEnv);
 	lua_register(m_lua, "CopyFile", __CopyFile);
 	lua_register(m_lua, "RemoveFile", __RemoveFile);
-	lua_register(m_lua, "OpenFile", __OpenFile);
+	lua_register(m_lua, "OpenFileAppend", __OpenFileAppend);
+	lua_register(m_lua, "OpenFileTrunc", __OpenFileTrunc);
 	lua_register(m_lua, "CloseFile", __CloseFile);
 	lua_register(m_lua, "LoadFileToString", __LoadFileToString);
+	lua_register(m_lua, "AppendStringToFile", __AppendStringToFile);
 }
