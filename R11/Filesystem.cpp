@@ -132,7 +132,7 @@ static int32_t _cdecl __OpenFileAppend(lua_State* state)
 
 	std::string path = lua_tostring(state, 1);
 	File* file = new File();
-	file->open(path.c_str(),std::ios::app | std::ios::in | std::ios::out);
+	file->open(path.c_str());
 	if (file->is_open())
 	{
 		m_files.push(file);
@@ -147,10 +147,12 @@ static int32_t _cdecl __OpenFileAppend(lua_State* state)
 
 static int32_t _cdecl __OpenFileTrunc(lua_State* state)
 {
-
 	std::string path = lua_tostring(state, 1);
+	File trunc;
+	trunc.open(path.c_str(), std::ios::trunc);
+	trunc.close();
 	File* file = new File();
-	file->open(path.c_str(), std::ios::trunc | std::ios::out);
+	file->open(path.c_str());
 	if (file->is_open())
 	{
 		m_files.push(file);
