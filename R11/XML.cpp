@@ -1,6 +1,9 @@
 #include "pch.h"
 #include "XML.h"
 #include "LuaManager.h"
+#include <rapidxml.hpp>
+
+using namespace rapidxml;
 
 namespace
 {

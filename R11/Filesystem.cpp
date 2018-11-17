@@ -52,7 +52,7 @@ struct File
 		}
 		else
 		{
-			throw std::runtime_error("Error! file was not opened!");
+			MessageBox(NULL, L"Error! File not opened!", NULL, NULL);
 		}
 		return ss.str();
 	}
@@ -65,7 +65,7 @@ struct File
 		}
 		else
 		{
-			throw std::runtime_error("Error! file was not opened!");
+			MessageBox(NULL, L"Error! File not opened!", NULL, NULL);
 		}
 	}
 
@@ -139,8 +139,7 @@ static int32_t _cdecl __OpenFileAppend(lua_State* state)
 	}
 	else
 	{
-		//file->close();
-		throw std::runtime_error("Error file not opened");
+		MessageBox(NULL, L"Error! File not opened!", NULL, NULL);
 	}
 	return 0;
 }
@@ -156,8 +155,7 @@ static int32_t _cdecl __OpenFileTrunc(lua_State* state)
 	}
 	else
 	{
-		//file->close();
-		throw std::runtime_error("Error file not opened");
+		MessageBox(NULL, L"Error! File not opened!", NULL, NULL);
 	}
 	return 0;
 }
@@ -166,7 +164,7 @@ static int32_t _cdecl __CloseFile(lua_State* state)
 {
 	if (m_files.empty())
 	{
-		throw std::runtime_error("Error no file to close!");
+		MessageBox(NULL, L"Error! No file to close!",NULL,NULL);
 	}
 	else
 	{
@@ -188,7 +186,7 @@ static int32_t _cdecl __LoadFileToString(lua_State* state)
 	std::string str;
 	if (m_files.empty())
 	{
-		throw std::runtime_error("Error! No opened files to load!");
+		MessageBox(NULL, L"Error! No files to load!", NULL, NULL);
 	}
 	else
 	{
@@ -203,7 +201,7 @@ static int32_t _cdecl __AppendStringToFile(lua_State* state)
 	std::string str = lua_tostring(m_lua, 1);
 	if (m_files.empty())
 	{
-		throw std::runtime_error("Error! No opened files to load!");
+		MessageBox(NULL, L"Error! No files to load!", NULL, NULL);
 	}
 	else
 	{
