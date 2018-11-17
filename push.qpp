@@ -7,7 +7,7 @@ System("@date /t")
 System("@time /t")
 
 ImportPackage("filesystem")
-OpenFileTrunc("version.ver")
+OpenFileAppend("version.ver")
 local version = LoadFileToString()
 Println(tostring(version))
 Print("Commit Message: ")
