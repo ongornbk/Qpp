@@ -1,0 +1,277 @@
+ImportPackage("conio")
+SetConsoleTitle("Snowrain")
+ImportPackage("system")
+ImportPackage("windows")
+ImportPackage("math")
+CreateWindow()
+SetTimer(45,0)
+ShowWindow(false)
+GetDC()
+
+local CONSOLE_MATRIX_HEIGHT = 35
+local CONSOLE_MATRIX_WIDTH  = 100
+
+local LEFT    = 10
+local TOP     = 5
+local TICKS   = 100
+
+local MATRIX = {}
+
+local LMOVE = 1
+local RMOVE = 3
+local TICK  = 0
+
+local SNOW_DENSITY    = 50
+local TICKS_TO_CLEAN  = 200
+local SNOW_CHAR       = '#'
+local EMPTY_CHAR      = ' '
+local CLEANING_HEIGHT = 6
+local MAX_SNOW_HEIGHT = 55
+
+function Wind()
+
+
+
+local w = RandomInteger(0,3)
+
+if w == 0
+then
+LMOVE = 1
+RMOVE = 3
+end
+
+if w == 1
+then
+LMOVE = 1
+RMOVE = 2
+end
+
+if w == 2
+then
+LMOVE = 2
+RMOVE = 2
+end
+
+if w == 3
+then
+LMOVE = 2
+RMOVE = 3
+end
+
+end
+
+function CleanColumn(x)
+
+for i = 0,CLEANING_HEIGHT,1
+do
+Gotoxy(x + LEFT,CONSOLE_MATRIX_HEIGHT - i + TOP)
+MATRIX[x][CONSOLE_MATRIX_HEIGHT - i] = EMPTY_CHAR
+Print(EMPTY_CHAR)
+end
+
+end
+
+function MoveConsoleCursor(x,y)
+Gotoxy(x + LEFT, y + TOP)
+end
+
+function Clean()
+	local x = 1
+	while (x < CONSOLE_MATRIX_WIDTH)
+	do
+	CleanColumn(x)
+    x = x + 1
+	end
+end
+
+function CreateSnow()
+		for i = 1,CONSOLE_MATRIX_WIDTH,1
+		do
+		
+			if RandomInteger(0,SNOW_DENSITY) == 0
+			then
+				MATRIX[i][0] = SNOW_CHAR;
+			end
+end
+end
+
+function PrintInfo()
+	
+	local wind = ""
+	
+	if LMOVE == 2 and RMOVE == 2
+	then
+		wind = "Brak wiatru..."
+	end
+	if LMOVE == 1 and RMOVE == 3
+	then
+		wind = "Wiatr zmienny..."
+	end
+	if LMOVE == 1 and RMOVE == 2
+	then
+		wind = "Wiatr ze wschodu..."
+	end
+	if LMOVE == 2 and RMOVE == 3
+	then
+		wind = "Wiatr z zachodu..."
+	end
+	MoveConsoleCursor(0, -1)
+	Print("Do odsniezenia zostalo: " ..TICK .." : "..TICKS_TO_CLEAN.."  ")
+	MoveConsoleCursor(0, -2)
+	Print(wind .. "      ")
+end
+
+function MoveSnow()
+
+for i = 0,CONSOLE_MATRIX_WIDTH,1
+do
+
+for j = CONSOLE_MATRIX_HEIGHT,0,-1
+do
+
+if (MATRIX[i][j] == SNOW_CHAR)
+then
+
+if not(j == CONSOLE_MATRIX_HEIGHT - 1 or (MATRIX[i][j + 1] == SNOW_CHAR and CONSOLE_MATRIX_HEIGHT - j < MAX_SNOW_HEIGHT))
+then
+
+					MATRIX[i][j] = EMPTY_CHAR
+					MoveConsoleCursor(i, j)
+					Print(MATRIX[i][j])
+					local XX = 0
+					local YY = 0
+					
+					if i == 0
+					then
+					
+					local RR = RandomInteger(LMOVE,RMOVE)
+					if RR == 1
+					then
+					XX = CONSOLE_MATRIX_WIDTH - 1
+					YY = j + 1
+					end
+					
+					if RR == 2
+					then
+					XX = i
+					YY = j + 1
+					end
+					
+					if RR == 3
+					then
+					XX = i + 1
+					YY = j + 1
+					end
+					
+					else
+					
+					if i == CONSOLE_MATRIX_WIDTH - 1
+					then
+						local RR = RandomInteger(LMOVE,RMOVE)
+					
+					if RR == 1
+					then
+							XX = i - 1
+							YY = j + 1
+					end
+					
+					if RR == 2
+					then
+							XX = i
+							YY = j + 1
+					end
+					
+					if RR == 3
+					then
+							XX = 0
+							YY = j + 1
+					end
+					
+					else
+					
+					local RR = RandomInteger(LMOVE,RMOVE)
+					
+					if RR == 1
+					then
+							XX = i - 1
+							YY = j + 1
+					end
+					
+					if RR == 2
+					then
+							XX = i
+							YY = j + 1
+					end
+					
+					if RR == 3
+					then
+							XX = i + 1
+							YY = j + 1
+					end
+					
+					end
+					
+					
+					
+					end
+
+					if MATRIX[XX][YY] ~= EMPTY_CHAR
+					then
+						MATRIX[i][YY] = SNOW_CHAR
+						MoveConsoleCursor(i, YY)
+						Print(MATRIX[i][YY])
+
+					else
+						MATRIX[XX][YY] = SNOW_CHAR
+						MoveConsoleCursor(XX, YY)
+						Print(MATRIX[XX][YY])
+					end
+
+end
+
+end
+
+end
+
+end
+
+end
+
+for i = 0, CONSOLE_MATRIX_WIDTH+1 do
+    MATRIX[i] = {}
+    for j = 0, CONSOLE_MATRIX_HEIGHT+1 do
+        MATRIX[i][j] = EMPTY_CHAR
+    end
+end
+
+while(true)
+do
+while(GetMessage())
+do
+
+local lparam,wparam,msg = RetrieveMessage()
+
+if msg == 0x113
+then
+
+CreateSnow()
+		MoveSnow()
+		if TICK > TICKS_TO_CLEAN
+		then
+			Clean()
+			TICK = 0
+			Wind()
+		else
+			PrintInfo()
+		end
+		
+		TICK = TICK + 1
+
+else
+WindowProc(msg,wparam,lparam)
+end
+DispatchMessage()
+end
+Sleep(1000)
+end
+
