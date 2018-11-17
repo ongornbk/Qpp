@@ -127,12 +127,14 @@ static int32_t _cdecl __RemoveFile(lua_State* state)
 	return 0;
 }
 
+constexpr auto i = 1 | 2;
+
 static int32_t _cdecl __OpenFileAppend(lua_State* state)
 {
 
 	std::string path = lua_tostring(state, 1);
 	File* file = new File();
-	file->open(path.c_str());
+	file->open(path.c_str(),std::ios::out | std::ios::in | std::ios::app);
 	if (file->is_open())
 	{
 		m_files.push(file);
@@ -148,11 +150,8 @@ static int32_t _cdecl __OpenFileAppend(lua_State* state)
 static int32_t _cdecl __OpenFileTrunc(lua_State* state)
 {
 	std::string path = lua_tostring(state, 1);
-	File trunc;
-	trunc.open(path.c_str(), std::ios::trunc);
-	trunc.close();
 	File* file = new File();
-	file->open(path.c_str());
+	file->open(path.c_str(), std::ios::out | std::ios::in | std::ios::trunc | std::ios::app);
 	if (file->is_open())
 	{
 		m_files.push(file);
@@ -162,6 +161,7 @@ static int32_t _cdecl __OpenFileTrunc(lua_State* state)
 		file->close();
 		throw std::runtime_error("Error file not opened");
 	}
+	return 0;
 	return 0;
 }
 
