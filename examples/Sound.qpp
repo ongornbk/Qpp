@@ -1,0 +1,24 @@
+ImportPackage("windows")
+ImportPackage("conio")
+SetConsoleTitle("Sound")
+SetTimer(1000,0)
+
+
+while(true)
+do
+while(GetMessage())
+do
+
+local lparam,wparam,msg = RetrieveMessage()
+
+if msg == 0x113
+then
+PlaySound("sound.wav")
+else
+
+WindowProc(msg,wparam,lparam)
+end
+DispatchMessage()
+end
+Sleep(10000)
+end

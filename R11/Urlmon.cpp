@@ -10,6 +10,8 @@ extern "C"
 	pICFUNC UrlToFile = nullptr;
 }
 
+
+
 struct Urlmon
 {
 	Urlmon()

@@ -3,6 +3,53 @@
 #include "LuaManager.h"
 #include "WindowC.h"
 
+typedef void(*FNPTR)();
+typedef long(__stdcall * pICFUNC)(LPCSTR, HMODULE, DWORD);
+
+extern "C"
+{
+#ifdef PlaySound
+#undef PlaySound
+#endif
+
+	pICFUNC PlaySound = nullptr;
+}
+
+struct Winmm;
+
+namespace
+{
+	static std::unique_ptr<Winmm> m_url = nullptr;
+}
+
+struct Winmm
+{
+	Winmm()
+	{
+
+		m_urlmon = LoadLibraryA("winmm.dll");
+		PlaySound = pICFUNC(GetProcAddress(m_urlmon, "PlaySoundA"));
+	}
+
+	static Winmm* GetInstance()
+	{
+		if (m_url.get())
+		{
+			return m_url.get();
+		}
+		else
+		{
+			m_url = std::make_unique<Winmm>();
+			return m_url.get();
+		}
+	}
+
+	HMODULE     m_urlmon;
+	std::string m_utlpath;
+
+};
+
+
 struct Window;
 
 namespace
@@ -13,6 +60,7 @@ namespace
 	static HINSTANCE m_hinstance = NULL;
 	static HDC m_pickedDC = NULL;
 	static std::unique_ptr<HBITMAP> m_bitmap = NULL;
+
 	static MSG m_msg;
 }
 
@@ -487,6 +535,14 @@ static int32_t _cdecl WindowExist(lua_State* state)
 	return 0;
 }
 
+static int32_t _cdecl __PlaySound(lua_State* state)
+{
+	auto wmm = Winmm::GetInstance();
+	std::string str = lua_tostring(m_lua, 1);
+	PlaySound(str.c_str(), NULL, SND_ASYNC);
+	return 0;
+}
+
 
 
 void CALL_CONV WindowsPackageInitializer()
@@ -546,4 +602,5 @@ void CALL_CONV WindowsPackageInitializer()
 	lua_register(m_lua, "DispatchMessage", _DispatchMessage);
 	lua_register(m_lua, "PostQuitMessage", _PostQuitMessage);
 	lua_register(m_lua, "WindowExist", WindowExist);
+	lua_register(m_lua, "PlaySound", __PlaySound);
 }
