@@ -6,16 +6,16 @@ ImportPackage("math")
 
 
 local CONSOLE_MATRIX_HEIGHT = 45
-local CONSOLE_MATRIX_WIDTH  = 120
+local CONSOLE_MATRIX_WIDTH  = 100
 
-local CHAR_LIST = {'#','@','!','$','%','^','&','*','+','-','~','?','|'}
-local NUMBER_OF_CHARS = 13
+local CHAR_LIST = {'#','@','!','$','%','^','&','*','+','-','~','?','|','.','¡'}
+local NUMBER_OF_CHARS = 15
 local CURRENT_CHAR = 1
 
 local LEFT    = 10
 local TOP     = 5
 local TICKS   = 100
-local DELAY   = 0
+local DELAY   = 30
 
 local RANDOM_CHARS = false
 
@@ -26,11 +26,11 @@ local RMOVE = 3
 local TICK  = 0
 
 local SNOW_DENSITY    = 70
-local TICKS_TO_CLEAN  = 430
+local TICKS_TO_CLEAN  = 200
 local SNOW_CHAR       = '#'
 local EMPTY_CHAR      = ' '
 local CLEANING_HEIGHT = 5
-local MAX_SNOW_HEIGHT = 20
+local MAX_SNOW_HEIGHT = CONSOLE_MATRIX_HEIGHT - 5
 
 RegisterHotKey(1,0x1B)--ESC 
 
@@ -107,8 +107,8 @@ Gotoxy(x + LEFT, y + TOP)
 end
 
 function Clean()
-	local x = 1
-	while (x < CONSOLE_MATRIX_WIDTH)
+	local x = 0
+	while (x <= CONSOLE_MATRIX_WIDTH)
 	do
 	CleanColumn(x)
     x = x + 1
@@ -158,9 +158,15 @@ function PrintInfo()
 	Print(wind .. "      ")
 	MoveConsoleCursor(0, -3)
 	
-	local cpt = tostring(GetCpuUsage())
+	local cpti = GetCpuUsage()
+	if cpti > 100 or cpti < 0
+	then 
+	cpti = 100
+	end
 	
-	Print("Cpu: " .. cpt .. "%")
+	
+	cpt = tostring(cpti)
+	Print("Cpu: " .. cpt .. "%                         ")
 end
 
 function MoveSnow()
@@ -207,7 +213,7 @@ then
 					
 					else
 					
-					if i == CONSOLE_MATRIX_WIDTH - 1
+					if i == CONSOLE_MATRIX_WIDTH
 					then
 						local RR = RandomInteger(LMOVE,RMOVE)
 					
