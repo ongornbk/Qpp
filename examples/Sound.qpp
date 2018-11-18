@@ -20,5 +20,5 @@ WindowProc(msg,wparam,lparam)
 end
 DispatchMessage()
 end
-Sleep(10000)
+Sleep(1000)
 end

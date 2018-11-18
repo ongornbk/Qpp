@@ -1,0 +1,19 @@
+require "List"
+
+ImportPackage("conio")
+ImportPackage("filesystem")
+SetConsoleTitle("List testing...")
+
+list = List.new()
+
+List.pushleft(list, "One")
+List.pushleft(list, "Two")
+List.pushright(list,"Three")
+List.pushright(list,"Four")
+
+Println(List.popleft(list))
+Println(List.popleft(list))
+Println(List.popleft(list))
+Println(List.popleft(list))
+
+Pause()
