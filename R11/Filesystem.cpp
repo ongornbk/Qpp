@@ -210,7 +210,7 @@ static int32_t _cdecl __AppendStringToFile(lua_State* state)
 	return 0;
 }
 
-void _stdcall FilesystemPackageInitializer()
+void CALL_CONV FilesystemPackageInitializer()
 {
 
 	m_lua = LuaManager::GetInstance()->m_lua;

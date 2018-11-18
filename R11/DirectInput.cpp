@@ -103,7 +103,7 @@ bool Input::Initialize(HINSTANCE hInstance, HWND hwnd, int screenWidth, int scre
 	return true;
 }
 
-bool __cdecl Input::Update()
+bool Input::Update()
 {
 	memcpy(m_prevKeys, m_keys, sizeof(bool)*s_NumKeys);
 	memcpy(m_prevMouseState, m_mouseState.rgbButtons, sizeof(BYTE) * 4);

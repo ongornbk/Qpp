@@ -1,5 +1,7 @@
 #pragma once
 #include "luaH.h"
 
-void _stdcall ConsolePackageInitializer();
+
+
+void CALL_CONV ConsolePackageInitializer();
 

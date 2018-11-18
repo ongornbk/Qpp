@@ -4,5 +4,13 @@
 #include <lauxlib.h>
 
 
-#pragma comment(lib,"liblua53.a")
+
+
+#if _WIN64 
+#define CALL_CONV __stdcall
+#pragma comment(lib,"slib/x64/liblua53.a")
+#else
+#define CALL_CONV __cdecl
+#pragma comment(lib,"slib/x86/liblua53.a")
+#endif
 

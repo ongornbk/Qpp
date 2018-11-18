@@ -50,7 +50,7 @@ static int32_t __GetMouseState(lua_State* state)
 	return 1;
 }
 
-void _stdcall InputPackageInitializer()
+void CALL_CONV InputPackageInitializer()
 {
 
 	m_input = std::make_unique<DInput>();

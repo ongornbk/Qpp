@@ -57,7 +57,7 @@ static int32_t _cdecl UrlRequestToFile(lua_State* state)
 	return 1;
 }
 
-void _stdcall UrlmonPackageInitializer()
+void CALL_CONV UrlmonPackageInitializer()
 {
 	m_url = std::make_unique<Urlmon>();
 	m_lua = LuaManager::GetInstance()->m_lua;

@@ -1,4 +1,4 @@
 #pragma once
 #include "luaH.h"
 
-void _stdcall InputPackageInitializer();
+void CALL_CONV InputPackageInitializer();

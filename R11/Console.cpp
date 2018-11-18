@@ -162,7 +162,7 @@ static int32_t _cdecl __AllocConsole(lua_State* state)
 	return 0;
 }
 
-void _stdcall ConsolePackageInitializer()
+void CALL_CONV ConsolePackageInitializer()
 {
 	
 	m_console = std::make_unique<Console>();

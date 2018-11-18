@@ -3,17 +3,21 @@ SetConsoleTitle("Snowrain")
 ImportPackage("system")
 ImportPackage("windows")
 ImportPackage("math")
-CreateWindow()
-SetTimer(45,0)
-ShowWindow(false)
-GetDC()
 
-local CONSOLE_MATRIX_HEIGHT = 35
-local CONSOLE_MATRIX_WIDTH  = 100
+
+local CONSOLE_MATRIX_HEIGHT = 45
+local CONSOLE_MATRIX_WIDTH  = 120
+
+local CHAR_LIST = {'#','@','!','$','%','^','&','*','+','-','~','?','|'}
+local NUMBER_OF_CHARS = 13
+local CURRENT_CHAR = 1
 
 local LEFT    = 10
 local TOP     = 5
 local TICKS   = 100
+local DELAY   = 0
+
+local RANDOM_CHARS = false
 
 local MATRIX = {}
 
@@ -21,12 +25,39 @@ local LMOVE = 1
 local RMOVE = 3
 local TICK  = 0
 
-local SNOW_DENSITY    = 50
-local TICKS_TO_CLEAN  = 200
+local SNOW_DENSITY    = 70
+local TICKS_TO_CLEAN  = 430
 local SNOW_CHAR       = '#'
 local EMPTY_CHAR      = ' '
-local CLEANING_HEIGHT = 6
-local MAX_SNOW_HEIGHT = 55
+local CLEANING_HEIGHT = 5
+local MAX_SNOW_HEIGHT = 20
+
+RegisterHotKey(1,0x1B)--ESC 
+
+if RANDOM_CHARS == true
+then
+
+else
+RegisterHotKey(2,0x20)--SPACE
+end
+
+CreateWindow()
+SetTimer(DELAY,0)
+ShowWindow(false)
+GetDC()
+
+function NextChar()
+
+CURRENT_CHAR = CURRENT_CHAR + 1
+
+if CURRENT_CHAR > NUMBER_OF_CHARS
+then
+CURRENT_CHAR = 1
+end
+
+SNOW_CHAR = CHAR_LIST[CURRENT_CHAR]
+
+end
 
 function Wind()
 
@@ -85,6 +116,12 @@ function Clean()
 end
 
 function CreateSnow()
+
+if RANDOM_CHARS == true
+then
+NextChar()
+end
+
 		for i = 1,CONSOLE_MATRIX_WIDTH,1
 		do
 		
@@ -119,6 +156,11 @@ function PrintInfo()
 	Print("Do odsniezenia zostalo: " ..TICK .." : "..TICKS_TO_CLEAN.."  ")
 	MoveConsoleCursor(0, -2)
 	Print(wind .. "      ")
+	MoveConsoleCursor(0, -3)
+	
+	local cpt = tostring(GetCpuUsage())
+	
+	Print("Cpu: " .. cpt .. "%")
 end
 
 function MoveSnow()
@@ -129,10 +171,10 @@ do
 for j = CONSOLE_MATRIX_HEIGHT,0,-1
 do
 
-if (MATRIX[i][j] == SNOW_CHAR)
+if not (MATRIX[i][j] == EMPTY_CHAR)
 then
 
-if not(j == CONSOLE_MATRIX_HEIGHT - 1 or (MATRIX[i][j + 1] == SNOW_CHAR and CONSOLE_MATRIX_HEIGHT - j < MAX_SNOW_HEIGHT))
+if not(j == CONSOLE_MATRIX_HEIGHT - 1 or (MATRIX[i][j + 1] ~= EMPTY_CHAR and CONSOLE_MATRIX_HEIGHT - j < MAX_SNOW_HEIGHT))
 then
 
 					MATRIX[i][j] = EMPTY_CHAR
@@ -270,6 +312,22 @@ CreateSnow()
 else
 WindowProc(msg,wparam,lparam)
 end
+
+if msg == 786
+then
+
+if wparam == 1
+then
+os.exit()
+end
+
+if wparam == 2
+then
+NextChar()
+end
+
+end
+
 DispatchMessage()
 end
 Sleep(1000)

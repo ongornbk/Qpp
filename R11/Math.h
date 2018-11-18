@@ -1,4 +1,4 @@
 #pragma once
 #include "luaH.h"
 
-void _stdcall MathPackageInitializer();
+void CALL_CONV MathPackageInitializer();

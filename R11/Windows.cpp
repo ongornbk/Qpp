@@ -489,7 +489,7 @@ static int32_t _cdecl WindowExist(lua_State* state)
 
 
 
-void _stdcall WindowsPackageInitializer()
+void CALL_CONV WindowsPackageInitializer()
 {
 	ZeroMemory(&m_msg, sizeof(MSG));
 	m_window = std::make_unique<Window>();

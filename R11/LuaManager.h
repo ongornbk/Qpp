@@ -18,14 +18,14 @@ private:
 
 	void _cdecl OpenLibs() noexcept;
 
-	friend void _stdcall ConsolePackageInitializer();
-	friend void _stdcall MathPackageInitializer();
-	friend void _stdcall SystemPackageInitializer();
-	friend void _stdcall WindowsPackageInitializer();
-	friend void _stdcall UrlmonPackageInitializer();
-	friend void _stdcall FilesystemPackageInitializer();
-	friend void _stdcall InputPackageInitializer();
-	friend void _stdcall XMLPackageInitializer();
+	friend void CALL_CONV ConsolePackageInitializer();
+	friend void CALL_CONV MathPackageInitializer();
+	friend void CALL_CONV SystemPackageInitializer();
+	friend void CALL_CONV WindowsPackageInitializer();
+	friend void CALL_CONV UrlmonPackageInitializer();
+	friend void CALL_CONV FilesystemPackageInitializer();
+	friend void CALL_CONV InputPackageInitializer();
+	friend void CALL_CONV XMLPackageInitializer();
 
 	friend int32_t _cdecl ImportPackage(lua_State* state);
 

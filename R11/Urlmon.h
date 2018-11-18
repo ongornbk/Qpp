@@ -1,5 +1,5 @@
 #pragma once
 #include "luaH.h"
 
-void _stdcall UrlmonPackageInitializer();
+void CALL_CONV UrlmonPackageInitializer();
 

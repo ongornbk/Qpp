@@ -56,7 +56,7 @@ static int32_t _cdecl ToColor(lua_State* state)
 	return 1;
 }
 
-void _stdcall MathPackageInitializer()
+void CALL_CONV MathPackageInitializer()
 {
 	srand((uint32_t)time(NULL));
 	m_lua = LuaManager::GetInstance()->m_lua;

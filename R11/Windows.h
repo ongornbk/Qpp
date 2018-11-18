@@ -1,5 +1,5 @@
 #pragma once
 #include "luaH.h"
 
-void _stdcall WindowsPackageInitializer();
+void CALL_CONV WindowsPackageInitializer();
 

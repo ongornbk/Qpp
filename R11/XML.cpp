@@ -12,7 +12,7 @@ namespace
 
 
 
-void _stdcall XMLPackageInitializer()
+void CALL_CONV XMLPackageInitializer()
 {
 	m_lua = LuaManager::GetInstance()->m_lua;
 }
