@@ -13,7 +13,8 @@ local width,height = GetScreenMetrics()
 
 function AcquireProcess()
 
-PickForegroundWindow()
+local first_hwnd_ptr,second_hwnd_ptr = GetForegroundWindow()
+PickWindow(first_hwnd_ptr,second_hwnd_ptr)
 GetDC()
 process = GetWindowProcessID()
 if process > 0

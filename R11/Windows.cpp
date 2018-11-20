@@ -142,40 +142,60 @@ struct Window
 
 
 
-static int32_t _cdecl __PickForegroundWindow(lua_State* state)
+static int32_t _cdecl __GetForegroundWindow(lua_State* state) // MANAGED
 {
-	m_pickedWindow = GetForegroundWindow();
-	return 0;
+	ptrtype lptr(GetForegroundWindow());
+
+	lua_pushinteger(m_lua, lptr.lua.first);
+	lua_pushinteger(m_lua, lptr.lua.second);
+
+	return 2;
 }
 
-static int32_t _cdecl __PickConsoleWindow(lua_State* state)
+static int32_t _cdecl __GetConsoleWindow(lua_State* state)
 {
-	m_pickedWindow = GetConsoleWindow();
-	return 0;
+	ptrtype lptr(GetConsoleWindow());
+
+	lua_pushinteger(m_lua, lptr.lua.first);
+	lua_pushinteger(m_lua, lptr.lua.second);
+	return 2;
 }
 
-static int32_t _cdecl __PickDesktopWindow(lua_State* state)
+static int32_t _cdecl __GetDesktopWindow(lua_State* state)
 {
-	m_pickedWindow = GetDesktopWindow();
-	return 0;
+	ptrtype lptr(GetDesktopWindow());
+
+	lua_pushinteger(m_lua, lptr.lua.first);
+	lua_pushinteger(m_lua, lptr.lua.second);
+	return 2;
 }
 
 static int32_t _cdecl __ShowWindow(lua_State* state)
 {
-	ShowWindow(m_pickedWindow, lua_toboolean(state, 1));
-	return 0;
+	lua_pushboolean(m_lua,ShowWindow(m_pickedWindow, lua_toboolean(state, 1)));
+	return 1;
 }
 
 static int32_t _cdecl __SetActiveWindow(lua_State* state)
 {
-	SetActiveWindow(m_pickedWindow);
-	return 0;
+	ptrtype lptr(SetActiveWindow(m_pickedWindow));
+	lua_pushinteger(m_lua, lptr.lua.first);
+	lua_pushinteger(m_lua, lptr.lua.second);
+	return 2;
+}
+
+static int32_t _cdecl __SetForegroundWindow(lua_State* state)
+{
+	lua_pushboolean(m_lua,(SetForegroundWindow(m_pickedWindow)));
+	return 1;
 }
 
 static int32_t _cdecl __SetFocus(lua_State* state)
 {
-	SetFocus(m_pickedWindow);
-	return 0;
+	ptrtype lptr(SetFocus(m_pickedWindow));
+	lua_pushinteger(m_lua, lptr.lua.first);
+	lua_pushinteger(m_lua, lptr.lua.second);
+	return 2;
 }
 
 static int32_t _cdecl __GetWindowRect(lua_State* state)
@@ -543,7 +563,11 @@ static int32_t _cdecl __PlaySound(lua_State* state)
 	return 0;
 }
 
-
+static int32_t _cdecl __PickWindow(lua_State* state)
+{
+	m_pickedWindow = (HWND)ptrtype(lua_tointeger(m_lua, 1), lua_tointeger(m_lua, 2)).ptr;
+	return 0;
+}
 
 void CALL_CONV WindowsPackageInitializer()
 {
@@ -551,9 +575,9 @@ void CALL_CONV WindowsPackageInitializer()
 	m_window = std::make_unique<Window>();
 	m_lua = LuaManager::GetInstance()->m_lua;
 	lua_register(m_lua, "CreateWindow", __CreateWindow);
-	lua_register(m_lua, "PickForegroundWindow", __PickForegroundWindow); 
-	lua_register(m_lua, "PickDesktopWindow", __PickDesktopWindow);
-	lua_register(m_lua, "PickConsoleWindow", __PickConsoleWindow);
+	lua_register(m_lua, "GetForegroundWindow", __GetForegroundWindow); 
+	lua_register(m_lua, "GetDesktopWindow", __GetDesktopWindow);
+	lua_register(m_lua, "GetConsoleWindow", __GetConsoleWindow);
 	lua_register(m_lua, "GetWindowProcessID", GetWindowProcessID);
 	lua_register(m_lua, "OpenProcess", OpenProcess);
 	lua_register(m_lua, "PickCurrentProcess", PickCurrentProcess);
@@ -603,4 +627,6 @@ void CALL_CONV WindowsPackageInitializer()
 	lua_register(m_lua, "PostQuitMessage", _PostQuitMessage);
 	lua_register(m_lua, "WindowExist", WindowExist);
 	lua_register(m_lua, "PlaySound", __PlaySound);
+	lua_register(m_lua, "PickWindow", __PickWindow);
+	lua_register(m_lua, "SetForegroundWindow", __SetForegroundWindow);
 }

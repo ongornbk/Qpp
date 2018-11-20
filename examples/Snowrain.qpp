@@ -8,7 +8,7 @@ ImportPackage("math")
 local CONSOLE_MATRIX_HEIGHT = 45
 local CONSOLE_MATRIX_WIDTH  = 100
 
-local CHAR_LIST = {'#','@','!','$','%','^','&','*','+','-','~','?','|','.','¡'}
+local CHAR_LIST = {'#','@','!','$','%','^','&','*','+','-','~','?','|','.',"!@#$%^&*"}
 local NUMBER_OF_CHARS = 15
 local CURRENT_CHAR = 1
 

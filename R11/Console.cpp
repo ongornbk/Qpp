@@ -64,8 +64,9 @@ static int32_t _cdecl Println(lua_State* state)
 
 static int32_t _cdecl Pause(lua_State* state)
 {
-	getchar();
-	return 0;
+	int32_t gc = getchar();
+	lua_pushinteger(m_lua,gc);
+	return 1;
 }
 
 static int32_t _cdecl GetInput(lua_State* state)
@@ -79,8 +80,9 @@ static int32_t _cdecl GetInput(lua_State* state)
 static int32_t _cdecl __SetConsoleTitle(lua_State* state)
 {
 	std::string title = lua_tostring(state, 1);
-	SetConsoleTitleA(title.c_str());
-	return 0;
+	bool result = SetConsoleTitleA(title.c_str());
+	lua_pushboolean(m_lua, result);
+	return 1;
 }
 
 static int32_t _cdecl GotoXY(lua_State* state)
@@ -152,14 +154,16 @@ static int32_t _cdecl CleanConsole(lua_State* state)
 
 static int32_t _cdecl __FreeConsole(lua_State* state)
 {
-	FreeConsole();
-	return 0;
+	bool result = FreeConsole();
+	lua_pushboolean(m_lua, result);
+	return 1;
 }
 
 static int32_t _cdecl __AllocConsole(lua_State* state)
 {
-	AllocConsole();
-	return 0;
+	bool result = AllocConsole();
+	lua_pushboolean(m_lua, result);
+	return 1;
 }
 
 void CALL_CONV ConsolePackageInitializer()

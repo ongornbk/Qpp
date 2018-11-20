@@ -8,7 +8,8 @@ local sleep_time = tonumber(GetInput())
 sleep_time = sleep_time * 100000
 while(true)
 do
-PickForegroundWindow()
+local first_ptr_hwnd,second_ptr_hwnd = GetForegroundWindow()
+PickWindow(first_ptr_hwnd,second_ptr_hwnd)
 local name = GetWindowName()
 local class = GetClassName()
 Println("name @" .. name .. "@ class @" .. class .."@")
