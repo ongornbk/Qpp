@@ -1,5 +1,5 @@
 ImportPackage("conio")
---FreeConsole()
+FreeConsole()
 
 ImportPackage("windows")
 ImportPackage("system")

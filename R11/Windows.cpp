@@ -252,8 +252,11 @@ static int32_t _cdecl CursorPosition(lua_State* state)
 
 static int32_t _cdecl Execute(lua_State* state)
 {	
-	ShellExecuteA(NULL, lua_tostring(state,1), lua_tostring(state, 2), NULL, NULL, SW_SHOWNORMAL);
-	return 0;
+	ptrtype lptr(ShellExecuteA(NULL, lua_tostring(state,1), lua_tostring(state, 2), NULL, NULL, SW_SHOWNORMAL));
+
+	lua_pushinteger(m_lua, lptr.lua.first);
+	lua_pushinteger(m_lua, lptr.lua.second);
+	return 2;
 }
 
 static int32_t _cdecl GetWindowProcessID(lua_State* state)
@@ -264,24 +267,28 @@ lua_pushinteger(state, (int32_t)PID);
 return 1;
 }
 
-static int32_t _cdecl PickCurrentProcess(lua_State* state)
+static int32_t _cdecl GetCurrentProcess(lua_State* state)
 {
-	m_handle = GetCurrentProcess();
+	ptrtype lptr(GetCurrentProcess());
+
+	lua_pushinteger(m_lua, lptr.lua.first);
+	lua_pushinteger(m_lua, lptr.lua.second);
+	return 2;
+}
+
+static int32_t _cdecl PickProcess(lua_State* state)
+{
+	m_handle = (HANDLE)ptrtype(lua_tointeger(m_lua, 1), lua_tointeger(m_lua, 2)).ptr;
 	return 0;
 }
 
 static int32_t _cdecl OpenProcess(lua_State* state)
 {
-HANDLE m_handle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, (DWORD)lua_tointeger(state,1));
-if (m_handle)
-{
-	lua_pushboolean(state, true);
-}
-else
-{
-	lua_pushboolean(state, false);
-}
-return 1;
+	ptrtype lptr(OpenProcess(PROCESS_ALL_ACCESS, FALSE, (DWORD)lua_tointeger(state,1)));
+
+	lua_pushinteger(m_lua, lptr.lua.first);
+	lua_pushinteger(m_lua, lptr.lua.second);
+return 2;
 }
 
 static int32_t _cdecl __CreateWindow(lua_State* state)
@@ -307,7 +314,15 @@ static int32_t _cdecl __SetCursorPosition(lua_State* state)
 
 static int32_t _cdecl __GetDC(lua_State* state)
 {
-	m_pickedDC = GetDC(m_pickedWindow);
+	ptrtype lptr(GetDC(m_pickedWindow));
+	lua_pushinteger(m_lua, lptr.lua.first);
+	lua_pushinteger(m_lua, lptr.lua.second);
+	return 2;
+}
+
+static int32_t _cdecl __PickDC(lua_State* state)
+{
+	m_pickedDC = (HDC)ptrtype(lua_tointeger(m_lua, 1), lua_tointeger(m_lua, 2)).ptr;
 	return 0;
 }
 
@@ -580,7 +595,7 @@ void CALL_CONV WindowsPackageInitializer()
 	lua_register(m_lua, "GetConsoleWindow", __GetConsoleWindow);
 	lua_register(m_lua, "GetWindowProcessID", GetWindowProcessID);
 	lua_register(m_lua, "OpenProcess", OpenProcess);
-	lua_register(m_lua, "PickCurrentProcess", PickCurrentProcess);
+	lua_register(m_lua, "GetCurrentProcess", GetCurrentProcess);
 	lua_register(m_lua, "ShowWindow", __ShowWindow);
 	lua_register(m_lua, "SetActiveWindow", __SetActiveWindow); 
 	lua_register(m_lua, "SetFocus", __SetFocus);
@@ -629,4 +644,6 @@ void CALL_CONV WindowsPackageInitializer()
 	lua_register(m_lua, "PlaySound", __PlaySound);
 	lua_register(m_lua, "PickWindow", __PickWindow);
 	lua_register(m_lua, "SetForegroundWindow", __SetForegroundWindow);
+	lua_register(m_lua, "PickProcess", PickProcess);
+	lua_register(m_lua, "PickDC", __PickDC);
 }

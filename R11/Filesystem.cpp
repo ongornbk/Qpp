@@ -73,6 +73,7 @@ struct File
 
 };
 
+
 namespace
 {
 	static lua_State* m_lua = nullptr;

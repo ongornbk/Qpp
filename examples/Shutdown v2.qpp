@@ -31,6 +31,9 @@ CleanConsole()
 ImportPackage("system")
 ImportPackage("windows")
 
+require "core/Window"
+
+
 local first_console_ptr,second_console_ptr = GetConsoleWindow()
 local first_hidden_ptr,second_hidden_ptr
 
