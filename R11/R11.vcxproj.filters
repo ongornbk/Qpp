@@ -75,6 +75,9 @@
     <ClInclude Include="XML.h">
       <Filter>Packages\Headers</Filter>
     </ClInclude>
+    <ClInclude Include="Collector.h">
+      <Filter>Packages\Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -117,6 +120,9 @@
       <Filter>Packages\Source</Filter>
     </ClCompile>
     <ClCompile Include="XML.cpp">
+      <Filter>Packages\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Collector.cpp">
       <Filter>Packages\Source</Filter>
     </ClCompile>
   </ItemGroup>

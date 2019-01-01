@@ -16,6 +16,10 @@ static int32_t _cdecl ImportPackage(lua_State* state)
 		package = lua_tostring(LuaManager::GetInstance()->m_lua, 1);
 		if (PackageMap::m_packages[package])
 			PackageMap::m_packages[package]->Import();
+		else
+		{
+			MessageBox(NULL, L"Error! Package not found!", L"Error!", NULL);
+		}
 	
 	return 0;
 }

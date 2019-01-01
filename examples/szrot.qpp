@@ -1,0 +1,26 @@
+ImportPackage("conio")
+Print("search: ")
+SetConsoleTitle("Szrot Downloader")
+
+ImportPackage("windows")
+local item = string.gsub(tostring(GetInput())," ","_");
+ImportPackage("filesystem")
+OpenFileAppend("sites.urls")
+local sites = tostring(LoadFileToString())
+
+ImportPackage("urlmon")
+SetUrlOutputPath("result.html")
+
+for str in string.gmatch(sites,"[^%s]+")
+do
+local result = UrlRequestToFile("www." .. str .. "/search/" .. item)
+if result
+then
+Execute("open","result.html")
+Println("Succesfull request from: " .. str)
+else
+Println("Failed request from: " .. str)
+end
+end
+
+RemoveFile("result.html")

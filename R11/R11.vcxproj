@@ -155,6 +155,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Collector.h" />
     <ClInclude Include="Console.h" />
     <ClInclude Include="DirectInput.h" />
     <ClInclude Include="Filesystem.h" />
@@ -173,6 +174,7 @@
     <ClInclude Include="XML.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Collector.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="DirectInput.cpp" />
     <ClCompile Include="Filesystem.cpp" />
