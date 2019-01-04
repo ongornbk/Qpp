@@ -4,6 +4,8 @@ ImportPackage("windows")
 ImportPackage("math")
 SetConsoleTitle("Multiclicker")
 
+require "Sunflower/Sunflower"
+
 RegisterHotKey(1,0x70)--F1
 RegisterHotKey(2,0x71)--F2
 RegisterHotKey(3,0x72)--F3
@@ -12,26 +14,9 @@ local process = 0
 local width,height = GetScreenMetrics()
 
 function AcquireProcess()
-
 local first_hwnd_ptr,second_hwnd_ptr = GetForegroundWindow()
 PickWindow(first_hwnd_ptr,second_hwnd_ptr)
 GetDC()
-process = GetWindowProcessID()
-if process > 0
-then
-
-if OpenProcess(process)
-then
-
-else
-Println("Error cannot open process : " .. tostring(process))
-end
-
-else
-Println("Error cannot get process ID")
-
-end
-
 end
 
 local space = false
@@ -53,14 +38,6 @@ Sleep(749)
 SendMessage(514,0,2,1)
 Sleep(749)
 end
-
-
---DrawLine(950,970,540,540,color)
-
---DrawLine((width/2)-30,(height/2),(width/2)+30,(height/2),ToColor(123,255,14))
---DrawLine((width/2),(height/2)-30,(width/2),(height/2)+30,ToColor(123,255,14))
---ValidateRect()
-
 
 while(PeekMessage())
 do

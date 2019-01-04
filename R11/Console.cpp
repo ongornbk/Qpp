@@ -94,6 +94,14 @@ static int32_t _cdecl GotoXY(lua_State* state)
 	return 0;
 }
 
+static int32_t _cdecl GetDebugInfo(lua_State* state)
+{
+
+
+
+	return 0;
+}
+
 static int32_t _cdecl GetConsoleCursorPosition(lua_State* state)
 {
 	CONSOLE_SCREEN_BUFFER_INFO csbi;

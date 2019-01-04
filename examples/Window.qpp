@@ -1,3 +1,5 @@
+require "Sunflower/Sunflower"
+
 ImportPackage("conio")
 FreeConsole()
 
@@ -7,8 +9,13 @@ ImportPackage("filesystem")
 ImportPackage("math")
 
 CreateWindow()
+
+
+
 ShowWindow(true)
 UpdateWindow()
+
+Sunflower.SetIcon("sample.ico")
 GetDC()
 
 while(true)

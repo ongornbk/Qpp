@@ -28,6 +28,7 @@ private:
 	friend void CALL_CONV XMLPackageInitializer();
 
 	friend int32_t _cdecl ImportPackage(lua_State* state);
+	friend int32_t _cdecl GetDebugInfo();
 
 	lua_State* m_lua;
 

@@ -1,0 +1,98 @@
+ImportPackage("conio")
+SetConsoleTitle("Callendar")
+
+CNUMBER_OF_MONTHS = 12
+CNUMBER_OF_DAYS = 7
+CHORIZONTAL_SPACING = 6
+
+days_short = {"MO","TU","WE","TH","FR","SA","SU"}
+days = {"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"}
+months = {"January","February","March","April","May","June","July","August","September","October","November","December"}
+first_day = {}
+number_of_days = {}
+
+ImportPackage("math")
+
+function CalculateCallendar(year)
+	for  month = 1, CNUMBER_OF_MONTHS, 1 do
+		first_day[month] = SetFirstDay(year, month);
+	end
+
+	number_of_days[1] = 31;
+
+		if (IsLeapYear(year))
+		then
+			number_of_days[2] = 29;
+		else
+			number_of_days[2] = 28;
+		end
+
+		number_of_days[3] = 31;
+		number_of_days[4] = 30;
+		number_of_days[5] = 31;
+		number_of_days[6] = 30;
+		number_of_days[7] = 31;
+		number_of_days[8] = 31;
+		number_of_days[9] = 30;
+		number_of_days[10] = 31;
+		number_of_days[11] = 30;
+		number_of_days[12] = 31;
+		
+end
+
+function DrawCallendar(year)
+
+    SetConsoleTitle("Callendar for year " .. year)
+	Println("Callendar for year " .. year)
+	
+	for i = 1,CNUMBER_OF_MONTHS, 1 do
+	Endline()
+	Endline()
+	Print(months[i])
+	Endline()
+	Endline()
+
+		for j = 1, CNUMBER_OF_DAYS, 1 do
+			Gotox(j*CHORIZONTAL_SPACING)
+			Print(days_short[j])
+			end
+		
+		Endline()
+		
+		y = 1
+		f = first_day[i]
+		while number_of_days[i] > 0
+		do
+		Gotox(f*CHORIZONTAL_SPACING)
+		Print(y)
+		number_of_days[i] = number_of_days[i] - 1
+		f = f + 1
+		if f > 6
+		then
+		f = 1
+		Endline()
+		end
+			y = y + 1
+		end
+		
+	end
+
+end
+
+::START::
+
+Print("Year: ")
+local input = tonumber(GetInput())
+
+if input < 1 or input > 2116
+then
+CleanConsole()
+Println("Error! Year out of range...")
+Println("Valid year belongs to the range of 1 to 2116")
+goto START
+end
+
+CleanConsole()
+CalculateCallendar(input)
+DrawCallendar(input)
+Pause()

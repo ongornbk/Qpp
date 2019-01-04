@@ -78,6 +78,9 @@
     <ClInclude Include="Collector.h">
       <Filter>Packages\Headers</Filter>
     </ClInclude>
+    <ClInclude Include="GdiPlus.h">
+      <Filter>Packages\Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">

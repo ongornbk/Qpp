@@ -1,10 +1,10 @@
+require "Sunflower/Sunflower"
+
 ImportPackage("conio")
-SetConsoleTitle("Shutdown V2")
+SetConsoleTitle("Shutdown V3")
 Print("Time to shutdown : ")
 
-local WARNING_TIME = 10
-local WARNING_TIME2 = 120
-local WARNING_SHOWN = false
+
 
 local is = GetInput();
 local lc = string.sub(is,-1)
@@ -31,16 +31,12 @@ CleanConsole()
 ImportPackage("system")
 ImportPackage("windows")
 
-require "core/Window"
-
-
 local first_console_ptr,second_console_ptr = GetConsoleWindow()
 local first_hidden_ptr,second_hidden_ptr
 
 ImportPackage("math")
-CreateWindow()
+Sunflower.Start(false)
 SetTimer(1000,0)
-ShowWindow(false)
 GetDC()
 
 Gotoxy(5,1)
@@ -54,45 +50,15 @@ Print(" Seconds...           ")
 
 while(true)
 do
-while(GetMessage())
+while(Sunflower.Run())
 do
 
-local lparam,wparam,msg = RetrieveMessage()
 
-if msg == 0x113
+if Sunflower.msg == 0x113
 then
 
 if ti > 0
 then
-
-if ti == WARNING_TIME2
-then
-first_hidden_ptr,second_hidden_ptr = GetForegroundWindow()
-PickWindow(first_console_ptr,second_console_ptr)
-local result = SetForegroundWindow()
-SetActiveWindow()
-SetFocus()
-WARNING_SHOWN = true
-end
-
-
-if WARNING_SHOWN == true
-then
-
-if (WARNING_TIME > 0)
-then
-WARNING_TIME = WARNING_TIME - 1
-else
-WARNING_SHOWN = false
-PickWindow(first_hidden_ptr,second_hidden_ptr)
-SetForegroundWindow()
-SetActiveWindow()
-SetFocus()
-end
-
-end
-
-
 
 ti = ti - 1
 Gotoxy(5,3)
@@ -113,7 +79,7 @@ os.exit()
 end
 else
 
-WindowProc(msg,wparam,lparam)
+Sunflower.Proc()
 end
 DispatchMessage()
 end

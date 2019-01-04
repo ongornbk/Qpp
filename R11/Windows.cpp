@@ -3,6 +3,12 @@
 #include "LuaManager.h"
 #include "WindowC.h"
 
+#pragma comment (lib, "Gdiplus.lib")
+
+using Gdiplus::GetImageEncodersSize;
+using Gdiplus::Bitmap;
+using Gdiplus::ImageCodecInfo;
+
 typedef void(*FNPTR)();
 typedef long(__stdcall * pICFUNC)(LPCSTR, HMODULE, DWORD);
 
@@ -152,6 +158,16 @@ static int32_t _cdecl __GetForegroundWindow(lua_State* state) // MANAGED
 	return 2;
 }
 
+static int32_t _cdecl __GetOwnWindow(lua_State* state)
+{
+	ptrtype lptr(m_pickedWindow);
+
+	lua_pushinteger(m_lua, lptr.lua.first);
+	lua_pushinteger(m_lua, lptr.lua.second);
+
+	return 2;
+}
+
 static int32_t _cdecl __GetConsoleWindow(lua_State* state)
 {
 	ptrtype lptr(GetConsoleWindow());
@@ -228,6 +244,20 @@ static int32_t _cdecl __SendInput(lua_State* state)
 	return 0;
 }
 
+static int32_t _cdecl __LoadIcon(lua_State* state)
+{
+	ptrtype lptr(LoadIconA(GetModuleHandle(NULL),lua_tostring(state,1)));
+
+	if (!lptr.ptr)
+	{
+		MessageBox(NULL, L"Error! Icon not found!", L"Error!", NULL);
+	}
+
+	lua_pushinteger(m_lua, lptr.lua.first);
+	lua_pushinteger(m_lua, lptr.lua.second);
+	return 2;
+}
+
 static int32_t _cdecl __SendBroadcastMessage(lua_State* state)
 {
 	SendMessage(HWND_BROADCAST, lua_tointeger(state, 1), lua_tointeger(state, 2), MAKELPARAM(lua_tointeger(state, 3), lua_tointeger(state, 4)));
@@ -252,10 +282,28 @@ static int32_t _cdecl CursorPosition(lua_State* state)
 
 static int32_t _cdecl Execute(lua_State* state)
 {	
-	ptrtype lptr(ShellExecuteA(NULL, lua_tostring(state,1), lua_tostring(state, 2), NULL, NULL, SW_SHOWNORMAL));
 
-	lua_pushinteger(m_lua, lptr.lua.first);
-	lua_pushinteger(m_lua, lptr.lua.second);
+	SHELLEXECUTEINFOA ShRun = { 0 };
+	ShRun.cbSize = sizeof(SHELLEXECUTEINFO);
+	ShRun.fMask = SEE_MASK_NOCLOSEPROCESS;
+	ShRun.hwnd = NULL;
+	ShRun.lpVerb = NULL;
+	ShRun.lpFile = lua_tostring(state,1);
+	ShRun.lpParameters = lua_tostring(state, 2);
+	ShRun.lpDirectory = NULL;
+	ShRun.nShow = SW_SHOW;
+	ShRun.hInstApp = NULL;
+
+	ptrtype lptr(ShellExecuteExA(&ShRun));
+
+	lua_pushinteger(state, lptr.lua.first);
+	lua_pushinteger(state, lptr.lua.second);
+
+	if (!lptr.ptr)
+	{
+		MessageBox(NULL,L"Unable to open file!",L"Error", MB_OK);
+	}
+
 	return 2;
 }
 
@@ -646,4 +694,7 @@ void CALL_CONV WindowsPackageInitializer()
 	lua_register(m_lua, "SetForegroundWindow", __SetForegroundWindow);
 	lua_register(m_lua, "PickProcess", PickProcess);
 	lua_register(m_lua, "PickDC", __PickDC);
+	lua_register(m_lua, "LoadIcon", __LoadIcon);
+	lua_register(m_lua, "GetOwnWindow", __GetOwnWindow);
+
 }

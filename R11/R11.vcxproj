@@ -159,6 +159,7 @@
     <ClInclude Include="Console.h" />
     <ClInclude Include="DirectInput.h" />
     <ClInclude Include="Filesystem.h" />
+    <ClInclude Include="GdiPlus.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="luaH.h" />
     <ClInclude Include="LuaManager.h" />

@@ -1,6 +1,0 @@
-ImportPackage("windows")
-while(true)
-do
-PickForegroundWindow()
-ShowWindow(false)
-end
