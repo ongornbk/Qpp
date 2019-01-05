@@ -8,29 +8,9 @@ ImportPackage("system")
 ImportPackage("filesystem")
 ImportPackage("math")
 
-CreateWindow()
+Sunflower.Start(true)
 
-
-
-ShowWindow(true)
-UpdateWindow()
-
-Sunflower.SetIcon("sample.ico")
-GetDC()
-
-while(true)
+while Sunflower.Run()
 do
-if(GetMessage())
-then
-msg,wparam,lparam = RetrieveMessage()
-DrawString(500,70,ToColor(0,255,0),"Window Qpp Example")
-local x,y = GetCursorPosition()
-DrawLine(x-25,y-15,x+15,y+25,ToColor(x-y,y+x,x*y))
-DrawLine(x-15,y-25,x+25,y+15,ToColor(x+y,y-x,x*y))
-DrawLine(x-15,y-25,x+15,y+25,ToColor(x*x,y*y,x*y))
-DrawLine(x-25,y-15,x+25,y+15,ToColor(x+x,y+x,x*y))
-WindowProc(msg,wparam,lparam)
-DispatchMessage()
-end
-Sleep(1000)
+Sunflower.Proc()
 end

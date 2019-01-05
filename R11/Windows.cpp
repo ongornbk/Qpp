@@ -3,11 +3,6 @@
 #include "LuaManager.h"
 #include "WindowC.h"
 
-#pragma comment (lib, "Gdiplus.lib")
-
-using Gdiplus::GetImageEncodersSize;
-using Gdiplus::Bitmap;
-using Gdiplus::ImageCodecInfo;
 
 typedef void(*FNPTR)();
 typedef long(__stdcall * pICFUNC)(LPCSTR, HMODULE, DWORD);
@@ -66,9 +61,19 @@ namespace
 	static HINSTANCE m_hinstance = NULL;
 	static HDC m_pickedDC = NULL;
 	static std::unique_ptr<HBITMAP> m_bitmap = NULL;
-
+	std::unordered_map<uint32_t, std::string> lua_events;
 	static MSG m_msg;
 }
+
+int32_t _stdcall doNothing(lua_State* state)
+{
+	return 0;
+}
+
+lua_CFunction EventTimer = doNothing;
+lua_CFunction EventDestroy = doNothing;
+lua_CFunction EventPaint = doNothing;
+lua_CFunction EventHover = doNothing;
 
 LRESULT __stdcall WindowProcedure(HWND window, uint32_t msg, WPARAM wp, LPARAM lp)
 
@@ -77,20 +82,22 @@ LRESULT __stdcall WindowProcedure(HWND window, uint32_t msg, WPARAM wp, LPARAM l
 	switch (msg)
 
 	{
-
+	case WM_TIMER:
+		EventTimer(m_lua);
+		return 0;
 	case WM_PAINT:
-
-		InvalidateRect(m_pickedWindow, 0, false);
+		if(EventPaint==doNothing)
+		return DefWindowProc(window, msg, wp, lp);
+		EventPaint(m_lua);
 		return 0;
-		break;
+	case WM_MOUSEHOVER:
+		EventHover(m_lua);
+		return 0;
 	case WM_DESTROY:
-		m_pickedWindow = NULL;
-		PostQuitMessage(0);
+		EventDestroy(m_lua);
 		return 0;
-		break;
 	default:
 		return DefWindowProc(window, msg, wp, lp);
-
 	}
 
 }
@@ -454,13 +461,14 @@ static int32_t _cdecl __RegisterHotKey(lua_State* state)
 
 static int32_t _cdecl __GetMessage(lua_State* state)
 {
+
 	lua_pushboolean(state,GetMessage(&m_msg, NULL, NULL, NULL));
 	return 1;
 }
 
 static int32_t _cdecl __PeekMessage(lua_State* state)
 {
-	lua_pushboolean(state, PeekMessage(&m_msg, NULL, NULL,NULL, 0x0001));
+	lua_pushboolean(state, PeekMessage(&m_msg, NULL, NULL,NULL, PM_REMOVE));
 	return 1;
 }
 
@@ -606,6 +614,12 @@ static int32_t _cdecl _DispatchMessage(lua_State* state)
 	return 0;
 }
 
+static int32_t _cdecl _TranslateMessage(lua_State* state)
+{
+	TranslateMessage(&m_msg);
+	return 0;
+}
+
 static int32_t _cdecl _PostQuitMessage(lua_State* state)
 {
 	PostQuitMessage(0);
@@ -631,6 +645,58 @@ static int32_t _cdecl __PickWindow(lua_State* state)
 	m_pickedWindow = (HWND)ptrtype(lua_tointeger(m_lua, 1), lua_tointeger(m_lua, 2)).ptr;
 	return 0;
 }
+
+static int32_t _cdecl RegisterEvent(lua_State* state)
+{
+
+	const auto Event = lua_tointeger(state, 1);
+	lua_events[Event] = lua_tostring(state, 2);
+
+
+	switch (Event)
+	{
+	case WM_PAINT:
+		EventPaint = [](lua_State* state)
+		{ 
+			lua_pcall(m_lua, 0, 0, 0);
+			lua_getglobal(m_lua,lua_events[WM_PAINT].c_str());
+			lua_pcall(m_lua, 0, 0,0);
+			return 0; 
+		};
+		break;
+	case WM_DESTROY:
+		EventDestroy = [](lua_State* state)
+		{
+			lua_pcall(m_lua, 0, 0, 0);
+			lua_getglobal(m_lua, lua_events[WM_DESTROY].c_str());
+			lua_pcall(m_lua, 0, 0,0);
+			return 0;
+		};
+		break;
+	case WM_TIMER:
+		EventTimer = [](lua_State* state)
+		{
+			lua_pcall(m_lua, 1, 0, 0);
+			lua_getglobal(m_lua, lua_events[WM_TIMER].c_str());
+			lua_pushinteger(m_lua, (int32_t)m_msg.wParam);
+			lua_pcall(m_lua, 1, 0,0);
+			return 0;
+		};
+		break;
+	case WM_MOUSEHOVER:
+		EventHover = [](lua_State* state)
+		{
+			lua_pcall(m_lua, 0, 0, 0);
+			lua_getglobal(m_lua, lua_events[WM_MOUSEHOVER].c_str());
+			lua_pcall(m_lua, 0, 0, 0);
+			return 0;
+		};
+		break;
+	}
+	
+	return 0;
+}
+
 
 void CALL_CONV WindowsPackageInitializer()
 {
@@ -687,6 +753,7 @@ void CALL_CONV WindowsPackageInitializer()
 	lua_register(m_lua, "KillTimer", _KillTimer);
 	lua_register(m_lua, "WindowProc", WindowProc);
 	lua_register(m_lua, "DispatchMessage", _DispatchMessage);
+	lua_register(m_lua, "TranslateMessage", _TranslateMessage);
 	lua_register(m_lua, "PostQuitMessage", _PostQuitMessage);
 	lua_register(m_lua, "WindowExist", WindowExist);
 	lua_register(m_lua, "PlaySound", __PlaySound);
@@ -696,5 +763,5 @@ void CALL_CONV WindowsPackageInitializer()
 	lua_register(m_lua, "PickDC", __PickDC);
 	lua_register(m_lua, "LoadIcon", __LoadIcon);
 	lua_register(m_lua, "GetOwnWindow", __GetOwnWindow);
-
+	lua_register(m_lua, "RegisterEvent", RegisterEvent);
 }

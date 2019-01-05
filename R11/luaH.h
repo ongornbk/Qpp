@@ -14,3 +14,4 @@
 #pragma comment(lib,"slib/x86/liblua53.a")
 #endif
 
+typedef int32_t(*lua_CFunction) (lua_State *L);

@@ -1,7 +1,7 @@
 require "Sunflower/Sunflower"
 
 ImportPackage("conio")
-SetConsoleTitle("Shutdown V3")
+SetConsoleTitle("Shutdown V4")
 Print("Time to shutdown : ")
 
 
@@ -31,12 +31,12 @@ CleanConsole()
 ImportPackage("system")
 ImportPackage("windows")
 
-local first_console_ptr,second_console_ptr = GetConsoleWindow()
-local first_hidden_ptr,second_hidden_ptr
+
 
 ImportPackage("math")
 Sunflower.Start(false)
 SetTimer(1000,0)
+SetTimer(ti * 1000,1)
 GetDC()
 
 Gotoxy(5,1)
@@ -48,40 +48,42 @@ Print(" Minutes...           ")
 Gotoxy(25,5)
 Print(" Seconds...           ")
 
-while(true)
-do
-while(Sunflower.Run())
-do
-
-
-if Sunflower.msg == 0x113
-then
-
-if ti > 0
-then
-
-ti = ti - 1
-Gotoxy(5,3)
-Print(tostring(ti/3600))
-Gotoxy(7,3)
-Print("                   ")
-Gotoxy(5,4)
-Print(tostring((ti/60)%60))
-Gotoxy(7,4)
-Print("                   ")
-Gotoxy(5,5)
-Print(tostring(ti%60))
-
-else
+function Close()
 KillTimer(0)
+KillTimer(1)
 Shutdown()
 os.exit()
 end
-else
 
+
+
+function Update()
+ti = ti - 1
+Gotoxy(5,3)
+Print(tostring(ti/3600) .. "  ")
+Gotoxy(7,3)
+Print("                   ")
+Gotoxy(5,4)
+Print(tostring((ti/60)%60) .. "  ")
+Gotoxy(7,4)
+Print("                   ")
+Gotoxy(5,5)
+Print(tostring(ti%60) .. "  ")
+end
+
+function Timer(id)
+
+if id == 1
+then
+Close()
+else
+Update()
+end
+end
+
+RegisterEvent(0x113,"Timer")
+
+while Sunflower.Run()
+do
 Sunflower.Proc()
-end
-DispatchMessage()
-end
-Sleep(10000)
 end
