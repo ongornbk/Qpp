@@ -4,7 +4,7 @@ ImportPackage("system")
 ImportPackage("windows")
 ImportPackage("math")
 
-
+require "Sunflower/Sunflower"
 
 local CONSOLE_MATRIX_HEIGHT = 45
 local CONSOLE_MATRIX_WIDTH  = 100
@@ -15,7 +15,6 @@ local CURRENT_CHAR = 1
 
 local LEFT    = 10
 local TOP     = 5
-local TICKS   = 100
 local DELAY   = 30
 
 local RANDOM_CHARS = false
@@ -42,9 +41,9 @@ else
 RegisterHotKey(2,0x20)--SPACE
 end
 
-CreateWindow()
+Sunflower.Start(false)
 SetTimer(DELAY,0)
-ShowWindow(false)
+SetTimer(DELAY * TICKS_TO_CLEAN,1)
 GetDC()
 
 function NextChar()
@@ -153,8 +152,6 @@ function PrintInfo()
 	then
 		wind = "Wiatr z zachodu..."
 	end
-	MoveConsoleCursor(0, -1)
-	Print("Do odsniezenia zostalo: " ..TICK .." : "..TICKS_TO_CLEAN.."  ")
 	MoveConsoleCursor(0, -2)
 	Print(wind .. "      ")
 	MoveConsoleCursor(0, -3)
@@ -293,50 +290,46 @@ for i = 0, CONSOLE_MATRIX_WIDTH+1 do
     end
 end
 
-while(true)
-do
-while(GetMessage())
-do
+function Update(id)
 
-local lparam,wparam,msg = RetrieveMessage()
 
-if msg == 0x113
-then
 
+if id == 0 then
 CreateSnow()
-		MoveSnow()
-		if TICK > TICKS_TO_CLEAN
-		then
-			Clean()
-			TICK = 0
-			Wind()
-		else
-			PrintInfo()
-		end
-		
-		TICK = TICK + 1
-
+MoveSnow()
 else
-WindowProc(msg,wparam,lparam)
+Clean()
+Wind()
 end
 
-if msg == 786
+PrintInfo()
+
+end
+
+RegisterEvent(0x113,"Update")
+
+while(true)
+do
+while(Sunflower.Run())
+do
+
+
+
+if Sunflower.msg == 786
 then
 
-if wparam == 1
+if Sunflower.wparam == 1
 then
 os.exit()
 end
 
-if wparam == 2
+if Sunflower.wparam == 2
 then
 NextChar()
 end
 
 end
-
-DispatchMessage()
+Sunflower.Proc()
 end
-Sleep(1000)
 end
 

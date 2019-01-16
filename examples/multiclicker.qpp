@@ -10,7 +10,6 @@ RegisterHotKey(1,0x70)--F1
 RegisterHotKey(2,0x71)--F2
 RegisterHotKey(3,0x72)--F3
 
-local process = 0
 local width,height = GetScreenMetrics()
 
 function AcquireProcess()
@@ -34,23 +33,22 @@ do
 while(KeyDown(0x1))
 do
 SendMessage(513,1,1,2)
-Sleep(749)
+Sleep(1249)
 SendMessage(514,0,2,1)
-Sleep(749)
+Sleep(1249)
 end
 
-while(PeekMessage())
+while(Sunflower.Peek())
 do
-local wparam,lparam,msg = RetrieveMessage()
 
 
 
-if msg == 786 and lparam == 2 
+if Sunflower.msg == 786 and Sunflower.wparam == 2 
 then
 GotoMainMenu()
 end
 
-DispatchMessage()
+Sunflower.Proc()
 
 end
 end
@@ -63,22 +61,20 @@ Println("Press f1 key to start...")
 Println("Press f2 key to pause...")
 Println("Press f3 key to exit... ")
 
-while(GetMessage())
+while(Sunflower.Run())
 do
-PeekMessage()
-local wparam,lparam,msg = RetrieveMessage()
 
-if lparam == 1 
+if Sunflower.wparam == 1 
 then
 AcquireProcess()
 GotoMainLoop()
 else
-if lparam == 3
+if Sunflower.wparam == 3
 then os.exit()
 else
 Sleep(10000)
 end
-
+Sunflower.Proc()
 end
 
 

@@ -1,0 +1,27 @@
+	ImportPackage("conio")
+ImportPackage("windows")
+ImportPackage("system")
+SetConsoleTitle("Uncooking assistant")
+
+--Println("Game Directory (Content): ")
+--Println("Output Directory: ")
+--Println("Image Format: ")
+
+local cgamed = "-indir=\"D:/Gry/The Witcher 3 Wild Hunt\""
+
+cgamed = cgamed:gsub("\\","/")
+
+local cdird = " -outdir=\"D:/Gry/The Witcher 3 Wild Hunt/ws\""
+
+cdird = cdird:gsub("\\","/")
+
+--Gotoxy(25,0)
+--local game_directory = "-indir=<" .. tostring(GetInput()) .. ">"
+--Gotoxy(17,1)
+--local output_directory = " -outdir=<" .. tostring(GetInput()) .. ">"
+--Gotoxy(13,2)
+--local imgfmt =  " -imgfmt=" .. tostring(GetInput())
+
+--Execute("wcc_lite.exe",game_directory .. output_directory .. imgfmt)
+
+Execute("wcc_lite.exe"," uncook " .. cgamed .. cdird .. " -imgfmt=tga")

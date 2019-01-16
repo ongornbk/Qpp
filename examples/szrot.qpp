@@ -16,7 +16,7 @@ do
 local result = UrlRequestToFile("www." .. str .. "/search/" .. item)
 if result
 then
-Execute("open","result.html")
+Execute("result.html")
 Println("Succesfull request from: " .. str)
 else
 Println("Failed request from: " .. str)

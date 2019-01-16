@@ -15,6 +15,12 @@ Sunflower.lparam,Sunflower.wparam,Sunflower.msg = RetrieveMessage()
 return val
 end
 
+function Sunflower.Peek()
+local val = PeekMessage()
+Sunflower.lparam,Sunflower.wparam,Sunflower.msg = RetrieveMessage()
+return val
+end
+
 function Sunflower.Proc()
 WindowProc(Sunflower.msg,Sunflower.wparam,Sunflower.lparam)
 end
