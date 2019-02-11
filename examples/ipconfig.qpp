@@ -1,0 +1,7 @@
+ImportPackage("conio")
+ImportPackage("system")
+SetConsoleTitle("ipconfig")
+
+System("ipconfig /release")
+System("ipconfig /renew")
+System("ipconfig /flushdns")
