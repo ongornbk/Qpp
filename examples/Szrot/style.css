@@ -1,0 +1,62 @@
+@charset "UTF-8";
+
+html
+{
+	overflow-y: scroll !important;
+}
+
+body
+{
+	margin: auto;
+width: 80%;
+  font-size: 13px;
+  background-color: silver;
+  color:black;
+  font-family: "Lucida Console";
+}
+
+table
+{
+	margin: auto;
+	width: 100%;
+}
+
+th, td
+{
+	border: 2px solid rgb(31, 35, 42);
+	border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+	border-collapse: collapse;
+	padding: 15px;
+	box-shadow: 2px 2px 4px #010432;
+	background-color: rgb(40, 51, 157)
+}
+
+td:visited
+{
+	background-color: rgb(80, 71, 137)
+}
+
+
+td:hover
+{
+	box-shadow: 3px 4px 7px #020632;
+	background-color: rgb(50, 71, 187);
+}
+
+td a.buttonstyle
+{
+text-decoration: none;
+border: #000 solid 1px;
+border-radius: 5px;
+box-shadow: 1px 2px 4px #010432;
+background-color: rgb(60, 61, 107);
+padding: 1px 8px 1px;
+font-size: 14px;
+color: rgb(255, 255, 255);
+}
+
+td a.buttonstyle:hover
+{
+	background-color: rgb(80,121, 157);
+}

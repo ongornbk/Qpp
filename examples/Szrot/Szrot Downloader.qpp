@@ -1,12 +1,21 @@
+ImportPackage("filesystem")
+
+require "lua/HtmlManager"
+
+
 ImportPackage("conio")
-Print("search: ")
+Print("Search for: ")
 SetConsoleTitle("Szrot Downloader")
 
+RemoveFile("result.html")
+RemoveFile("magnets.html")
+
 ImportPackage("windows")
-local item = string.gsub(tostring(GetInput())," ","_");
-ImportPackage("filesystem")
+local item = string.gsub(tostring(GetInput())," ",".")
+
 OpenFileAppend("sites.urls")
 local sites = tostring(LoadFileToString())
+CloseFile()
 
 ImportPackage("urlmon")
 SetUrlOutputPath("result.html")
@@ -16,11 +25,16 @@ do
 local result = UrlRequestToFile("www." .. str .. "/search/" .. item)
 if result
 then
-Execute("result.html")
 Println("Succesfull request from: " .. str)
+OpenFileAppend("result.html")
+local site = tostring(LoadFileToString())
+CloseFile()
+UnpackResult(site)
+Execute("magnets.html")
 else
 Println("Failed request from: " .. str)
 end
 end
 
 RemoveFile("result.html")
+
