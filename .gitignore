@@ -10,7 +10,6 @@
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
-examples/Szrot/magnets.html
 
 # Build results
 [Dd]ebug/
