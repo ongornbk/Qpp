@@ -646,6 +646,35 @@ static int32_t _cdecl __PickWindow(lua_State* state)
 	return 0;
 }
 
+static int32_t _cdecl __GetDriveType(lua_State* state)
+{
+	lua_pushinteger(m_lua,GetDriveTypeA(lua_tostring(m_lua, 1)));
+	return 1;
+}
+
+static int32_t _cdecl __DeleteObject(lua_State* state)
+{
+	ptrtype ptr = ptrtype(lua_tointeger(state, 1), lua_tointeger(state, 2));
+	lua_pushboolean(state,DeleteObject(ptr.ptr));
+	return 1;
+}
+
+static int32_t _cdecl __MessageBox(lua_State* state)
+{
+	HWND tpm;
+	if (lua_toboolean(state, 1))
+	{
+		tpm = m_pickedWindow;
+	}
+	else
+	{
+		tpm = NULL;
+	}
+
+	lua_pushinteger(state,MessageBoxA(tpm, lua_tostring(state, 2), lua_tostring(state, 3), (unsigned int)lua_tointeger(state, 4)));
+	return 1;
+}
+
 static int32_t _cdecl RegisterEvent(lua_State* state)
 {
 
@@ -764,4 +793,7 @@ void CALL_CONV WindowsPackageInitializer()
 	lua_register(m_lua, "LoadIcon", __LoadIcon);
 	lua_register(m_lua, "GetOwnWindow", __GetOwnWindow);
 	lua_register(m_lua, "RegisterEvent", RegisterEvent);
+	lua_register(m_lua, "GetDriveType", __GetDriveType);
+	lua_register(m_lua, "DeleteObject", __DeleteObject);
+	lua_register(m_lua, "MessageBox", __MessageBox);
 }
