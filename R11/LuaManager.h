@@ -8,7 +8,7 @@ public:
 	LuaManager();
 	~LuaManager();
 
-	bool _cdecl Initialize(std::string path, std::string file) noexcept;
+	bool _cdecl Initialize(const int argc, char* argv[]);
 	bool _cdecl Execute(std::string filename) noexcept;
 	std::string _cdecl GetPath() noexcept;
 	
@@ -26,8 +26,11 @@ private:
 	friend void CALL_CONV FilesystemPackageInitializer();
 	friend void CALL_CONV InputPackageInitializer();
 	friend void CALL_CONV XMLPackageInitializer();
+	friend void CALL_CONV NetworkPackageInitializer();
 
 	friend int32_t _cdecl ImportPackage(lua_State* state);
+	friend int32_t _cdecl GetArgument(lua_State* state);
+	friend int32_t _cdecl GetNumberOfArguments(lua_State* state);
 	friend int32_t _cdecl GetDebugInfo();
 
 	lua_State* m_lua;
@@ -35,5 +38,10 @@ private:
 	inline void CreatePackage(std::string name, void(*initializer)(void));
 
 	std::string m_path;
+	std::string m_file;
+
+	int m_numberOfArguments;
+
+	std::vector<std::string> m_args;
 
 };

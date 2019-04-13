@@ -15,7 +15,8 @@ local width,height = GetScreenMetrics()
 function AcquireProcess()
 local first_hwnd_ptr,second_hwnd_ptr = GetForegroundWindow()
 PickWindow(first_hwnd_ptr,second_hwnd_ptr)
-GetDC()
+local dc0,dc1 = GetDC()
+PickDC(dc0,dc1)
 end
 
 local space = false
@@ -27,16 +28,22 @@ Println("Running...")
 
 local color = ToColor(255,0,0)
 
+
 while(true)
 do
 
+
 while(KeyDown(0x1))
 do
-SendMessage(513,1,1,2)
-Sleep(1249)
-SendMessage(514,0,2,1)
-Sleep(1249)
+
+
+
+SendMessage(0x0201,1,1,2)
+Sleep(1200)
+SendMessage(0x0202,0,2,1)
+Sleep(1200)
 end
+
 
 while(Sunflower.Peek())
 do

@@ -359,7 +359,10 @@ static int32_t _cdecl __ClientToScreen(lua_State* state)
 	p.y = lua_tointeger(state, 2);
 	ClientToScreen(m_pickedWindow, &p);
 	return 0;
+
+	
 }
+
 
 static int32_t _cdecl __SetCursorPosition(lua_State* state)
 {
@@ -659,6 +662,15 @@ static int32_t _cdecl __DeleteObject(lua_State* state)
 	return 1;
 }
 
+static int32_t _cdecl __GetPixel(lua_State* state)
+{
+	COLORREF color = GetPixel(m_pickedDC, lua_tointeger(state, 1), lua_tointeger(state, 2));
+	lua_pushinteger(state, color);
+	return 1;
+}
+
+
+
 static int32_t _cdecl __MessageBox(lua_State* state)
 {
 	HWND tpm;
@@ -727,6 +739,7 @@ static int32_t _cdecl RegisterEvent(lua_State* state)
 }
 
 
+
 void CALL_CONV WindowsPackageInitializer()
 {
 	ZeroMemory(&m_msg, sizeof(MSG));
@@ -740,7 +753,8 @@ void CALL_CONV WindowsPackageInitializer()
 	lua_register(m_lua, "OpenProcess", OpenProcess);
 	lua_register(m_lua, "GetCurrentProcess", GetCurrentProcess);
 	lua_register(m_lua, "ShowWindow", __ShowWindow);
-	lua_register(m_lua, "SetActiveWindow", __SetActiveWindow); 
+	lua_register(m_lua, "SetActiveWindow", __SetActiveWindow);
+	lua_register(m_lua, "GetPixel", __GetPixel);
 	lua_register(m_lua, "SetFocus", __SetFocus);
 	lua_register(m_lua, "GetWindowRect", __GetWindowRect);
 	lua_register(m_lua, "SendMessage", __SendMessage);

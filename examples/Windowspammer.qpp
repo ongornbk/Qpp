@@ -1,0 +1,11 @@
+
+
+ImportPackage("conio")
+FreeConsole()
+
+ImportPackage("windows")
+
+while(true)
+do
+MessageBox(false,"","",0)
+end

@@ -69,6 +69,7 @@ Gotoxy(7,4)
 Print("                   ")
 Gotoxy(5,5)
 Print(tostring(ti%60) .. "  ")
+
 end
 
 function Timer(id)

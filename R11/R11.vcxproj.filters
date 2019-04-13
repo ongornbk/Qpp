@@ -81,6 +81,12 @@
     <ClInclude Include="GdiPlus.h">
       <Filter>Packages\Headers</Filter>
     </ClInclude>
+    <ClInclude Include="Network.h">
+      <Filter>Packages\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Enet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -126,6 +132,9 @@
       <Filter>Packages\Source</Filter>
     </ClCompile>
     <ClCompile Include="Collector.cpp">
+      <Filter>Packages\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Network.cpp">
       <Filter>Packages\Source</Filter>
     </ClCompile>
   </ItemGroup>

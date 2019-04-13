@@ -56,6 +56,16 @@ static int32_t _cdecl ToColor(lua_State* state)
 	return 1;
 }
 
+static int32_t _cdecl GetColor(lua_State* state)
+{
+	COLOR rgb;
+	rgb.color = (unsigned int)lua_tointeger(state, 1);
+	lua_pushinteger(state, rgb.r);
+	lua_pushinteger(state, rgb.g);
+	lua_pushinteger(state, rgb.b);
+	return 3;
+}
+
 
 static int32_t _cdecl SetFirstDay(lua_State* state)
 {
@@ -96,6 +106,7 @@ void CALL_CONV MathPackageInitializer()
 	lua_register(m_lua, "RandomInteger", RandomInteger);
 	lua_register(m_lua, "IntegerLength", IntegerLength);
 	lua_register(m_lua, "ToColor", ToColor);
+	lua_register(m_lua, "GetColor", GetColor);
 	lua_register(m_lua, "SetFirstDay", SetFirstDay);
 	lua_register(m_lua, "IsLeapYear", IsLeapYear);
 	lua_register(m_lua, "VarLength", VarLength);
