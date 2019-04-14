@@ -14,5 +14,5 @@ namespace
 
 void CALL_CONV XMLPackageInitializer()
 {
-	m_lua = LuaManager::GetInstance()->m_lua;
+
 }

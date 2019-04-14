@@ -110,9 +110,6 @@
     <ClCompile Include="DirectInput.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Console.cpp">
-      <Filter>Packages\Source</Filter>
-    </ClCompile>
     <ClCompile Include="Filesystem.cpp">
       <Filter>Packages\Source</Filter>
     </ClCompile>
@@ -143,9 +140,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="main.lua" />
-    <None Include="test.qpp">
-      <Filter>Header Files</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc">
@@ -156,5 +150,8 @@
     <Image Include="..\..\Quick C++\Quick C++\icon.ico">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="test.qpp" />
   </ItemGroup>
 </Project>

@@ -12,8 +12,15 @@ namespace
 
 static int32_t _cdecl _lua_import(lua_State* state)
 {
-	std::string pckname = lua_tostring(state, 1);
-	m_instance->m_pcks[pckname] = new LuaPackage(state, pckname);
+	std::string pckpath = lua_tostring(state, 1);
+	std::string pckname;
+	size_t off = pckpath.find_first_of("/");
+	if (off != pckpath.npos)
+		pckname = pckpath.substr(off+1);
+	else
+		pckname = pckpath;
+
+	m_instance->m_pcks[pckname] = new LuaPackage(state,pckpath, pckname);
 
 	try
 	{
@@ -29,9 +36,17 @@ static int32_t _cdecl _lua_import(lua_State* state)
 
 static int32_t _cdecl _lua_import_as(lua_State* state)
 {
-	std::string pckname = lua_tostring(state, 1);
-	std::string as = lua_tostring(state, 2);
-	m_instance->m_pcks[pckname] = new LuaPackage(state, pckname,as);
+	std::string pckpath = lua_tostring(state, 1);
+	std::string pckas = lua_tostring(state, 2);
+
+	std::string pckname;
+	size_t off = pckpath.find_first_of("/\\");
+	if (off != pckpath.npos)
+		pckname = pckpath.substr(off+1);
+	else
+		pckname = pckpath;
+
+	m_instance->m_pcks[pckname] = new LuaPackage(state,pckpath, pckname,pckas);
 	try
 	{
 		m_instance->m_pcks[pckname]->initialize();
@@ -57,14 +72,6 @@ static int32_t _cdecl _lua_get_argc(lua_State* state)
 	std::string number = std::to_string(m_instance->m_numberOfArguments);
 	lua_pushstring(LuaManager::GetInstance()->m_lua, number.c_str());
 	return 1;
-}
-
-inline void LuaManager::CreatePackage(std::string name,void(*initializer)(void))
-{
-	Package* pck = new Package();
-	pck->m_initializer = initializer;
-	pck->m_name = name;
-	m_packages[name] = pck;
 }
 
 LuaManager::LuaManager()
@@ -121,11 +128,6 @@ bool _cdecl LuaManager::Initialize(const int argc, char* argv[])
 	}
 	return true;
 	
-}
-
-bool _cdecl LuaManager::Execute(std::string filename) noexcept
-{
-	return false;
 }
 
 std::string _cdecl LuaManager::GetPath() noexcept

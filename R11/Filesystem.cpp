@@ -211,17 +211,3 @@ static int32_t _cdecl __AppendStringToFile(lua_State* state)
 	return 0;
 }
 
-void CALL_CONV FilesystemPackageInitializer()
-{
-
-	m_lua = LuaManager::GetInstance()->m_lua;
-	lua_register(m_lua, "Mkdir", Mkdir);
-	lua_register(m_lua, "GetEnv", __GetEnv);
-	lua_register(m_lua, "CopyFile", __CopyFile);
-	lua_register(m_lua, "RemoveFile", __RemoveFile);
-	lua_register(m_lua, "OpenFileAppend", __OpenFileAppend);
-	lua_register(m_lua, "OpenFileTrunc", __OpenFileTrunc);
-	lua_register(m_lua, "CloseFile", __CloseFile);
-	lua_register(m_lua, "LoadFileToString", __LoadFileToString);
-	lua_register(m_lua, "AppendStringToFile", __AppendStringToFile);
-}

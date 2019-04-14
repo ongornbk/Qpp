@@ -70,15 +70,4 @@ static int32_t _cdecl ClientDestroy(lua_State* state)
 	return 0;
 }
 
-void CALL_CONV NetworkPackageInitializer()
-{
-
-	m_lua = LuaManager::GetInstance()->m_lua;
-	lua_register(m_lua, "ClientCreate", ClientCreate);
-	lua_register(m_lua, "HostDestroy", HostDestroy);
-	lua_register(m_lua, "HostCreate", HostCreate);
-	lua_register(m_lua, "ClientDestroy", ClientDestroy);
-
-}
-
 

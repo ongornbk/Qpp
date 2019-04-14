@@ -5,11 +5,30 @@
 #include "conio.h"
 #include <conio.h>
 
+std::string getline();
+
 extern "C"
 {
 
 	static HANDLE HandleOut;
 	static HANDLE HandleIn;
+	static HWND   ConsoleWindow;
+	static COORD  ConsoleCursorPosition;
+	static HDC    ConsoleHDC;
+
+	COORD GetConsoleCursorPosition(HANDLE hConsoleOutput)
+	{
+		CONSOLE_SCREEN_BUFFER_INFO cbsi;
+		if (GetConsoleScreenBufferInfo(hConsoleOutput, &cbsi))
+		{
+			return cbsi.dwCursorPosition;
+		}
+		else
+		{
+			COORD invalid = { 0, 0 };
+			return invalid;
+		}
+	}
 
 	long start(const long arg)
 	{
@@ -23,6 +42,12 @@ extern "C"
 
 		HandleIn = GetStdHandle(STD_INPUT_HANDLE);
 		if (!HandleIn) return 4;
+
+		ConsoleWindow = GetConsoleWindow();
+		if (!ConsoleWindow) return 5;
+
+		ConsoleHDC = GetDC(ConsoleWindow);
+		if (!ConsoleHDC) return 6;
 
 		return 0;
 	}
@@ -77,10 +102,100 @@ extern "C"
 		return 0;
 	}
 
-	constexpr long FOO_COUNT = 6;
+	static int32_t _cdecl _lua_endline(lua_State* state)
+	{
+		printf_s("\n");
+		return 0;
+	}
 
-	const char* sckeys[FOO_COUNT] = {"Gotoxy", "Pause","Print","Printf","Println","SetConsoleTitle" };
-	const lua_CFunction scfooes[FOO_COUNT] = { _lua_gotoxy,_lua_pause,_lua_print,_lua_printf,_lua_println,_lua_setconsoletitle };
+	static int32_t _cdecl _lua_getline(lua_State* state)
+	{
+		lua_pushstring(state,getline().c_str());
+		return 1;
+	}
+
+	static int32_t _cdecl _lua_getcursorposition(lua_State* state)
+	{
+		CONSOLE_SCREEN_BUFFER_INFO csbi;
+		int32_t x, y;
+		if (GetConsoleScreenBufferInfo(HandleOut, &csbi)) {
+			x = csbi.dwCursorPosition.X;
+			y = csbi.dwCursorPosition.Y;
+		}
+		lua_pushinteger(state, x);
+		lua_pushinteger(state, y);
+		return 2;
+	}
+
+	static int32_t _cdecl _lua_gotox(lua_State* state)
+	{
+		ConsoleCursorPosition = GetConsoleCursorPosition(HandleOut);
+		ConsoleCursorPosition.X = (SHORT)lua_tointeger(state, 1);
+		SetConsoleCursorPosition(HandleOut, ConsoleCursorPosition);
+		return 0;
+	}
+
+	static int32_t _cdecl _lua_gotoy(lua_State* state)
+	{
+		ConsoleCursorPosition = GetConsoleCursorPosition(HandleOut);
+		ConsoleCursorPosition.Y = (SHORT)lua_tointeger(state, 1);
+		SetConsoleCursorPosition(HandleOut, ConsoleCursorPosition);
+		return 0;
+	}
+
+	static int32_t _cdecl _lua_drawpixel(lua_State* state)
+	{
+		COORD _pos;
+		_pos.X = (SHORT)lua_tointeger(state, 1);
+		_pos.Y = (SHORT)lua_tointeger(state, 2);
+		COLORREF color = (DWORD)lua_tointeger(state, 3);
+		int32_t scale = (int32_t)lua_tointeger(state, 4);
+		for (int i = 0; i < scale; i++)
+			for (int j = 0; j <= scale; j++)
+				SetPixel(ConsoleHDC, _pos.X + i, _pos.Y + j, color);
+		return 0;
+	}
+
+	static int32_t _cdecl _lua_cls(lua_State* state)
+	{
+		printf_s("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+		ConsoleCursorPosition = { 0,0 };
+		SetConsoleCursorPosition(HandleOut, ConsoleCursorPosition);
+		return 0;
+	}
+
+	constexpr long FOO_COUNT = 13;
+
+	const char* sckeys[FOO_COUNT] = {
+		"Clear",
+		"DrawPixel",
+		"Endline",
+		"GetCursorPosition",
+		"Getline",
+		"Gotox",
+		"Gotoxy",
+		"Gotoy",
+		"Pause",
+		"Print",
+		"Printf",
+		"Println",
+		"SetConsoleTitle"
+	};
+	const lua_CFunction scfooes[FOO_COUNT] = {
+		_lua_cls,
+		_lua_drawpixel,
+		_lua_endline,
+		_lua_getcursorposition,
+		_lua_getline,
+		_lua_gotox,
+		_lua_gotoxy,
+		_lua_gotoy,
+		_lua_pause,
+		_lua_print,
+		_lua_printf,
+		_lua_println,
+		_lua_setconsoletitle
+	};
 
 	long foo_count(const long arg)
 	{
@@ -94,4 +209,45 @@ extern "C"
 		cp.value = scfooes[index];
 		return cp;
 	}
+}
+
+std::string getline()
+{
+	long key{};
+	char escape = true;
+	std::string str;
+	while (escape)
+	{
+		key = getch();
+		switch (key)
+		{
+		case '\r':
+		{
+			escape = false;
+			break;
+		}
+		case '\b':
+		{
+			ConsoleCursorPosition = GetConsoleCursorPosition(HandleOut);
+			if (ConsoleCursorPosition.X != 0)
+			{
+				ConsoleCursorPosition.X--;
+			}
+			SetConsoleCursorPosition(HandleOut, ConsoleCursorPosition);
+			printf_s("%c", ' ');
+			SetConsoleCursorPosition(HandleOut, ConsoleCursorPosition);
+			break;
+		}
+
+		default:
+		{
+
+			printf_s("%c", key);
+
+			str += (char)key;
+		}
+		}
+	}
+	printf_s("\n");
+	return str;
 }

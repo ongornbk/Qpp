@@ -61,7 +61,7 @@ namespace
 	static HINSTANCE m_hinstance = NULL;
 	static HDC m_pickedDC = NULL;
 	static std::unique_ptr<HBITMAP> m_bitmap = NULL;
-	std::unordered_map<uint32_t, std::string> lua_events;
+	//std::unordered_map<uint32_t, std::string> lua_events;
 	static MSG m_msg;
 }
 
@@ -706,7 +706,7 @@ static int32_t _cdecl RegisterEvent(lua_State* state)
 {
 
 	const auto Event = lua_tointeger(state, 1);
-	lua_events[Event] = lua_tostring(state, 2);
+	//lua_events[Event] = lua_tostring(state, 2);
 
 
 	switch (Event)
@@ -715,7 +715,7 @@ static int32_t _cdecl RegisterEvent(lua_State* state)
 		EventPaint = [](lua_State* state)
 		{ 
 			lua_pcall(m_lua, 0, 0, 0);
-			lua_getglobal(m_lua,lua_events[WM_PAINT].c_str());
+			//lua_getglobal(m_lua,lua_events[WM_PAINT].c_str());
 			lua_pcall(m_lua, 0, 0,0);
 			return 0; 
 		};
@@ -724,7 +724,7 @@ static int32_t _cdecl RegisterEvent(lua_State* state)
 		EventDestroy = [](lua_State* state)
 		{
 			lua_pcall(m_lua, 0, 0, 0);
-			lua_getglobal(m_lua, lua_events[WM_DESTROY].c_str());
+			//lua_getglobal(m_lua, lua_events[WM_DESTROY].c_str());
 			lua_pcall(m_lua, 0, 0,0);
 			return 0;
 		};
@@ -733,7 +733,7 @@ static int32_t _cdecl RegisterEvent(lua_State* state)
 		EventTimer = [](lua_State* state)
 		{
 			lua_pcall(m_lua, 1, 0, 0);
-			lua_getglobal(m_lua, lua_events[WM_TIMER].c_str());
+			//lua_getglobal(m_lua, lua_events[WM_TIMER].c_str());
 			lua_pushinteger(m_lua, (int32_t)m_msg.wParam);
 			lua_pcall(m_lua, 1, 0,0);
 			return 0;
@@ -743,7 +743,7 @@ static int32_t _cdecl RegisterEvent(lua_State* state)
 		EventHover = [](lua_State* state)
 		{
 			lua_pcall(m_lua, 0, 0, 0);
-			lua_getglobal(m_lua, lua_events[WM_MOUSEHOVER].c_str());
+			//lua_getglobal(m_lua, lua_events[WM_MOUSEHOVER].c_str());
 			lua_pcall(m_lua, 0, 0, 0);
 			return 0;
 		};
@@ -759,7 +759,6 @@ void CALL_CONV WindowsPackageInitializer()
 {
 	ZeroMemory(&m_msg, sizeof(MSG));
 	m_window = std::make_unique<Window>();
-	m_lua = LuaManager::GetInstance()->m_lua;
 	lua_register(m_lua, "CreateWindow", __CreateWindow);
 	lua_register(m_lua, "GetForegroundWindow", __GetForegroundWindow); 
 	lua_register(m_lua, "GetDesktopWindow", __GetDesktopWindow);

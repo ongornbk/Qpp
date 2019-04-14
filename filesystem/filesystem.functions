@@ -1,0 +1,4 @@
+FILESYSTEM FUNCTIONS:
+
+GetEnv takes string retunrs string
+Mkdir takes string return boolean

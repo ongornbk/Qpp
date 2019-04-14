@@ -99,15 +99,3 @@ static int32_t _cdecl VarLength(lua_State* state)
 	return 1;
 }
 
-void CALL_CONV MathPackageInitializer()
-{
-	srand((uint32_t)time(NULL));
-	m_lua = LuaManager::GetInstance()->m_lua;
-	lua_register(m_lua, "RandomInteger", RandomInteger);
-	lua_register(m_lua, "IntegerLength", IntegerLength);
-	lua_register(m_lua, "ToColor", ToColor);
-	lua_register(m_lua, "GetColor", GetColor);
-	lua_register(m_lua, "SetFirstDay", SetFirstDay);
-	lua_register(m_lua, "IsLeapYear", IsLeapYear);
-	lua_register(m_lua, "VarLength", VarLength);
-}

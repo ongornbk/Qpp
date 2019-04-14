@@ -77,7 +77,7 @@ void CALL_CONV UrlmonPackageInitializer()
 {
 	m_url = new Urlmon();
 	push_ptr(m_url);
-	m_lua = LuaManager::GetInstance()->m_lua;
+
 	lua_register(m_lua, "SetUrlOutputPath", SetUrlOutputPath);
 	lua_register(m_lua, "UrlRequestToFile", UrlRequestToFile);
 

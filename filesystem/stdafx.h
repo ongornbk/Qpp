@@ -10,12 +10,16 @@
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 // Windows Header Files
 #include <windows.h>
+#include <cstdint>
 #include <lua.hpp>
 #include <lualib.h>
 #include <lauxlib.h>
-#include <string>
-#include <map>
-#include <stdio.h>
+#include <sys/stat.h>
+#include <fstream>
+#include <sstream>
+#include <stack>
+#include <exception>
+#include <memory>
 
 #if _WIN64 
 #define CALL_CONV __stdcall

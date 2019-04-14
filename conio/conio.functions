@@ -1,0 +1,15 @@
+CONIO FUNCTIONS:
+
+Clear takes nothing returns nothing
+DrawPixel takes integer x, integer y, integer color, integer scale returns nothing
+Endline takes nothing returns nothing
+GetCursorPosition takes nothing returns integer,integer
+Getline takes nothing returns string
+Gotox takes integer returns nothing
+Gotoxy takes integer, integer returns nothing
+Gotoy takes integer y returns nothing
+Pause takes nothing returns nothing
+Print takes string returns nothing
+Printf takes string returns nothing
+Println takes string returns nothing
+SetConsoleTitle takes string returns nothing

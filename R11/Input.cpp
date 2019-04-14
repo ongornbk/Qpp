@@ -49,13 +49,3 @@ static int32_t __GetMouseState(lua_State* state)
 	}
 	return 1;
 }
-
-void CALL_CONV InputPackageInitializer()
-{
-
-	m_input = std::make_unique<DInput>();
-	m_lua = LuaManager::GetInstance()->m_lua;
-	lua_register(m_lua, "UpdateInput", UpdateInput);
-	lua_register(m_lua, "GetMousePressed", __GetMousePressed);
-	lua_register(m_lua, "GetMouseState", __GetMouseState);
-}

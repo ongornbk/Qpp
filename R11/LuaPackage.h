@@ -22,6 +22,7 @@ class LuaPackage
 {
 	std::string m_name;
 	std::string m_realName;
+	std::string m_path;
 	std::map<std::string, lua_CFunction> m_functions;
 
 	HMODULE m_lib;
@@ -36,18 +37,20 @@ public:
 
 
 
-	LuaPackage(lua_State* lua,std::string name, std::string as)
+	LuaPackage(lua_State* lua,std::string path,std::string name, std::string as)
 	{
+		m_path = path;
 		m_lua = lua;
-		m_realName = name;
 		m_name = as;
+		m_realName = name;
 	}
 
-	LuaPackage(lua_State* lua, std::string name)
+	LuaPackage(lua_State* lua,std::string path, std::string name)
 	{
-		m_lua = lua;
-		m_realName = name;
+		m_path = path;
 		m_name = name;
+		m_lua = lua;
+		m_realName = m_name;
 	}
 
 	~LuaPackage()
@@ -57,7 +60,7 @@ public:
 		long result = pckclose(0);
 		if (result)
 		{
-			MessageBoxA(NULL, (m_realName + ".dll " + "closing failed! code -> " + std::to_string(result)).c_str(), "Dll Error", MB_OK);
+			MessageBoxA(NULL, (m_realName + ".pck " + "closing failed! code -> " + std::to_string(result)).c_str(), "Dll Error", MB_OK);
 		}
 	}
 
@@ -68,10 +71,10 @@ public:
 
 	void initialize()
 	{
-		m_lib = LoadLibraryA((m_realName + ".dll").c_str());
+		m_lib = LoadLibraryA((m_path + ".pck").c_str());
 		if (!m_lib)
 		{
-			throw std::exception((m_realName + ".dll " + "not found!").c_str());
+			throw std::exception((m_realName + ".pck " + "not found!").c_str());
 		}
 
 		pckfoocount = package_start_close_count_function(GetProcAddress(m_lib, "foo_count"));
@@ -83,7 +86,7 @@ public:
 			long result = pckstart(0);
 			if (result)
 			{
-				throw std::exception((m_realName + ".dll " + "starting failed! code -> " + std::to_string(result)).c_str());
+				throw std::exception((m_realName + ".pck " + "starting failed! code -> " + std::to_string(result)).c_str());
 			}
 		}
 

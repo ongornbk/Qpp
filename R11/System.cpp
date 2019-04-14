@@ -123,7 +123,6 @@ static int32_t _cdecl __GetCpuUsage(lua_State* state)
 
 void CALL_CONV SystemPackageInitializer()
 {
-	m_lua = LuaManager::GetInstance()->m_lua;
 	InitCPU();
 	lua_register(m_lua, "Sleep", __Sleep);
 	lua_register(m_lua, "Shutdown", __Shutdown);
