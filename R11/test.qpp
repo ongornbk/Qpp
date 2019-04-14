@@ -1,0 +1,3 @@
+import("conio")
+conio.Printf("sdsdsds")
+conio.Pause()

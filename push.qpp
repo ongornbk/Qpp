@@ -1,5 +1,5 @@
-ImportPackage("conio")
-SetConsoleTitle("GIT R11")
+import("conio")
+conio.SetConsoleTitle("GIT R11")
 ImportPackage("system")
 System("@git status -s")
 Println("Pushing R11")

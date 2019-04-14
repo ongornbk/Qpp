@@ -1,5 +1,6 @@
 #pragma once
 #include "PackageMap.h"
+#include "LuaPackage.h"
 #include "luaH.h"
 
 class LuaManager : PackageMap
@@ -28,9 +29,10 @@ private:
 	friend void CALL_CONV XMLPackageInitializer();
 	friend void CALL_CONV NetworkPackageInitializer();
 
-	friend int32_t _cdecl ImportPackage(lua_State* state);
-	friend int32_t _cdecl GetArgument(lua_State* state);
-	friend int32_t _cdecl GetNumberOfArguments(lua_State* state);
+	friend int32_t _cdecl _lua_import(lua_State* state);
+	friend int32_t _cdecl _lua_import_as(lua_State* state);
+	friend int32_t _cdecl _lua_get_argument(lua_State* state);
+	friend int32_t _cdecl _lua_get_argc(lua_State* state);
 	friend int32_t _cdecl GetDebugInfo();
 
 	lua_State* m_lua;
@@ -44,4 +46,5 @@ private:
 
 	std::vector<std::string> m_args;
 
+	std::map<std::string, LuaPackage*> m_pcks;
 };

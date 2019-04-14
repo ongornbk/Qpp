@@ -87,6 +87,9 @@
     <ClInclude Include="Enet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="LuaPackage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -140,6 +143,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="main.lua" />
+    <None Include="test.qpp">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc">

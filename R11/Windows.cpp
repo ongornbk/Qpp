@@ -290,28 +290,43 @@ static int32_t _cdecl CursorPosition(lua_State* state)
 static int32_t _cdecl Execute(lua_State* state)
 {	
 
-	SHELLEXECUTEINFOA ShRun = { 0 };
-	ShRun.cbSize = sizeof(SHELLEXECUTEINFO);
-	ShRun.fMask = SEE_MASK_NOCLOSEPROCESS;
-	ShRun.hwnd = NULL;
-	ShRun.lpVerb = NULL;
-	ShRun.lpFile = lua_tostring(state,1);
-	ShRun.lpParameters = lua_tostring(state, 2);
-	ShRun.lpDirectory = NULL;
-	ShRun.nShow = SW_SHOW;
-	ShRun.hInstApp = NULL;
+	//SHELLEXECUTEINFOA ShRun = { 0 };
+	//ShRun.cbSize = sizeof(SHELLEXECUTEINFO);
+	//ShRun.fMask = SEE_MASK_NOCLOSEPROCESS;
+	//ShRun.hwnd = NULL;
+	//ShRun.lpVerb = NULL;
+	//ShRun.lpFile = lua_tostring(state,1);
+	//ShRun.lpParameters = lua_tostring(state, 2);
+	//ShRun.lpDirectory = NULL;
+	//ShRun.nShow = SW_SHOW;
+	//ShRun.hInstApp = NULL;
 
-	ptrtype lptr(ShellExecuteExA(&ShRun));
+	SHELLEXECUTEINFOA ShExecInfo = { 0 };
+	ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
+	ShExecInfo.fMask = SEE_MASK_NOCLOSEPROCESS;
+	ShExecInfo.hwnd = NULL;
+	ShExecInfo.lpVerb = "open";
+	ShExecInfo.lpFile = lua_tostring(state, 1);
+	ShExecInfo.lpParameters = lua_tostring(state, 2);
+	ShExecInfo.lpDirectory = NULL;
+	ShExecInfo.nShow = SW_SHOW;
+	ShExecInfo.hInstApp = NULL;
+	ShellExecuteExA(&ShExecInfo);
 
-	lua_pushinteger(state, lptr.lua.first);
-	lua_pushinteger(state, lptr.lua.second);
+	//ptrtype lptr(ShellExecuteExA(&ShRun));
 
-	if (!lptr.ptr)
-	{
-		MessageBox(NULL,L"Unable to open file!",L"Error", MB_OK);
-	}
+	//ptrtype lptr(ShellExecuteA(NULL, "open", lua_tostring(state, 1), lua_tostring(state, 2), NULL, 1));
 
-	return 2;
+	//lua_pushinteger(state, lptr.lua.first);
+	//lua_pushinteger(state, lptr.lua.second);
+
+	//if (!lptr.ptr)
+	//{
+	//	MessageBox(NULL,L"Unable to open file!",L"Error", MB_OK);
+	//}
+
+	//return 2;
+	return 0;
 }
 
 static int32_t _cdecl GetWindowProcessID(lua_State* state)
