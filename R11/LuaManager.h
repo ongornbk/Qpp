@@ -3,6 +3,14 @@
 #include "luaH.h"
 #include <vector>
 
+struct Urlmon
+{
+	Urlmon();
+
+	HMODULE     m_urlmon;
+	std::string m_urlpath;
+};
+
 class LuaManager
 {
 public:
@@ -11,6 +19,8 @@ public:
 
 	bool _cdecl Initialize(const int argc, char* argv[]);
 	std::string _cdecl GetPath() noexcept;
+
+	Urlmon& GetUrlmon();
 	
 	static LuaManager* GetInstance() noexcept;
 
@@ -26,6 +36,8 @@ private:
 
 	lua_State* m_lua;
 
+	Urlmon m_urlmon;
+
 	std::string m_path;
 	std::string m_file;
 
@@ -34,4 +46,6 @@ private:
 	std::vector<std::string> m_args;
 
 	std::map<std::string, LuaPackage*> m_pcks;
+	
+	
 };

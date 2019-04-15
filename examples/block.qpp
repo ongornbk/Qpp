@@ -1,5 +1,0 @@
-ImportPackage("windows")
-ImportPackage("conio")
-SetConsoleTitle("Block")
-BlockInput(true)
-Pause()

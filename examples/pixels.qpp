@@ -1,14 +1,19 @@
 import("conio")
---ImportPackage("math")
+import("math")
 conio.SetTitle("Pixels")
-conio.Pause()
-for x = 0,1600,2 
+
+for z = 1,500,2
 do
-   for y = 0,900,2
-   do
-   --local r = RandomInteger(0,255)
-   --ConsoleDrawPixel(x,y,ToColor(x,y,r),5)
-   conio.DrawPixel(x,y,x*y*(x-y),1)
-   end
+
+for y = 0,500,2
+do
+
+   local posx = x
+   local posy = y
+  conio.DrawPixel(posx,posy500,x*y,1)
+
 end
+
+end
+
 conio.Pause()

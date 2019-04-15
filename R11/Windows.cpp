@@ -547,11 +547,7 @@
 //	return 0;
 //}
 //
-//static int32_t _cdecl __BlockInput(lua_State* state)
-//{
-//	lua_pushboolean(state,BlockInput(lua_toboolean(state, 1)));
-//	return 1;
-//}
+
 //
 //static int32_t _cdecl _DrawString(lua_State* state)
 //{

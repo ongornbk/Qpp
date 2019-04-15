@@ -158,9 +158,20 @@ extern "C"
 
 	static int32_t _cdecl _lua_cls(lua_State* state)
 	{
-		printf_s("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 		ConsoleCursorPosition = { 0,0 };
 		SetConsoleCursorPosition(HandleOut, ConsoleCursorPosition);
+
+		BOOL bSuccess;
+		DWORD cCharsWritten;
+		CONSOLE_SCREEN_BUFFER_INFO csbi;
+		DWORD dwConSize;
+
+		GetConsoleScreenBufferInfo(HandleOut, &csbi);
+		dwConSize = csbi.dwSize.X * csbi.dwSize.Y;
+
+		bSuccess = FillConsoleOutputCharacter(HandleOut,' ',
+			dwConSize, ConsoleCursorPosition, &cCharsWritten);
+
 		return 0;
 	}
 

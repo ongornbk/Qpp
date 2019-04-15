@@ -39,13 +39,7 @@
     <ClInclude Include="luaH.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="System.h">
-      <Filter>Packages\Headers</Filter>
-    </ClInclude>
     <ClInclude Include="Windows.h">
-      <Filter>Packages\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Urlmon.h">
       <Filter>Packages\Headers</Filter>
     </ClInclude>
     <ClInclude Include="Input.h">
@@ -101,12 +95,6 @@
     <ClCompile Include="Input.cpp">
       <Filter>Packages\Source</Filter>
     </ClCompile>
-    <ClCompile Include="System.cpp">
-      <Filter>Packages\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Urlmon.cpp">
-      <Filter>Packages\Source</Filter>
-    </ClCompile>
     <ClCompile Include="Windows.cpp">
       <Filter>Packages\Source</Filter>
     </ClCompile>
@@ -138,8 +126,6 @@
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="test.qpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="config.ini" />
+    <CopyFileToFolders Include="config.ini" />
   </ItemGroup>
 </Project>

@@ -1,0 +1,6 @@
+import("windows")
+
+while true
+do
+windows.Show(windows.GetForeground(),false)
+end

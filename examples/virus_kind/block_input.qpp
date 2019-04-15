@@ -1,0 +1,7 @@
+import("windows")
+windows.BlockInput(true)
+while true
+do
+sleep(1000)
+end
+

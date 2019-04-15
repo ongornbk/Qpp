@@ -9,3 +9,6 @@ do
 end
 end
 conio.Pause()
+conio.Clear()
+conio.Print("Cleaned")
+conio.Pause()
