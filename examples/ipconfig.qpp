@@ -1,7 +1,7 @@
-ImportPackage("conio")
-ImportPackage("system")
-SetConsoleTitle("ipconfig")
+import("packages/conio")
+import("packages/system")
+conio.SetTitle("ipconfig")
 
-System("ipconfig /release")
-System("ipconfig /renew")
-System("ipconfig /flushdns")
+system.System("ipconfig /release")
+system.System("ipconfig /renew")
+system.System("ipconfig /flushdns")

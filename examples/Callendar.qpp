@@ -1,4 +1,4 @@
-import("packages/conio")
+import("conio")
 conio.SetTitle("Callendar")
 
 CNUMBER_OF_MONTHS = 12
@@ -11,7 +11,7 @@ months = {"January","February","March","April","May","June","July","August","Sep
 first_day = {}
 number_of_days = {}
 
-import("packages/math")
+import("math")
 
 function CalculateCallendar(year)
 	for  month = 1, CNUMBER_OF_MONTHS, 1 do

@@ -1,3 +1,3 @@
 import("packages/conio")
-conio.Printf("wololo")
+conio.Printf(get_argument(0))
 conio.Pause()

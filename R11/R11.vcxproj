@@ -168,11 +168,13 @@
     <ClInclude Include="Network.h" />
     <ClInclude Include="Package.h" />
     <ClInclude Include="PackageMap.h" />
+    <ClInclude Include="Pair.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Settings.h" />
+    <ClInclude Include="String.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="Urlmon.h" />
-    <ClInclude Include="WindowC.h" />
     <ClInclude Include="Windows.h" />
     <ClInclude Include="XML.h" />
   </ItemGroup>
@@ -182,8 +184,6 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="LuaManager.cpp" />
     <ClCompile Include="Network.cpp" />
-    <ClCompile Include="Package.cpp" />
-    <ClCompile Include="PackageMap.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -191,13 +191,14 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="R11.cpp" />
+    <ClCompile Include="Settings.cpp" />
+    <ClCompile Include="String.cpp" />
     <ClCompile Include="System.cpp" />
     <ClCompile Include="Urlmon.cpp" />
     <ClCompile Include="Windows.cpp" />
     <ClCompile Include="XML.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="main.lua" />
     <CopyFileToFolders Include="test.qpp">
       <FileType>Document</FileType>
     </CopyFileToFolders>
@@ -207,6 +208,11 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="config.ini">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,6 +1,6 @@
-import("packages/conio")
+import("conio")
 --ImportPackage("math")
-conio.SetConsoleTitle("Pixels")
+conio.SetTitle("Pixels")
 conio.Pause()
 for x = 0,1600,2 
 do

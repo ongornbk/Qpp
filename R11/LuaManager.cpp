@@ -11,7 +11,7 @@ static int32_t _cdecl _lua_import(lua_State* state)
 {
 	std::string pckpath = lua_tostring(state, 1);
 	std::string pckname;
-	size_t off = pckpath.find_first_of("/");
+	size_t off = pckpath.find_last_of("/\\");
 	if (off != pckpath.npos)
 		pckname = pckpath.substr(off+1);
 	else
@@ -37,7 +37,7 @@ static int32_t _cdecl _lua_import_as(lua_State* state)
 	std::string pckas = lua_tostring(state, 2);
 
 	std::string pckname;
-	size_t off = pckpath.find_first_of("/\\");
+	size_t off = pckpath.find_last_of("/\\");
 	if (off != pckpath.npos)
 		pckname = pckpath.substr(off+1);
 	else

@@ -4,7 +4,7 @@
 #include <mutex>
 #include "LuaManager.h"
 #include "DirectInput.h"
-#include "WindowC.h"
+
 
 #define GWL_HINSTANCE (-6)
 
@@ -13,8 +13,8 @@ struct DInput
 	DInput()
 	{
 		RECT rect;
-		GetWindowRect(m_pickedWindow, &rect);
-		m_instance.Initialize((HINSTANCE)GetWindowLong(m_pickedWindow, GWL_HINSTANCE), m_pickedWindow, rect.right-rect.left, rect.bottom-rect.top);
+		//GetWindowRect(m_pickedWindow, &rect);
+//		m_instance.Initialize((HINSTANCE)GetWindowLong(m_pickedWindow, GWL_HINSTANCE), m_pickedWindow, rect.right-rect.left, rect.bottom-rect.top);
 	}
 	Input m_instance;
 };

@@ -3,8 +3,7 @@
 #include <string>
 
 #include "LuaH.h"
-
-#include <iostream>
+#include "Settings.h"
 
 extern "C"
 {
@@ -20,6 +19,7 @@ typedef cpair(__stdcall * package_get_foo_function)(const long index);
 
 class LuaPackage
 {
+
 	std::string m_name;
 	std::string m_realName;
 	std::string m_path;
@@ -74,7 +74,14 @@ public:
 		m_lib = LoadLibraryA((m_path + ".pck").c_str());
 		if (!m_lib)
 		{
-			throw std::exception((m_realName + ".pck " + "not found!").c_str());
+			std::string alt_path = GetSetting("DefaultPackagesLocation").get_string();
+
+			m_lib = LoadLibraryA((alt_path + "/" + m_realName + ".pck").c_str());
+			if (!m_lib)
+			{
+				throw std::exception((m_realName + ".pck " + "not found!").c_str());
+			}
+			
 		}
 
 		pckfoocount = package_start_close_count_function(GetProcAddress(m_lib, "foo_count"));
@@ -103,28 +110,11 @@ public:
 
 		for (auto&& ele : m_functions)
 		{
-			//lua_register(m_lua, ele.first.c_str(), ele.second);
 			lua_pushstring(m_lua, ele.first.c_str());   /* Push the table index */
 			lua_pushcfunction(m_lua,ele.second); /* Push the cell value */
 			lua_rawset(m_lua, -3);
 		}
 
 		lua_setglobal(m_lua,m_name.c_str());
-
-		//long top = lua_gettop(m_lua);
-		//lua_createtable(m_lua,0,2);
-		
-		//for (auto it = m_functions.begin(); it != m_functions.end(); ++it) {
-
-			//lua_pushcfunction(m_lua,it->second);
-			//lua_setfield(m_lua, it->second.c_str());
-
-			//setField(m_lua, "slot", i);
-			//setField(m_lua, "kartaid", karta->getID());
-		
-			//lua_settop(m_lua, top);
-		
-	//	lua_settable(m_lua,top);
-	//	lua_setglobal(m_lua, m_name.c_str());
 	}
 };
