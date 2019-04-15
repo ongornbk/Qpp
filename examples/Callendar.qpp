@@ -1,5 +1,5 @@
-ImportPackage("conio")
-SetConsoleTitle("Callendar")
+import("packages/conio")
+conio.SetTitle("Callendar")
 
 CNUMBER_OF_MONTHS = 12
 CNUMBER_OF_DAYS = 7
@@ -11,16 +11,16 @@ months = {"January","February","March","April","May","June","July","August","Sep
 first_day = {}
 number_of_days = {}
 
-ImportPackage("math")
+import("packages/math")
 
 function CalculateCallendar(year)
 	for  month = 1, CNUMBER_OF_MONTHS, 1 do
-		first_day[month] = SetFirstDay(year, month);
+		first_day[month] = math.FirstDay(year, month);
 	end
 
 	number_of_days[1] = 31;
 
-		if (IsLeapYear(year))
+		if (math.IsLeapYear(year))
 		then
 			number_of_days[2] = 29;
 		else
@@ -42,35 +42,35 @@ end
 
 function DrawCallendar(year)
 
-    SetConsoleTitle("Callendar for year " .. year)
-	Println("Callendar for year " .. year)
+    conio.SetTitle("Callendar for year " .. year)
+	conio.Println("Callendar for year " .. year)
 	
 	for i = 1,CNUMBER_OF_MONTHS, 1 do
-	Endline()
-	Endline()
-	Print(months[i])
-	Endline()
-	Endline()
+	conio.Endline()
+	conio.Endline()
+	conio.Print(months[i])
+	conio.Endline()
+	conio.Endline()
 
 		for j = 1, CNUMBER_OF_DAYS, 1 do
-			Gotox(j*CHORIZONTAL_SPACING)
-			Print(days_short[j])
+			conio.Gotox(j*CHORIZONTAL_SPACING)
+			conio.Print(days_short[j])
 			end
 		
-		Endline()
+		conio.Endline()
 		
 		y = 1
 		f = first_day[i]
 		while number_of_days[i] > 0
 		do
-		Gotox(f*CHORIZONTAL_SPACING)
-		Print(y)
+		conio.Gotox(f*CHORIZONTAL_SPACING)
+		conio.Print(y)
 		number_of_days[i] = number_of_days[i] - 1
 		f = f + 1
-		if f > 6
+		if f > 7
 		then
 		f = 1
-		Endline()
+		conio.Endline()
 		end
 			y = y + 1
 		end
@@ -81,18 +81,18 @@ end
 
 ::START::
 
-Print("Year: ")
-local input = tonumber(GetInput())
+conio.Print("Year: ")
+local input = tonumber(conio.Getline())
 
 if input < 1 or input > 2116
 then
-CleanConsole()
-Println("Error! Year out of range...")
-Println("Valid year belongs to the range of 1 to 2116")
+conio.Clear()
+conio.Println("Error! Year out of range...")
+conio.Println("Valid year belongs to the range of 1 to 2116")
 goto START
 end
 
-CleanConsole()
+conio.Clear()
 CalculateCallendar(input)
 DrawCallendar(input)
-Pause()
+conio.Pause()

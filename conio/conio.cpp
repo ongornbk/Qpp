@@ -179,7 +179,7 @@ extern "C"
 		"Print",
 		"Printf",
 		"Println",
-		"SetConsoleTitle"
+		"SetTitle"
 	};
 	const lua_CFunction scfooes[FOO_COUNT] = {
 		_lua_cls,

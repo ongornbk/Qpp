@@ -42,19 +42,10 @@
     <ClInclude Include="luaH.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Console.h">
-      <Filter>Packages\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Math.h">
-      <Filter>Packages\Headers</Filter>
-    </ClInclude>
     <ClInclude Include="System.h">
       <Filter>Packages\Headers</Filter>
     </ClInclude>
     <ClInclude Include="Windows.h">
-      <Filter>Packages\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Filesystem.h">
       <Filter>Packages\Headers</Filter>
     </ClInclude>
     <ClInclude Include="Urlmon.h">
@@ -109,12 +100,6 @@
     </ClCompile>
     <ClCompile Include="DirectInput.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Filesystem.cpp">
-      <Filter>Packages\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Math.cpp">
-      <Filter>Packages\Source</Filter>
     </ClCompile>
     <ClCompile Include="Input.cpp">
       <Filter>Packages\Source</Filter>

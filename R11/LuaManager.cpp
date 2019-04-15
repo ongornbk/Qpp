@@ -1,8 +1,5 @@
 #include "pch.h"
 #include "LuaManager.h"
-#include "Console.h"
-#include "Windows.h"
-#include "Urlmon.h"
 
 namespace
 {

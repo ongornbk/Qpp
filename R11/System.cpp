@@ -48,34 +48,7 @@ static int32_t _cdecl __Sleep(lua_State* state)
 	return 0;
 }
 
-static int32_t _cdecl __Shutdown(lua_State* state)
-{
-	system("shutdown -s");
-	return 0;
-}
 
-static int32_t _cdecl __System(lua_State* state)
-{
-	std::string str = lua_tostring(state, 1);
-	system(str.c_str());
-	return 0;
-}
-
-static int32_t _cdecl __GetEnv(lua_State* state)
-{
-#pragma warning(disable : 4996)
-	std::string str = getenv(lua_tostring(state, 1));
-	lua_pushstring(state, str.c_str());
-	return 1;
-}
-
-static int32_t _cdecl __SetAttributes(lua_State* state)
-{
-	std::string str = lua_tostring(state, 1);
-	uint64_t attribute = lua_tointeger(state, 2);
-	SetFileAttributesA(str.c_str(),attribute);
-	return 0;
-}
 
 static int32_t _cdecl __GetCpuUsage(lua_State* state)
 {
@@ -125,9 +98,9 @@ void CALL_CONV SystemPackageInitializer()
 {
 	InitCPU();
 	lua_register(m_lua, "Sleep", __Sleep);
-	lua_register(m_lua, "Shutdown", __Shutdown);
-	lua_register(m_lua, "System", __System);
-	lua_register(m_lua, "GetEnv", __GetEnv);
-	lua_register(m_lua, "SetAttributes", __SetAttributes);
+//	lua_register(m_lua, "Shutdown", __Shutdown);
+//	lua_register(m_lua, "System", __System);
+//	lua_register(m_lua, "GetEnv", __GetEnv);
+	//lua_register(m_lua, "SetAttributes", __SetAttributes);
 	lua_register(m_lua, "GetCpuUsage", __GetCpuUsage);
 }

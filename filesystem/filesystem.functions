@@ -1,4 +1,12 @@
 FILESYSTEM FUNCTIONS:
 
-GetEnv takes string retunrs string
+AppendString takes string returns nothing
+Close takes nothing returns nothing
+CopyFile takes string source,string destination returns nothing
 Mkdir takes string return boolean
+Open takes string file, integer mode returns nothing
+OpenAppend takes string file returns nothing
+OpenTrunc takes string file returns nothing
+Remove takes string returns nothing
+SetAttributes takes string file, integer attributes returns boolean
+ToString takes nothing returns string

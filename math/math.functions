@@ -1,0 +1,9 @@
+MATH FUNCTIONS:
+
+FirstDay takes integer year, integer month returns integer day
+GetColor takes integer color returns integer red, integer green, integer blue
+IsLeapYear takes integer year returns boolean
+Length takes integer, returns integer
+Random takes integer min, integer max returns integer
+Seed takes integer returns nothing
+ToColor takes integer red, integer green, integer blue returns integer color

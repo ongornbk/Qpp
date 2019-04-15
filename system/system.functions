@@ -1,0 +1,5 @@
+SYSTEM FUNCTIONS:
+
+GetEnv takes string retunrs string
+Shutdown takes nothing returns nothing
+System takes string returns nothing
