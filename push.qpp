@@ -17,5 +17,6 @@ system.System("@echo R11 Pushing >> pushHistory.his")
 system.System("@date /t >> pushHistory.his")
 system.System("@time /t >> pushHistory.his")
 system.System("@echo "..input..">> pushHistory.his")
+conio.Clear()
 conio.Pause()
 
