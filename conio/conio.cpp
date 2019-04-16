@@ -175,12 +175,19 @@ extern "C"
 		return 0;
 	}
 
-	constexpr long FOO_COUNT = 13;
+	static int32_t _cdecl _lua_getch(lua_State* state)
+	{
+		lua_pushinteger(state, getch());
+		return 1;
+	}
+
+	constexpr long FOO_COUNT = 14;
 
 	const char* sckeys[FOO_COUNT] = {
 		"Clear",
 		"DrawPixel",
 		"Endline",
+		"Getch",
 		"GetCursorPosition",
 		"Getline",
 		"Gotox",
@@ -196,6 +203,7 @@ extern "C"
 		_lua_cls,
 		_lua_drawpixel,
 		_lua_endline,
+		_lua_getch,
 		_lua_getcursorposition,
 		_lua_getline,
 		_lua_gotox,

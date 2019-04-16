@@ -1,0 +1,78 @@
+head = '@'
+body = '#'
+tail = '*'
+
+margin_left = 2
+margin_top = 1
+
+local top_bottom_border = "+-----------------------------------+"
+local left_right_border = "|                                   |"
+
+
+import_as("conio","con")
+con.SetTitle("Snake!")
+
+require "snake"
+
+con.Gotoxy(margin_left,margin_top)
+con.Print(top_bottom_border)
+
+    for y = margin_top+1,margin_top+16,1
+    do
+    con.Gotoxy(margin_left,y)
+    con.Print(left_right_border)
+    end
+
+con.Gotoxy(margin_left,margin_top+17)
+con.Print(top_bottom_border)
+
+
+
+Snake.Draw()
+
+while true
+do
+
+local input = con.Getch()
+
+if(input==224)
+then
+
+input = con.Getch()
+
+if(input == 72)
+then
+Snake.Update(0,-1)
+end
+
+if(input == 77)
+then
+Snake.Update(1,0)
+end
+
+if(input == 75)
+then
+Snake.Update(-1,0)
+end
+
+if(input == 80)
+then
+Snake.Update(0,1)
+end
+
+end
+
+if(input == 32)
+then
+Snake.Enlarge()
+else
+Snake.Draw()
+end
+
+con.Gotoxy(0,0)
+con.Println("x: " .. Snake.element[0].x .. " y: " .. Snake.element[0].y .. "  ")
+
+end
+    
+
+con.Pause()

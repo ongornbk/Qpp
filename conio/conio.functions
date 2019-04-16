@@ -3,6 +3,7 @@ CONIO FUNCTIONS:
 Clear takes nothing returns nothing
 DrawPixel takes integer x, integer y, integer color, integer scale returns nothing
 Endline takes nothing returns nothing
+Getch takes nothing returns integer key
 GetCursorPosition takes nothing returns integer,integer
 Getline takes nothing returns string
 Gotox takes integer returns nothing
