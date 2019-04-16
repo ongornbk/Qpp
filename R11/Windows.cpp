@@ -154,15 +154,7 @@
 //
 //
 //
-//static int32_t _cdecl __GetForegroundWindow(lua_State* state) // MANAGED
-//{
-//	ptrtype lptr(GetForegroundWindow());
-//
-//	lua_pushinteger(m_lua, lptr.lua.first);
-//	lua_pushinteger(m_lua, lptr.lua.second);
-//
-//	return 2;
-//}
+
 //
 //static int32_t _cdecl __GetOwnWindow(lua_State* state)
 //{
@@ -192,44 +184,9 @@
 //	return 2;
 //}
 //
-//static int32_t _cdecl __ShowWindow(lua_State* state)
-//{
-//	//lua_pushboolean(m_lua,ShowWindow(m_pickedWindow, lua_toboolean(state, 1)));
-//	return 1;
-//}
+
 //
-//static int32_t _cdecl __SetActiveWindow(lua_State* state)
-//{
-//	//ptrtype lptr(SetActiveWindow(m_pickedWindow));
-//	lua_pushinteger(m_lua, lptr.lua.first);
-//	lua_pushinteger(m_lua, lptr.lua.second);
-//	return 2;
-//}
-//
-//static int32_t _cdecl __SetForegroundWindow(lua_State* state)
-//{
-//	//lua_pushboolean(m_lua,(SetForegroundWindow(m_pickedWindow)));
-//	return 1;
-//}
-//
-//static int32_t _cdecl __SetFocus(lua_State* state)
-//{
-//	//ptrtype lptr(SetFocus(m_pickedWindow));
-//	lua_pushinteger(m_lua, lptr.lua.first);
-//	lua_pushinteger(m_lua, lptr.lua.second);
-//	return 2;
-//}
-//
-//static int32_t _cdecl __GetWindowRect(lua_State* state)
-//{
-//	RECT rect;
-//	//GetWindowRect(m_pickedWindow,&rect);
-//	lua_pushinteger(state, rect.bottom);
-//	lua_pushinteger(state, rect.left);
-//	lua_pushinteger(state, rect.right);
-//	lua_pushinteger(state, rect.top);
-//	return 4;
-//}
+
 //
 //static int32_t _cdecl __SendMessage(lua_State* state)
 //{
@@ -591,29 +548,7 @@
 //	return 0;
 //}
 //
-//static int32_t _cdecl _ValidateRect(lua_State* state)
-//{
-//	//ValidateRect(m_pickedWindow, 0);
-//	return 0;
-//}
-//
-//static int32_t _cdecl _InvalidateRect(lua_State* state)
-//{
-////	InvalidateRect(m_pickedWindow, 0,false);
-//	return 0;
-//}
-//
-//static int32_t _cdecl _SetTimer(lua_State* state)
-//{
-//	//SetTimer(m_pickedWindow, lua_tointeger(state, 2),lua_tointeger(state,1), 0);
-//	return 0;
-//}
-//
-//static int32_t _cdecl _KillTimer(lua_State* state)
-//{
-//	//KillTimer(m_pickedWindow, lua_tointeger(state, 1));
-//	return 0;
-//}
+
 //
 //static int32_t _cdecl WindowProc(lua_State* state)
 //{

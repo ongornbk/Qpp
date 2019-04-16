@@ -14,6 +14,16 @@ Snake.lastposition = {}
 Snake.lastposition.x = 5
 Snake.lastposition.y = 5
 
+Snake.food = {}
+
+Snake.food.x = 10
+Snake.food.y = 10
+
+function Snake.CreateFood()
+    Snake.food.x = math.random(1,35)
+    Snake.food.y = math.random(1,16)
+end
+
 function Snake.Enlarge ()
     Snake.size = Snake.size + 1
     Snake.element[Snake.size] = {}
@@ -50,13 +60,22 @@ end
 
 function Snake.Draw()
 
+    con.Gotoxy(margin_left+Snake.food.x,margin_top+Snake.food.y)
+    con.Print("&")
+
     con.Gotoxy(margin_left+Snake.element[0].x,margin_top+Snake.element[0].y)
     con.Print(head)
 
 for i = 1,Snake.size-1,1
 do
-con.Gotoxy(margin_left+Snake.element[i].x,margin_top+Snake.element[i].y)
-con.Print(body)
+    con.Gotoxy(margin_left+Snake.element[i].x,margin_top+Snake.element[i].y)
+    if(Snake.element[i].x == Snake.food.x and Snake.element[i].y == Snake.food.y)
+    then
+        con.Print("X")
+    else
+        con.Print(body)
+    end
+
 end
 
     if(Snake.size > 0)
@@ -103,6 +122,12 @@ else
 if(Snake.element[0].y < 1)
 then
 Snake.element[0].y = 16
+end
+
+if(Snake.element[0].x == Snake.food.x and Snake.element[0].y == Snake.food.y)
+then
+Snake.Enlarge()
+Snake.CreateFood()
 end
 
 Snake.Collision(Snake.element[0].x,Snake.element[0].y)

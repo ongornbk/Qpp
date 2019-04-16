@@ -26,51 +26,54 @@ con.Print(top_bottom_border)
 con.Gotoxy(margin_left,margin_top+17)
 con.Print(top_bottom_border)
 
+import_as("windows","win")
 
-
-Snake.Draw()
+local offsetx = 0
+local offsety = 0
 
 while true
 do
 
-local input = con.Getch()
 
-if(input==224)
+
+if(win.KeyDown(0x26))
 then
-
-input = con.Getch()
-
-if(input == 72)
-then
-Snake.Update(0,-1)
-end
-
-if(input == 77)
-then
-Snake.Update(1,0)
-end
-
-if(input == 75)
-then
-Snake.Update(-1,0)
-end
-
-if(input == 80)
-then
-Snake.Update(0,1)
-end
-
-end
-
-if(input == 32)
-then
-Snake.Enlarge()
+    offsetx = 0
+    offsety = -1
 else
-Snake.Draw()
+
+    if(win.KeyDown(0x27))
+    then
+    offsetx = 1
+    offsety = 0
+    else
+
+        if(win.KeyDown(0x25))
+        then
+        offsetx = -1
+        offsety = 0
+        else
+
+            if(win.KeyDown(0x28))
+            then
+            offsetx = 0
+            offsety = 1
+            end
+
+        end
+
+    end
+
 end
+
+Snake.Update(offsetx,offsety)
+
+Snake.Draw()
 
 con.Gotoxy(0,0)
-con.Println("x: " .. Snake.element[0].x .. " y: " .. Snake.element[0].y .. "  ")
+con.Println("x: " .. Snake.element[0].x .. " y: " .. Snake.element[0].y .. " cpu: " .. get_cpu() .. "% ")
+
+sleep(100000000)
 
 end
     

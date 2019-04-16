@@ -1,10 +1,8 @@
-ImportPackage("conio")
-ImportPackage("windows")
-ImportPackage("math")
-SetConsoleTitle("Cursor")
+import("conio")
+import("windows")
+conio.SetTitle("Cursor")
 while(true)
 do
-local x,y = GetCursorPosition()
-ConsoleDrawPixel(x,y,ToColor(x,y,x*y),30);
+local x,y = windows.CursorPosition()
+conio.DrawPixel(x,y,255,30);
 end
-Pause()
