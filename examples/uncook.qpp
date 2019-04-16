@@ -1,7 +1,7 @@
-	ImportPackage("conio")
-ImportPackage("windows")
-ImportPackage("system")
-SetConsoleTitle("Uncooking assistant")
+import("conio")
+import("windows")
+import("system")
+conio.SetTitle("Uncooking assistant")
 
 --Println("Game Directory (Content): ")
 --Println("Output Directory: ")
@@ -24,4 +24,4 @@ cdird = cdird:gsub("\\","/")
 
 --Execute("wcc_lite.exe",game_directory .. output_directory .. imgfmt)
 
-Execute("wcc_lite.exe"," uncook " .. cgamed .. cdird .. " -imgfmt=tga")
+execute("wcc_lite.exe"," uncook " .. cgamed .. cdird .. " -imgfmt=tga")

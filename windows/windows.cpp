@@ -116,11 +116,18 @@ extern "C"
 		return 1;
 	}
 
-	constexpr long FOO_COUNT = 14;
+	static int32_t _cdecl _lua_exist(lua_State* state)
+	{
+		lua_pushboolean(state,(bool)ptrtype(lua_tointeger(state, 1), lua_tointeger(state, 2)).val);
+		return 0;
+	}
+
+	constexpr long FOO_COUNT = 15;
 
 	const char* sckeys[FOO_COUNT] = {
 		"BlockInput",
 		"CursorPosition",
+		"Exist",
 		"GetForeground",
 		"GetRect",
 		"InvalidateRect",
@@ -137,6 +144,7 @@ extern "C"
 	const lua_CFunction scfooes[FOO_COUNT] = {
 		_lua_blockinput,
 		_lua_cursorposition,
+		_lua_exist,
 		_lua_getforegroundwindow,
 		_lua_getrect,
 		_lua_invalidaterect,

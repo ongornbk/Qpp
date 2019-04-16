@@ -175,18 +175,44 @@ extern "C"
 		return 0;
 	}
 
+	static int32_t _cdecl _lua_fill(lua_State* state)
+	{
+		ConsoleCursorPosition = { 0,0 };
+		SetConsoleCursorPosition(HandleOut, ConsoleCursorPosition);
+
+		BOOL bSuccess;
+		DWORD cCharsWritten;
+		CONSOLE_SCREEN_BUFFER_INFO csbi;
+		DWORD dwConSize;
+
+		GetConsoleScreenBufferInfo(HandleOut, &csbi);
+		dwConSize = csbi.dwSize.X * csbi.dwSize.Y;
+
+		bSuccess = FillConsoleOutputCharacterA(HandleOut, std::string(lua_tostring(state,1)).at(0),
+			dwConSize, ConsoleCursorPosition, &cCharsWritten);
+
+		return 0;
+	}
+
 	static int32_t _cdecl _lua_getch(lua_State* state)
 	{
 		lua_pushinteger(state, getch());
 		return 1;
 	}
 
-	constexpr long FOO_COUNT = 14;
+	static int32_t _cdecl _lua_setcolor(lua_State* state)
+	{
+		SetConsoleTextAttribute(HandleOut,(unsigned short) lua_tointeger(state,1));
+		return 0;
+	}
+
+	constexpr long FOO_COUNT = 16;
 
 	const char* sckeys[FOO_COUNT] = {
 		"Clear",
 		"DrawPixel",
 		"Endline",
+		"Fill",
 		"Getch",
 		"GetCursorPosition",
 		"Getline",
@@ -197,12 +223,14 @@ extern "C"
 		"Print",
 		"Printf",
 		"Println",
+		"SetColor",
 		"SetTitle"
 	};
 	const lua_CFunction scfooes[FOO_COUNT] = {
 		_lua_cls,
 		_lua_drawpixel,
 		_lua_endline,
+		_lua_fill,
 		_lua_getch,
 		_lua_getcursorposition,
 		_lua_getline,
@@ -213,6 +241,7 @@ extern "C"
 		_lua_print,
 		_lua_printf,
 		_lua_println,
+		_lua_setcolor,
 		_lua_setconsoletitle
 	};
 

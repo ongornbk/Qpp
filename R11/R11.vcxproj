@@ -166,10 +166,12 @@
     <ClInclude Include="LuaManager.h" />
     <ClInclude Include="LuaPackage.h" />
     <ClInclude Include="Network.h" />
+    <ClInclude Include="Object.h" />
     <ClInclude Include="Package.h" />
     <ClInclude Include="PackageMap.h" />
     <ClInclude Include="Pair.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="PointersManager.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="String.h" />
@@ -188,6 +190,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="PointersManager.cpp" />
     <ClCompile Include="R11.cpp" />
     <ClCompile Include="Settings.cpp" />
     <ClCompile Include="String.cpp" />

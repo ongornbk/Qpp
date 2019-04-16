@@ -574,11 +574,7 @@
 //	return 0;
 //}
 //
-//static int32_t _cdecl WindowExist(lua_State* state)
-//{
-////lua_pushboolean(state, (bool)m_pickedWindow);
-//	return 0;
-//}
+
 //
 //static int32_t _cdecl __PlaySound(lua_State* state)
 //{

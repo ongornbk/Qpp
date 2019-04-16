@@ -1,79 +1,41 @@
-head = '@'
-body = '#'
-tail = '*'
-
-margin_left = 2
-margin_top = 1
-
-local top_bottom_border = "+-----------------------------------+"
-local left_right_border = "|                                   |"
-
-
 import_as("conio","con")
 con.SetTitle("Snake!")
 
-require "snake"
+require "map"
+require "snake_blue"
+require "snake_red"
 
-con.Gotoxy(margin_left,margin_top)
-con.Print(top_bottom_border)
-
-    for y = margin_top+1,margin_top+16,1
-    do
-    con.Gotoxy(margin_left,y)
-    con.Print(left_right_border)
-    end
-
-con.Gotoxy(margin_left,margin_top+17)
-con.Print(top_bottom_border)
+map.Begin()
 
 import_as("windows","win")
 
-local offsetx = 0
-local offsety = 0
+
 
 while true
 do
 
+SnakeBlue.Update()  
+SnakeRed.Update()
 
+map.Draw()
 
-if(win.KeyDown(0x26))
-then
-    offsetx = 0
-    offsety = -1
-else
+SnakeBlue.Draw()
+SnakeRed.Draw()
 
-    if(win.KeyDown(0x27))
-    then
-    offsetx = 1
-    offsety = 0
-    else
-
-        if(win.KeyDown(0x25))
-        then
-        offsetx = -1
-        offsety = 0
-        else
-
-            if(win.KeyDown(0x28))
-            then
-            offsetx = 0
-            offsety = 1
-            end
-
-        end
-
-    end
-
-end
-
-Snake.Update(offsetx,offsety)
-
-Snake.Draw()
-
+con.SetColor(10)
 con.Gotoxy(0,0)
-con.Println("x: " .. Snake.element[0].x .. " y: " .. Snake.element[0].y .. " cpu: " .. get_cpu() .. "% ")
+con.Println("Player Blue:")
+con.Println("x: " .. SnakeBlue.element[0].x .. " y: " .. SnakeBlue.element[0].y)
+con.Println("size: " .. tostring(SnakeBlue.size) .. "   ")
+con.Endline()
+con.Endline()
+con.Println("Player Red:")
+con.Println("x: " .. SnakeRed.element[0].x .. " y: " .. SnakeRed.element[0].y)
+con.Println("size: " .. tostring(SnakeRed.size) .. "   ")
 
-sleep(100000000)
+sleep(75000000)
+
+
 
 end
     

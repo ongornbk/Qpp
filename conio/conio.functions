@@ -13,4 +13,5 @@ Pause takes nothing returns nothing
 Print takes string returns nothing
 Printf takes string returns nothing
 Println takes string returns nothing
-SetConsoleTitle takes string returns nothing
+SetColor takes integer color, returns nothing
+SetTitle takes string returns nothing
