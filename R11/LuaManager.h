@@ -1,6 +1,7 @@
 #pragma once
 #include "LuaPackage.h"
 #include "luaH.h"
+#include "PointersManager.h"
 #include <vector>
 
 struct Urlmon
@@ -35,6 +36,7 @@ private:
 	friend int32_t _cdecl GetDebugInfo();
 
 	lua_State* m_lua;
+	PointersManager* m_ptrs;
 
 	Urlmon m_urlmon;
 

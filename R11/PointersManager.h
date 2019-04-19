@@ -1,4 +1,11 @@
 #pragma once
 
-template <class _Out_ ReturnType, class _In_ Type>
-ReturnType& x32(const Type& obj)
+bool release_ptr(const long);
+
+struct PointersManager 
+{
+	PointersManager();
+
+	long (_cdecl* x32)(void* obj);
+	void* (_cdecl* x64)(const long obj);
+};

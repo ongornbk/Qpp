@@ -1,8 +1,8 @@
-ImportPackage("conio")
-SetConsoleTitle("Snowrain")
-ImportPackage("system")
-ImportPackage("windows")
-ImportPackage("math")
+import("conio")
+con.SetTitle("Snowrain")
+import("system")
+import("windows")
+import("math")
 
 require "Sunflower/Sunflower"
 

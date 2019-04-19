@@ -1,0 +1,92 @@
+ImportPackage("conio")
+ImportPackage("system")
+ImportPackage("windows")
+ImportPackage("math")
+SetConsoleTitle("Multiclicker")
+
+require "Sunflower/Sunflower"
+
+RegisterHotKey(1,0x70)--F1
+RegisterHotKey(2,0x71)--F2
+RegisterHotKey(3,0x72)--F3
+
+local width,height = GetScreenMetrics()
+
+function AcquireProcess()
+local first_hwnd_ptr,second_hwnd_ptr = GetForegroundWindow()
+PickWindow(first_hwnd_ptr,second_hwnd_ptr)
+local dc0,dc1 = GetDC()
+PickDC(dc0,dc1)
+end
+
+local space = false
+
+function GotoMainLoop()
+
+CleanConsole()
+Println("Running...")
+
+local color = ToColor(255,0,0)
+
+
+while(true)
+do
+
+
+while(KeyDown(0x1))
+do
+
+
+
+SendMessage(0x0201,1,1,2)
+Sleep(1200)
+SendMessage(0x0202,0,2,1)
+Sleep(1200)
+end
+
+
+while(Sunflower.Peek())
+do
+
+
+
+if Sunflower.msg == 786 and Sunflower.wparam == 2 
+then
+GotoMainMenu()
+end
+
+Sunflower.Proc()
+
+end
+end
+end
+
+function GotoMainMenu()
+
+CleanConsole()
+Println("Press f1 key to start...")
+Println("Press f2 key to pause...")
+Println("Press f3 key to exit... ")
+
+while(Sunflower.Run())
+do
+
+if Sunflower.wparam == 1 
+then
+AcquireProcess()
+GotoMainLoop()
+else
+if Sunflower.wparam == 3
+then os.exit()
+else
+Sleep(10000)
+end
+Sunflower.Proc()
+end
+
+
+end
+end
+
+GotoMainMenu()
+

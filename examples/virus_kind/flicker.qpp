@@ -1,11 +1,11 @@
 import_as("windows","win")
 
-local ptr0,ptr1 = win.GetForeground()
-win.Show(ptr0,ptr1,false)
-local ptr2,ptr3 = win.GetForeground()
-win.Show(ptr0,ptr1,true)
+local hwnd0 = win.GetForeground()
+win.Show(hwnd0,false)
+local hwnd1 = win.GetForeground()
+win.Show(hwnd0,true)
 
-if ptr0 == ptr2 and ptr1 == ptr3
+if hwnd0 == hwnd1
 then
 import("conio")
 conio.Println("Something went wrong")
@@ -15,8 +15,8 @@ end
 
 while true
 do
-    win.Show(ptr0,ptr1,true)
-    win.Show(ptr2,ptr3,true)
+    win.Show(hwnd0,true)
+    win.Show(hwnd1,true)
 end
 
 ::EXIT::

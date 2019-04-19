@@ -1,0 +1,7 @@
+import("windows")
+import("conio")
+while true
+do
+conio.Println(hwnd)
+conio.Pause()
+end

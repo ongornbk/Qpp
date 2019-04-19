@@ -70,12 +70,15 @@ struct File
 namespace
 {
 	static std::stack<File*> s_files;
+	static PointersManager* ptrs;
 }
 
 extern "C"
 {
-	long start(const long arg)
+	long start(PointersManager* arg)
 	{
+		ptrs = arg;
+		if (!arg) return 1;
 
 		return 0;
 	}

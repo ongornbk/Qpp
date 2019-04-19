@@ -50,7 +50,7 @@ static int32_t _cdecl _lua_import(lua_State* state)
 	else
 		pckname = pckpath;
 
-	m_instance->m_pcks[pckname] = new LuaPackage(state,pckpath, pckname);
+	m_instance->m_pcks[pckname] = new LuaPackage(state,m_instance->m_ptrs,pckpath, pckname);
 
 	try
 	{
@@ -76,7 +76,7 @@ static int32_t _cdecl _lua_import_as(lua_State* state)
 	else
 		pckname = pckpath;
 
-	m_instance->m_pcks[pckname] = new LuaPackage(state,pckpath, pckname,pckas);
+	m_instance->m_pcks[pckname] = new LuaPackage(state, m_instance->m_ptrs,pckpath, pckname,pckas);
 	try
 	{
 		m_instance->m_pcks[pckname]->initialize();
@@ -202,9 +202,15 @@ static int32_t _cdecl _lua_execute(lua_State* state)
 	ShExecInfo.lpDirectory = NULL;
 	ShExecInfo.nShow = SW_SHOW;
 	ShExecInfo.hInstApp = NULL;
-	ShellExecuteExA(&ShExecInfo);
+	lua_pushboolean(state,ShellExecuteExA(&ShExecInfo));
 
-	return 0;
+	return 1;
+}
+
+static int32_t _cdecl _lua_release(lua_State* state)
+{
+	lua_pushboolean(state, release_ptr(lua_tointeger(state, 1)));
+	return 1;
 }
 
 Urlmon::Urlmon()
@@ -230,7 +236,7 @@ LuaManager::LuaManager()
 {
 	m_instance = this;
 	m_lua = nullptr;
-
+	m_ptrs = new PointersManager();
 }
 
 LuaManager::~LuaManager()
@@ -247,6 +253,12 @@ LuaManager::~LuaManager()
 		}
 	}
 	m_pcks.clear();
+
+	if (m_ptrs)
+	{
+		delete m_ptrs;
+		m_ptrs = nullptr;
+	}
 }
 
 Urlmon& LuaManager::GetUrlmon()
@@ -278,6 +290,7 @@ bool _cdecl LuaManager::Initialize(const int argc, char* argv[])
 	lua_register(m_lua, "sleep", _lua_sleep);
 	lua_register(m_lua, "get_cpu", _lua_getcpu);
 	lua_register(m_lua, "execute", _lua_execute);
+	lua_register(m_lua, "release", _lua_release);
 
 	result = luaL_loadfile(m_lua, m_file.c_str());
 	if (result)

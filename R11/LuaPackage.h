@@ -4,6 +4,7 @@
 
 #include "LuaH.h"
 #include "Settings.h"
+#include "PointersManager.h"
 
 extern "C"
 {
@@ -14,7 +15,7 @@ extern "C"
 	};
 }
 
-typedef long(__stdcall * package_start_close_count_function)(const long arg);
+typedef long(__stdcall * package_start_close_count_function)(PointersManager* ptrs);
 typedef cpair(__stdcall * package_get_foo_function)(const long index);
 
 class LuaPackage
@@ -24,6 +25,8 @@ class LuaPackage
 	std::string m_realName;
 	std::string m_path;
 	std::map<std::string, lua_CFunction> m_functions;
+
+	PointersManager* m_ptrs;
 
 	HMODULE m_lib;
 
@@ -37,20 +40,22 @@ public:
 
 
 
-	LuaPackage(lua_State* lua,std::string path,std::string name, std::string as)
+	LuaPackage(lua_State* lua,PointersManager* ptrs,std::string path,std::string name, std::string as)
 	{
 		m_path = path;
 		m_lua = lua;
 		m_name = as;
 		m_realName = name;
+		m_ptrs = ptrs;
 	}
 
-	LuaPackage(lua_State* lua,std::string path, std::string name)
+	LuaPackage(lua_State* lua, PointersManager* ptrs,std::string path, std::string name)
 	{
 		m_path = path;
 		m_name = name;
 		m_lua = lua;
 		m_realName = m_name;
+		m_ptrs = ptrs;
 	}
 
 	~LuaPackage()
@@ -90,7 +95,7 @@ public:
 		pckgetfoo = package_get_foo_function(GetProcAddress(m_lib, "get_foo"));
 
 		{
-			long result = pckstart(0);
+			long result = pckstart(m_ptrs);
 			if (result)
 			{
 				throw std::exception((m_realName + ".pck " + "starting failed! code -> " + std::to_string(result)).c_str());

@@ -4,10 +4,15 @@
 #include "stdafx.h"
 #include "windows.h"
 
+static PointersManager* ptrs;
+
 extern "C"
 {
-	long start(const long arg)
+	long start(PointersManager* arg)
 	{
+		ptrs = arg;
+		if (!ptrs) return 1;
+
 		return 0;
 	}
 
@@ -34,45 +39,40 @@ extern "C"
 
 	static int32_t _cdecl _lua_getforegroundwindow(lua_State* state)
 	{
-		ptrtype lptr(GetForegroundWindow());
-		lua_pushinteger(state, lptr.lua.first);
-		lua_pushinteger(state, lptr.lua.second);
-		
-		return 2;
+		lua_pushinteger(state, ptrs->x32(GetForegroundWindow()));
+		return 1;
 	}
 
 	static int32_t _cdecl _lua_show(lua_State* state)
 	{
-		lua_pushboolean(state,ShowWindow((HWND)ptrtype(lua_tointeger(state,1),lua_tointeger(state,2)).ptr, lua_toboolean(state, 3)));
+		lua_pushboolean(state, ShowWindow((HWND)(ptrs->x64(lua_tointeger(state, 1))),lua_toboolean(state,2)));
 		return 1;
 	}
 
 	static int32_t _cdecl _lua_setactive(lua_State* state)
 	{
-		ptrtype lptr(SetActiveWindow((HWND)ptrtype(lua_tointeger(state,1),lua_tointeger(state,2)).ptr));
-		lua_pushinteger(state, lptr.lua.first);
-		lua_pushinteger(state, lptr.lua.second);
-		return 2;
+		HWND previous = SetActiveWindow((HWND)(ptrs->x64(lua_tointeger(state, 1))));
+		lua_pushinteger(state,ptrs->x32(previous));
+		return 1;
 	}
 
 	static int32_t _cdecl _lua_setfocus(lua_State* state)
 	{
-		ptrtype lptr(SetFocus((HWND)ptrtype(lua_tointeger(state, 1), lua_tointeger(state, 2)).ptr));
-		lua_pushinteger(state, lptr.lua.first);
-		lua_pushinteger(state, lptr.lua.second);
-		return 2;
+		HWND previous = SetFocus((HWND)(ptrs->x64(lua_tointeger(state, 1))));
+		lua_pushinteger(state, ptrs->x32(previous));
+		return 1;
 	}
 
 	static int32_t _cdecl _lua_setforeground(lua_State* state)
 	{
-		lua_pushboolean(state,(SetForegroundWindow((HWND)ptrtype(lua_tointeger(state, 1), lua_tointeger(state, 2)).ptr)));
+		lua_pushboolean(state,(SetForegroundWindow((HWND)(ptrs->x64(lua_tointeger(state, 1))))));
 		return 1;
 	}
 	
 	static int32_t _cdecl _lua_getrect(lua_State* state)
 	{
 		RECT rect;
-		GetWindowRect((HWND)ptrtype(lua_tointeger(state,1),lua_tointeger(state,2)).ptr,&rect);
+		GetWindowRect((HWND)(ptrs->x64(lua_tointeger(state, 1))),&rect);
 		lua_pushinteger(state, rect.bottom);
 		lua_pushinteger(state, rect.left);
 		lua_pushinteger(state, rect.right);
@@ -82,25 +82,25 @@ extern "C"
 
 	static int32_t _cdecl _lua_validaterect(lua_State* state)
 	{
-		ValidateRect((HWND)ptrtype(lua_tointeger(state, 1), lua_tointeger(state, 2)).ptr, 0);
+		ValidateRect((HWND)(ptrs->x64(lua_tointeger(state, 1))), 0);
 		return 0;
 	}
 	
 	static int32_t _cdecl _lua_invalidaterect(lua_State* state)
 	{
-		InvalidateRect((HWND)ptrtype(lua_tointeger(state, 1), lua_tointeger(state, 2)).ptr, 0,false);
+		InvalidateRect((HWND)(ptrs->x64(lua_tointeger(state, 1))), 0,false);
 		return 0;
 	}
 	
 	static int32_t _cdecl _lua_settimer(lua_State* state)
 	{
-		SetTimer((HWND)ptrtype(lua_tointeger(state, 1), lua_tointeger(state, 2)).ptr, lua_tointeger(state, 4),lua_tointeger(state,3), 0);
+		SetTimer((HWND)(ptrs->x64(lua_tointeger(state, 1))), lua_tointeger(state, 3),lua_tointeger(state,2), 0);
 		return 0;
 	}
 	
 	static int32_t _cdecl _lua_killtimer(lua_State* state)
 	{
-		KillTimer((HWND)ptrtype(lua_tointeger(state, 1), lua_tointeger(state, 2)).ptr, lua_tointeger(state, 3));
+		KillTimer((HWND)(ptrs->x64(lua_tointeger(state, 1))), lua_tointeger(state, 2));
 		return 0;
 	}
 
@@ -116,19 +116,39 @@ extern "C"
 		return 1;
 	}
 
-	static int32_t _cdecl _lua_exist(lua_State* state)
+	static int32_t _cdecl _lua_getprocessid(lua_State* state)
 	{
-		lua_pushboolean(state,(bool)ptrtype(lua_tointeger(state, 1), lua_tointeger(state, 2)).val);
-		return 0;
+		DWORD PID;
+		::GetWindowThreadProcessId((HWND)(ptrs->x64(lua_tointeger(state, 1))), &PID);
+		lua_pushinteger(state, (int32_t)PID);
+		return 1;
 	}
 
-	constexpr long FOO_COUNT = 15;
+	static int32_t _cdecl _lua_getname(lua_State* state)
+	{
+		char name[100];
+		GetWindowTextA((HWND)(ptrs->x64(lua_tointeger(state, 1))), name, 100);
+		lua_pushstring(state, name);
+		return 1;
+	}
+	
+	static int32_t _cdecl _lua_getclassname(lua_State* state)
+	{
+		char name[100];
+		GetClassNameA((HWND)(ptrs->x64(lua_tointeger(state, 1))), name, 100);
+		lua_pushstring(state, name);
+		return 1;
+	}
+
+	constexpr long FOO_COUNT = 17;
 
 	const char* sckeys[FOO_COUNT] = {
 		"BlockInput",
 		"CursorPosition",
-		"Exist",
+		"GetClassName",
 		"GetForeground",
+		"GetName",
+		"GetProcessId",
 		"GetRect",
 		"InvalidateRect",
 		"KeyDown",
@@ -144,8 +164,10 @@ extern "C"
 	const lua_CFunction scfooes[FOO_COUNT] = {
 		_lua_blockinput,
 		_lua_cursorposition,
-		_lua_exist,
+		_lua_getclassname,
 		_lua_getforegroundwindow,
+		_lua_getname,
+		_lua_getprocessid,
 		_lua_getrect,
 		_lua_invalidaterect,
 		_lua_keydown,

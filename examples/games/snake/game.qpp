@@ -9,10 +9,10 @@ map.Begin()
 
 import_as("windows","win")
 
-
-
 while true
 do
+
+
 
 SnakeBlue.Update()  
 SnakeRed.Update()
@@ -32,6 +32,8 @@ con.Endline()
 con.Println("Player Red:")
 con.Println("x: " .. SnakeRed.element[0].x .. " y: " .. SnakeRed.element[0].y)
 con.Println("size: " .. tostring(SnakeRed.size) .. "   ")
+con.Gotoxy(map.width / 2,0)
+con.Print("cpu usage: " .. get_cpu() .. "  ")
 
 sleep(75000000)
 

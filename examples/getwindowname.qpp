@@ -1,17 +1,16 @@
-ImportPackage("system")
-ImportPackage("windows")
-ImportPackage("conio")
-SetConsoleTitle("Get Foreground Window Name")
+import("system")
+import_as("windows","win")
+import("conio")
+conio.SetTitle("Get Foreground Window Name")
 
-Print("Delay time in milliseconds: ")
-local sleep_time = tonumber(GetInput())
+conio.Print("Delay time in milliseconds: ")
+local sleep_time = tonumber(conio.Getline())
 sleep_time = sleep_time * 100000
-while(true)
+while true
 do
-local first_ptr_hwnd,second_ptr_hwnd = GetForegroundWindow()
-PickWindow(first_ptr_hwnd,second_ptr_hwnd)
-local name = GetWindowName()
-local class = GetClassName()
-Println("name @" .. name .. "@ class @" .. class .."@")
-Sleep(sleep_time)
+local hwnd = win.GetForeground()
+local name = win.GetName(hwnd)
+local class = win.GetClassName(hwnd)
+conio.Println("name @" .. name .. "@ class @" .. class .."@")
+sleep(sleep_time)
 end

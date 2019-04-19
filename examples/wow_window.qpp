@@ -1,0 +1,15 @@
+import("conio")
+conio.SetTitle("MultipleOpener")
+
+conio.Println("How many windows do you want to open?")
+local windows = tonumber(conio.Getline())
+
+if(windows<1)
+then
+os.exit()
+end
+
+for i = 0,windows-1,1
+do
+execute("Wow.exe","-windowed")
+end

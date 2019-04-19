@@ -285,22 +285,7 @@
 //	return 0;
 //}
 //
-//static int32_t _cdecl GetWindowProcessID(lua_State* state)
-//{
-//DWORD PID;
-////::GetWindowThreadProcessId(m_pickedWindow, &PID);
-//lua_pushinteger(state, (int32_t)PID);
-//return 1;
-//}
-//
-//static int32_t _cdecl GetCurrentProcess(lua_State* state)
-//{
-//	ptrtype lptr(GetCurrentProcess());
-//
-//	lua_pushinteger(m_lua, lptr.lua.first);
-//	lua_pushinteger(m_lua, lptr.lua.second);
-//	return 2;
-//}
+
 //
 //static int32_t _cdecl PickProcess(lua_State* state)
 //{
@@ -411,21 +396,7 @@
 //	return 1;
 //}
 //
-//static int32_t _cdecl __GetWindowName(lua_State* state)
-//{
-//	char name[100];
-//	//GetWindowTextA(m_pickedWindow, name, 100);
-//	lua_pushstring(state, name);
-//	return 1;
-//}
-//
-//static int32_t _cdecl __GetClassName(lua_State* state)
-//{
-//	char name[100];
-//	//GetClassNameA(m_pickedWindow, name, 100);
-//	lua_pushstring(state, name);
-//	return 1;
-//}
+
 //
 //static int32_t _cdecl __RegisterHotKey(lua_State* state)
 //{

@@ -166,7 +166,6 @@
     <ClInclude Include="LuaManager.h" />
     <ClInclude Include="LuaPackage.h" />
     <ClInclude Include="Network.h" />
-    <ClInclude Include="Object.h" />
     <ClInclude Include="Package.h" />
     <ClInclude Include="PackageMap.h" />
     <ClInclude Include="Pair.h" />

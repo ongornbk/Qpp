@@ -1,53 +1,76 @@
 #include "pch.h"
 #include "PointersManager.h"
-#include "Object.h"
 
-struct ptrc
-{
-	long  index;
-	void* ptr;
-};
+
 
 namespace
 {
-	static long m_index = 0;
-	static std::map<void*,ptrc> m_objects;
+	static uint32 used_ptrs = 0;
+	std::stack<long> ready_to_use_ptrs;
+	static std::map<void*,long> m_objects;
+	static std::map<long, void*> m_ptrs;
 }
 
-template <class _Out_ x32_type, class _In_ x64_type>
-x32_type& x32(const x64_type& obj)
+bool release_ptr(const long obj)
 {
-	void* in = (void*)(obj)
-
-
-		size_t = m_objects.find(in);
-	if (size_t != m_objects.npos)
+	std::map<long, void*>::iterator it = m_ptrs.find(obj);
+	if (it != m_ptrs.end())
 	{
-		return (x32_type)m_objects[in].index;
+		m_ptrs.erase(it);
+		ready_to_use_ptrs.push(obj);
+		return true;
 	}
 	else
 	{
-		m_index++;
-		m_objects[in] = m_index
-		return(x32_type)m_objects[in].index;
+		return false;
 	}
 }
 
-template <class _Out_ x32_type, class _In_ x64_type>
-x64_type& x32(const x32_type& obj)
+long _x32(void* obj)
 {
-	void* in = (void*)(obj)
-
-
-		size_t = m_objects.find(in);
-	if (size_t != m_objects.npos)
+	std::map<void*, long>::iterator it = m_objects.find(obj);
+	if (it != m_objects.end())
 	{
-		return (x32_type)m_objects[in].index;
+		return it->second;
 	}
 	else
 	{
-		m_index++;
-		m_objects[in] = m_index
-			return(x32_type)m_objects[in].index;
+		if (ready_to_use_ptrs.empty())
+		{
+			const long key = used_ptrs;
+			m_objects[obj] = key;
+			m_ptrs[key] = obj;
+			used_ptrs++;
+			return key;
+		}
+		else
+		{
+			const long key = ready_to_use_ptrs.top();
+			ready_to_use_ptrs.pop();
+			m_objects[obj] = key;
+			m_ptrs[key] = obj;
+			return key;
+		}
 	}
+}
+
+void* _x64(const long obj)
+{
+	std::map<long, void*>::iterator it = m_ptrs.find(obj);
+	if (it != m_ptrs.end())
+	{
+		return it->second;
+	}
+	else
+	{
+		std::string msg = "Error! " + std::to_string(obj) + " is not referenced!";
+			MessageBoxA(NULL, msg.c_str(), "Error!", NULL);
+		return nullptr;
+	}
+}
+
+PointersManager::PointersManager()
+{
+	this->x32 = _x32;
+	this->x64 = _x64;
 }
