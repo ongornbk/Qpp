@@ -1,0 +1,17 @@
+import("conio")
+
+local ptr = {}
+
+conio.Pause()
+
+for i = 0,10000,1
+do
+ptr[i] = malloc(640)
+end
+conio.Pause()
+for i = 0,100,1
+do
+free(ptr[i])
+end
+
+conio.Pause()

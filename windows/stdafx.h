@@ -57,5 +57,12 @@ union ptrtype
 	lua64uint         lua;
 };
 
+struct PointersManager
+{
+	long(_cdecl* x32)(void* obj);
+	void* (_cdecl* x64)(const long obj);
+};
+
+static PointersManager* ptrs;
 
 // reference additional headers your program requires here

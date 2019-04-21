@@ -1,10 +1,6 @@
 #pragma once
 
-struct PointersManager
-{
-	long (_cdecl* x32)(void* obj);
-	void* (_cdecl* x64)(const long obj);
-};
+
 
 extern "C"
 {

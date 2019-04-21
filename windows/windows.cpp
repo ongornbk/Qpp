@@ -3,8 +3,11 @@
 
 #include "stdafx.h"
 #include "windows.h"
+#include "window.h"
 
-static PointersManager* ptrs;
+
+
+
 
 extern "C"
 {
@@ -139,44 +142,114 @@ extern "C"
 		lua_pushstring(state, name);
 		return 1;
 	}
+	
+	static int32_t _cdecl _lua_proc(lua_State* state)
+	{
+		WindowProcedure((HWND)(ptrs->x64(lua_tointeger(state, 1))), lua_tointeger(state, 1), lua_tointeger(state, 2), lua_tointeger(state, 3));
+		return 0;
+		
+	}
+	
+	static int32_t _cdecl _lua_dispatchmessage(lua_State* state)
+	{
+		DispatchMessage((MSG*)(ptrs->x64(lua_tointeger(state, 1))));
+		return 0;
+	}
+	
+	static int32_t _cdecl _lua_translatemessage(lua_State* state)
+	{
+		TranslateMessage((MSG*)(ptrs->x64(lua_tointeger(state, 1))));
+		return 0;
+	}
 
-	constexpr long FOO_COUNT = 17;
+	static int32_t _cdecl _lua_postquitmessage(lua_State* state)
+	{
+		PostQuitMessage(0);
+		return 0;
+	}
+
+	static int32_t _cdecl _lua_createwindow(lua_State* state)
+	{
+		Window* window = new Window();
+		lua_pushinteger(state, ptrs->x32(window));
+		return 1;
+	}
+
+	static int32_t _cdecl _lua_destroywindow(lua_State* state)
+	{
+		Window* window = (Window*)ptrs->x64(lua_tointeger(state, 1));
+		if (window)
+		{
+			delete window;
+			lua_pushboolean(state, true);
+		}
+		lua_pushboolean(state, false);
+		return 1;
+	}
+
+	static int32_t _cdecl _lua_getwindowhandle(lua_State* state)
+	{
+		Window* window = (Window*)ptrs->x64(lua_tointeger(state, 1));
+		if (window) lua_pushinteger(state, ptrs->x32(window->window));
+		else lua_pushinteger(state, -1);
+
+		return 1;
+	}
+
+	
+
+
+	constexpr long FOO_COUNT = 24;
 
 	const char* sckeys[FOO_COUNT] = {
 		"BlockInput",
 		"CursorPosition",
+		"CreateWindow",
+		"DestroyWindow",
+		"DispatchMessage",
 		"GetClassName",
 		"GetForeground",
 		"GetName",
 		"GetProcessId",
 		"GetRect",
+		"GetWindowHandle",
 		"InvalidateRect",
 		"KeyDown",
 		"KeyPressed",
 		"KillTimer",
+		"PostQuitMessage",
+		"Proc",
 		"SetActive",
 		"SetFocus",
 		"SetForeground",
 		"SetTimer",
+		"TranslateMessage",
 		"Show",
 		"ValidateRect"
 	};
 	const lua_CFunction scfooes[FOO_COUNT] = {
 		_lua_blockinput,
 		_lua_cursorposition,
+		_lua_createwindow,
+		_lua_destroywindow,
+		_lua_dispatchmessage,
 		_lua_getclassname,
 		_lua_getforegroundwindow,
 		_lua_getname,
 		_lua_getprocessid,
 		_lua_getrect,
+		_lua_getwindowhandle,
 		_lua_invalidaterect,
 		_lua_keydown,
 		_lua_keypressed,
 		_lua_killtimer,
+		_lua_postquitmessage,
+		_lua_proc,
 		_lua_setactive,
 		_lua_setfocus,
 		_lua_setforeground,
 		_lua_settimer,
+		_lua_translatemessage,
 		_lua_show,
 		_lua_validaterect
 	};

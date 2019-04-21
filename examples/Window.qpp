@@ -1,16 +1,11 @@
 require "Sunflower/Sunflower"
 
-ImportPackage("conio")
-FreeConsole()
 
-ImportPackage("windows")
-ImportPackage("system")
-ImportPackage("filesystem")
-ImportPackage("math")
+
+import("windows")
 
 Sunflower.Start(true)
 
-while Sunflower.Run()
-do
-Sunflower.Proc()
-end
+
+
+Sunflower.Close()
