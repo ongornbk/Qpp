@@ -231,6 +231,41 @@ static int32_t _cdecl _lua_bzero(lua_State* state)
 	return 0;
 }
 
+static int32_t _cdecl _lua_ptrs_size(lua_State* state)
+{
+	lua_pushinteger(state, ptrs_size());
+	return 1;
+}
+
+static int32_t _cdecl _lua_set(lua_State* state)
+{
+	long* mem = (long*)m_instance->m_ptrs->x64(lua_tointeger(state, 1));
+	mem[lua_tointeger(state, 2)] = lua_tointeger(state, 3);
+	return 0;
+}
+
+static int32_t _cdecl _lua_get(lua_State* state)
+{
+	long* mem = (long*)m_instance->m_ptrs->x64(lua_tointeger(state, 1));
+	lua_pushinteger(state, mem[lua_tointeger(state, 2)]);
+	return 1;
+}
+
+static int32_t _cdecl _lua_realloc(lua_State* state)
+{
+	long index = lua_tointeger(state, 1);
+	long size = lua_tointeger(state, 2);
+
+	void* data = m_instance->m_ptrs->x64(index);
+
+	release_ptr(index);
+
+	index = m_instance->m_ptrs->x32(realloc(data,(size_t)size));
+
+	lua_pushinteger(state, index);
+	return 1;
+}
+
 Urlmon::Urlmon()
 {
 	std::string urlmonpath = GetSetting("DefaultLibrariesLocation").get_string() + "/urlmon.dll";
@@ -312,6 +347,10 @@ bool _cdecl LuaManager::Initialize(const int argc, char* argv[])
 	lua_register(m_lua, "malloc", _lua_malloc);
 	lua_register(m_lua, "free", _lua_free);
 	lua_register(m_lua, "bzero", _lua_bzero);
+	lua_register(m_lua, "ptrs_size", _lua_ptrs_size);
+	lua_register(m_lua, "set", _lua_set);
+	lua_register(m_lua, "get", _lua_get);
+	lua_register(m_lua, "realloc", _lua_realloc);
 
 	result = luaL_loadfile(m_lua, m_file.c_str());
 	if (result)

@@ -1,0 +1,16 @@
+import("conio")
+
+function prints()
+conio.Println(ptrs_size())
+conio.Pause()
+end
+
+prints()
+
+while true
+do
+local var = malloc(4)
+free(var)
+prints()
+
+end

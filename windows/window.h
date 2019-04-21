@@ -7,8 +7,6 @@ extern lua_CFunction EventHover;
 
 extern LRESULT __stdcall WindowProcedure(HWND window, uint32_t msg, WPARAM wp, LPARAM lp);
 
-void set_lua(lua_State* state);
-
 class Window
 {
 public:

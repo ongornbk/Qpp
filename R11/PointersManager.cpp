@@ -26,6 +26,11 @@ bool release_ptr(const long obj)
 	}
 }
 
+long ptrs_size()
+{
+	return used_ptrs;
+}
+
 long _x32(void* obj)
 {
 	std::map<void*, long>::iterator it = m_objects.find(obj);
@@ -54,19 +59,15 @@ long _x32(void* obj)
 	}
 }
 
-void* _x64(const long obj)
+void*& _x64(const long obj)
 {
 	std::map<long, void*>::iterator it = m_ptrs.find(obj);
-	if (it != m_ptrs.end())
-	{
-		return it->second;
-	}
-	else
+	if (it == m_ptrs.end())
 	{
 		std::string msg = "Error! " + std::to_string(obj) + " is not referenced!";
-			MessageBoxA(NULL, msg.c_str(), "Error!", NULL);
-		return nullptr;
+		MessageBoxA(NULL, msg.c_str(), "Error!", NULL);
 	}
+		return it->second;
 }
 
 PointersManager::PointersManager()

@@ -34,7 +34,7 @@ import("windows")
 
 
 import("math")
-Sunflower.Start(false)
+--Sunflower.Start(false)
 windows.SetTimer(1000,0)
 windows.SetTimer(ti * 1000,1)
 --GetDC()

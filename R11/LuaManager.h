@@ -36,6 +36,9 @@ private:
 	friend int32_t _cdecl _lua_malloc(lua_State* state);
 	friend int32_t _cdecl _lua_free(lua_State* state);
 	friend int32_t _cdecl _lua_bzero(lua_State* state);
+	friend int32_t _cdecl _lua_set(lua_State* state);
+	friend int32_t _cdecl _lua_get(lua_State* state);
+	friend int32_t _cdecl _lua_realloc(lua_State* state);
 	friend int32_t _cdecl GetDebugInfo();
 
 	lua_State* m_lua;

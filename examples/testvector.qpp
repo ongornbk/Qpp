@@ -1,0 +1,31 @@
+import("conio")
+conio.SetTitle("vector test")
+
+require "vector"
+
+local vec = vector.new()
+
+for i = 0,10,1
+do
+vector.push_back(vec,i)
+end
+
+for i = 0,vec.size-1,1
+do
+conio.Println("Element: " .. i .. " = " .. vector.get(vec,i))
+end
+
+conio.Pause()
+
+vector.set(vec,5,300)
+
+for i = 0,vec.size-1,1
+do
+    conio.Println("Element: " .. i .. " = " .. vector.get(vec,i))
+end
+
+vector.delete(vec)
+
+
+
+conio.Pause()
