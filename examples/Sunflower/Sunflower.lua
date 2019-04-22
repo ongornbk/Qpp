@@ -1,4 +1,4 @@
-require "vector"
+require "Sunflower/vector"
 
 Sunflower = {}
 
