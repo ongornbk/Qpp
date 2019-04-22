@@ -1,7 +1,7 @@
 import("conio")
 conio.SetTitle("vector test")
 
-require "vector"
+require "Sunflower/vector"
 
 local vec = vector.new()
 

@@ -6,15 +6,16 @@
 #include "window.h"
 
 
-
+namespace
+{
+	std::unordered_map<uint32_t, std::string> lua_events;
+}
 
 
 extern "C"
 {
-	long start(PointersManager* arg)
+	long start(const long arg)
 	{
-		ptrs = arg;
-		if (!ptrs) return 1;
 
 		return 0;
 	}
@@ -42,7 +43,7 @@ extern "C"
 
 	static int32_t _cdecl _lua_getforegroundwindow(lua_State* state)
 	{
-		lua_pushinteger(state, ptrs->x32(GetForegroundWindow()));
+		lua_pushinteger(state, (lua_Integer)GetForegroundWindow());
 		return 1;
 	}
 
@@ -174,6 +175,12 @@ extern "C"
 		return 1;
 	}
 
+	static int32_t _cdecl _lua_peekmessage(lua_State* state)
+	{
+		lua_pushboolean(state, PeekMessageA((MSG*)lua_tointeger(state, 2), (HWND)lua_tointeger(state, 1), NULL, NULL,NULL));
+		return 1;
+	}
+
 	static int32_t _cdecl _lua_retrievemessage(lua_State* state)
 	{
 		MSG* msg = (MSG*)lua_tointeger(state, 1);
@@ -185,7 +192,7 @@ extern "C"
 
 	static int32_t _cdecl _lua_createwindow(lua_State* state)
 	{
-		Window* window = new Window();
+		Window* window = new Window(state);
 		lua_pushinteger(state,(lua_Integer)window);
 		return 1;
 	}
@@ -229,10 +236,95 @@ extern "C"
 		return 1;
 	}
 
-	constexpr long FOO_COUNT = 29;
+	static int32_t _cdecl _lua_sendmessage(lua_State* state)
+	{
+		SendMessage((HWND)lua_tointeger(state,1), (UINT)lua_tointeger(state, 2), lua_tointeger(state, 3), MAKELPARAM(lua_tointeger(state, 4), lua_tointeger(state, 5)));
+		return 0;
+	}
+
+	static int32_t _cdecl _lua_postmessage(lua_State* state)
+	{
+		PostMessage((HWND)lua_tointeger(state, 1), (UINT)lua_tointeger(state, 2), lua_tointeger(state, 3), MAKELPARAM(lua_tointeger(state, 4), lua_tointeger(state, 5)));
+		return 0;
+	}
+	
+	static int32_t _cdecl _lua_clienttoscreen(lua_State* state)
+	{
+		POINT p;
+		p.x = (long)lua_tointeger(state, 2);
+		p.y = (long)lua_tointeger(state, 3);
+		ClientToScreen((HWND)lua_tointeger(state,1), &p);
+		return 0;
+	}
+
+	static int32_t _cdecl _lua_registerhotkey(lua_State* state)
+	{
+		RegisterHotKey(NULL, (int)int32_t(lua_tointeger(state, 1)), MOD_NOREPEAT, (UINT)lua_tointeger(state, 2));
+		return 1;
+	}
+
+	static int32_t _cdecl _lua_getscreenmetrics(lua_State* state)
+	{
+		lua_pushinteger(state, (lua_Integer)GetSystemMetrics(SM_CXSCREEN));
+		lua_pushinteger(state, (lua_Integer)GetSystemMetrics(SM_CYSCREEN));
+		return 2;
+	}
+
+	static int32_t _cdecl _lua_registerevent(lua_State* state)
+	{
+
+	const auto Event = lua_tointeger(state, 1);
+	lua_events[(uint32_t)Event] = lua_tostring(state, 2);
+
+
+	switch (Event)
+	{
+	case WM_PAINT:
+		EventPaint = [](lua_State* state)
+		{ 
+			lua_pcall(state, 0, 0, 0);
+			lua_getglobal(state,lua_events[WM_PAINT].c_str());
+			lua_pcall(state, 0, 0,0);
+			return 0; 
+		};
+		break;
+	case WM_DESTROY:
+		EventDestroy = [](lua_State* state)
+		{
+			lua_pcall(state, 0, 0, 0);
+			lua_getglobal(state, lua_events[WM_DESTROY].c_str());
+			lua_pcall(state, 0, 0,0);
+			return 0;
+		};
+		break;
+	case WM_TIMER:
+		EventTimer = [](lua_State* state)
+		{
+			lua_pcall(state, 0, 0, 0);
+			lua_getglobal(state, lua_events[WM_TIMER].c_str());
+			lua_pcall(state, 0, 0,0);
+			return 0;
+		};
+		break;
+	case WM_MOUSEHOVER:
+		EventHover = [](lua_State* state)
+		{
+			lua_pcall(state, 0, 0, 0);
+			lua_getglobal(state, lua_events[WM_MOUSEHOVER].c_str());
+			lua_pcall(state, 0, 0, 0);
+			return 0;
+		};
+		break;
+	}
+	
+	return 0;
+}
+
+	constexpr long FOO_COUNT = 36;
 
 	const char* sckeys[FOO_COUNT] = {
 		"BlockInput",
+		"ClientToScreen",
 		"CursorPosition",
 		"CreateWindow",
 		"DestroyWindow",
@@ -244,14 +336,20 @@ extern "C"
 		"GetName",
 		"GetProcessId",
 		"GetRect",
+		"GetScreenMetrics",
 		"GetWindowHandle",
 		"InvalidateRect",
 		"KeyDown",
 		"KeyPressed",
 		"KillTimer",
+		"PeekMessage",
+		"PostMessage",
 		"PostQuitMessage",
 		"Proc",
+		"RegisterEvent",
+		"RegisterHotkey",
 		"RetrieveMessage",
+		"SendMessage",
 		"SetActive",
 		"SetFocus",
 		"SetForeground",
@@ -264,6 +362,7 @@ extern "C"
 	};
 	const lua_CFunction scfooes[FOO_COUNT] = {
 		_lua_blockinput,
+		_lua_clienttoscreen,
 		_lua_cursorposition,
 		_lua_createwindow,
 		_lua_destroywindow,
@@ -275,14 +374,20 @@ extern "C"
 		_lua_getname,
 		_lua_getprocessid,
 		_lua_getrect,
+		_lua_getscreenmetrics,
 		_lua_getwindowhandle,
 		_lua_invalidaterect,
 		_lua_keydown,
 		_lua_keypressed,
 		_lua_killtimer,
+		_lua_peekmessage,
+		_lua_postmessage,
 		_lua_postquitmessage,
 		_lua_proc,
+		_lua_registerevent,
+		_lua_registerhotkey,
 		_lua_retrievemessage,
+		_lua_sendmessage,
 		_lua_setactive,
 		_lua_setfocus,
 		_lua_setforeground,

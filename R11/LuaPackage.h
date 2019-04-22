@@ -26,8 +26,6 @@ class LuaPackage
 	std::string m_path;
 	std::map<std::string, lua_CFunction> m_functions;
 
-	PointersManager* m_ptrs;
-
 	HMODULE m_lib;
 
 	lua_State* m_lua;
@@ -40,29 +38,27 @@ public:
 
 
 
-	LuaPackage(lua_State* lua,PointersManager* ptrs,std::string path,std::string name, std::string as)
+	LuaPackage(lua_State* lua,std::string path,std::string name, std::string as)
 	{
 		m_path = path;
 		m_lua = lua;
 		m_name = as;
 		m_realName = name;
-		m_ptrs = ptrs;
 	}
 
-	LuaPackage(lua_State* lua, PointersManager* ptrs,std::string path, std::string name)
+	LuaPackage(lua_State* lua, std::string path, std::string name)
 	{
 		m_path = path;
 		m_name = name;
 		m_lua = lua;
 		m_realName = m_name;
-		m_ptrs = ptrs;
 	}
 
 	~LuaPackage()
 	{
 		m_functions.clear();
 
-		long result = pckclose(0);
+		const long result = pckclose(0);
 		if (result)
 		{
 			MessageBoxA(NULL, (m_realName + ".pck " + "closing failed! code -> " + std::to_string(result)).c_str(), "Dll Error", MB_OK);
@@ -95,7 +91,7 @@ public:
 		pckgetfoo = package_get_foo_function(GetProcAddress(m_lib, "get_foo"));
 
 		{
-			long result = pckstart(m_ptrs);
+			long result = pckstart(0);
 			if (result)
 			{
 				throw std::exception((m_realName + ".pck " + "starting failed! code -> " + std::to_string(result)).c_str());

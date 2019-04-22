@@ -34,9 +34,9 @@ import("windows")
 
 
 import("math")
---Sunflower.Start(false)
-windows.SetTimer(1000,0)
-windows.SetTimer(ti * 1000,1)
+Sunflower.Start("Auto - Shutdown",false)
+Sunflower.SetTimer(1000,0)
+Sunflower.SetTimer(ti * 1000,1)
 --GetDC()
 
 conio.Gotoxy(5,1)
@@ -49,10 +49,8 @@ conio.Gotoxy(25,5)
 conio.Print(" Seconds...           ")
 
 function Close()
-conio.KillTimer(0)
-conio.KillTimer(1)
 Sunflower.Close()
---Shutdown()
+system.Shutdown()
 os.exit()
 end
 
@@ -61,15 +59,15 @@ end
 function Update()
 ti = ti - 1
 conio.Gotoxy(5,3)
-Print(tostring(ti/3600) .. "  ")
-Gotoxy(7,3)
-Print("                   ")
-Gotoxy(5,4)
-Print(tostring((ti/60)%60) .. "  ")
-Gotoxy(7,4)
-Print("                   ")
-Gotoxy(5,5)
-Print(tostring(ti%60) .. "  ")
+conio.Print(tostring(ti/3600) .. "  ")
+conio.Gotoxy(7,3)
+conio.Print("                   ")
+conio.Gotoxy(5,4)
+conio.Print(tostring((ti/60)%60) .. "  ")
+conio.Gotoxy(7,4)
+conio.Print("                   ")
+conio.Gotoxy(5,5)
+conio.Print(tostring(ti%60) .. "  ")
 
 end
 
@@ -83,7 +81,7 @@ Update()
 end
 end
 
-RegisterEvent(0x113,"Timer")
+windows.RegisterEvent(0x113,"Timer")
 
 while Sunflower.Run()
 do

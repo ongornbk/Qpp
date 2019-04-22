@@ -11,9 +11,10 @@ class Window
 {
 public:
 
-	Window();
+	Window(lua_State* state);
 
 	~Window();
 
 	HWND window;
+	static lua_State* m_state;
 };

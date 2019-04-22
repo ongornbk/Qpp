@@ -4,14 +4,11 @@
 #include "stdafx.h"
 #include "math.h"
 
-static PointersManager* ptrs;
 
 extern "C"
 {
-	long start(PointersManager* arg)
+	long start(const long arg)
 	{
-		ptrs = arg;
-		if (!arg) return 1;
 
 		return 0;
 	}

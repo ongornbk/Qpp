@@ -1,5 +1,5 @@
 import("conio")
-con.SetTitle("Snowrain")
+conio.SetTitle("Snowrain")
 import("system")
 import("windows")
 import("math")
@@ -7,7 +7,7 @@ import("math")
 require "Sunflower/Sunflower"
 
 local CONSOLE_MATRIX_HEIGHT = 45
-local CONSOLE_MATRIX_WIDTH  = 100
+local CONSOLE_MATRIX_WIDTH  = 90
 
 local CHAR_LIST = {'#','@','!','$','%','^','&','*','+','-','~','?','|','.',"!@#$%^&*"}
 local NUMBER_OF_CHARS = 15
@@ -32,19 +32,18 @@ local EMPTY_CHAR      = ' '
 local CLEANING_HEIGHT = 5
 local MAX_SNOW_HEIGHT = CONSOLE_MATRIX_HEIGHT - 5
 
-RegisterHotKey(1,0x1B)--ESC 
+windows.RegisterHotkey(1,0x1B)--ESC 
 
 if RANDOM_CHARS == true
 then
 
 else
-RegisterHotKey(2,0x20)--SPACE
+windows.RegisterHotkey(2,0x20)--SPACE
 end
 
-Sunflower.Start(false)
-SetTimer(DELAY,0)
-SetTimer(DELAY * TICKS_TO_CLEAN,1)
-GetDC()
+Sunflower.Start("Snowrain",false)
+Sunflower.SetTimer(0,DELAY)
+Sunflower.SetTimer(1,DELAY * TICKS_TO_CLEAN)
 
 function NextChar()
 
@@ -63,7 +62,7 @@ function Wind()
 
 
 
-local w = RandomInteger(0,3)
+local w = math.Random(0,3)
 
 if w == 0
 then
@@ -95,15 +94,15 @@ function CleanColumn(x)
 
 for i = 0,CLEANING_HEIGHT,1
 do
-Gotoxy(x + LEFT,CONSOLE_MATRIX_HEIGHT - i + TOP)
+conio.Gotoxy(x + LEFT,CONSOLE_MATRIX_HEIGHT - i + TOP)
 MATRIX[x][CONSOLE_MATRIX_HEIGHT - i] = EMPTY_CHAR
-Print(EMPTY_CHAR)
+conio.Print(EMPTY_CHAR)
 end
 
 end
 
 function MoveConsoleCursor(x,y)
-Gotoxy(x + LEFT, y + TOP)
+conio.Gotoxy(x + LEFT, y + TOP)
 end
 
 function Clean()
@@ -125,7 +124,7 @@ end
 		for i = 1,CONSOLE_MATRIX_WIDTH,1
 		do
 		
-			if RandomInteger(0,SNOW_DENSITY) == 0
+			if math.Random(0,SNOW_DENSITY) == 0
 			then
 				MATRIX[i][0] = SNOW_CHAR;
 			end
@@ -153,10 +152,10 @@ function PrintInfo()
 		wind = "Wiatr z zachodu..."
 	end
 	MoveConsoleCursor(0, -2)
-	Print(wind .. "      ")
+	conio.Print(wind .. "      ")
 	MoveConsoleCursor(0, -3)
 	
-	local cpti = GetCpuUsage()
+	local cpti = get_cpu()
 	if cpti > 100 or cpti < 0
 	then 
 	cpti = 100
@@ -164,7 +163,7 @@ function PrintInfo()
 	
 	
 	cpt = tostring(cpti)
-	Print("Cpu: " .. cpt .. "%                         ")
+	conio.Print("Cpu: " .. cpt .. "%                         ")
 end
 
 function MoveSnow()
@@ -183,14 +182,14 @@ then
 
 					MATRIX[i][j] = EMPTY_CHAR
 					MoveConsoleCursor(i, j)
-					Print(MATRIX[i][j])
+					conio.Print(MATRIX[i][j])
 					local XX = 0
 					local YY = 0
 					
 					if i == 0
 					then
 					
-					local RR = RandomInteger(LMOVE,RMOVE)
+					local RR = math.Random(LMOVE,RMOVE)
 					if RR == 1
 					then
 					XX = CONSOLE_MATRIX_WIDTH - 1
@@ -213,7 +212,7 @@ then
 					
 					if i == CONSOLE_MATRIX_WIDTH
 					then
-						local RR = RandomInteger(LMOVE,RMOVE)
+						local RR = math.Random(LMOVE,RMOVE)
 					
 					if RR == 1
 					then
@@ -235,7 +234,7 @@ then
 					
 					else
 					
-					local RR = RandomInteger(LMOVE,RMOVE)
+					local RR = math.Random(LMOVE,RMOVE)
 					
 					if RR == 1
 					then
@@ -265,12 +264,12 @@ then
 					then
 						MATRIX[i][YY] = SNOW_CHAR
 						MoveConsoleCursor(i, YY)
-						Print(MATRIX[i][YY])
+						conio.Print(MATRIX[i][YY])
 
 					else
 						MATRIX[XX][YY] = SNOW_CHAR
 						MoveConsoleCursor(XX, YY)
-						Print(MATRIX[XX][YY])
+						conio.Print(MATRIX[XX][YY])
 					end
 
 end
@@ -290,11 +289,12 @@ for i = 0, CONSOLE_MATRIX_WIDTH+1 do
     end
 end
 
-function Update(id)
+function Update()
 
+if Sunflower.wparam == 0 then
 
+	
 
-if id == 0 then
 CreateSnow()
 MoveSnow()
 else
@@ -306,14 +306,12 @@ PrintInfo()
 
 end
 
-RegisterEvent(0x113,"Update")
+windows.RegisterEvent(0x113,"Update")
 
 while(true)
 do
 while(Sunflower.Run())
 do
-
-
 
 if Sunflower.msg == 786
 then

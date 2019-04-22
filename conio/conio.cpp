@@ -15,7 +15,6 @@ extern "C"
 	static HWND   ConsoleWindow;
 	static COORD  ConsoleCursorPosition;
 	static HDC    ConsoleHDC;
-	static PointersManager* ptrs;
 
 	COORD GetConsoleCursorPosition(HANDLE hConsoleOutput)
 	{
@@ -31,7 +30,7 @@ extern "C"
 		}
 	}
 
-	long start(PointersManager* arg)
+	long start(const long arg)
 	{
 		if (!AllocConsole())return 1;
 
@@ -49,9 +48,6 @@ extern "C"
 
 		ConsoleHDC = GetDC(ConsoleWindow);
 		if (!ConsoleHDC) return 6;
-
-		ptrs = arg;
-		if (!ptrs) return 7;
 
 		return 0;
 	}

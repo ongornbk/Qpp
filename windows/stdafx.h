@@ -14,6 +14,7 @@
 #include <lua.hpp>
 #include <lualib.h>
 #include <lauxlib.h>
+#include <unordered_map>
 #include <sal.h>
 
 #if _WIN64 
@@ -56,13 +57,5 @@ union ptrtype
 	uint64_t          val;
 	lua64uint         lua;
 };
-
-struct PointersManager
-{
-	long(_cdecl* x32)(void* obj);
-	void* (_cdecl* x64)(const long obj);
-};
-
-static PointersManager* ptrs;
 
 // reference additional headers your program requires here

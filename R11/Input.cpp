@@ -12,7 +12,7 @@ struct DInput
 {
 	DInput()
 	{
-		RECT rect;
+//		RECT rect;
 		//GetWindowRect(m_pickedWindow, &rect);
 //		m_instance.Initialize((HINSTANCE)GetWindowLong(m_pickedWindow, GWL_HINSTANCE), m_pickedWindow, rect.right-rect.left, rect.bottom-rect.top);
 	}

@@ -50,7 +50,7 @@ static int32_t _cdecl _lua_import(lua_State* state)
 	else
 		pckname = pckpath;
 
-	m_instance->m_pcks[pckname] = new LuaPackage(state,m_instance->m_ptrs,pckpath, pckname);
+	m_instance->m_pcks[pckname] = new LuaPackage(state,pckpath, pckname);
 
 	try
 	{
@@ -76,7 +76,7 @@ static int32_t _cdecl _lua_import_as(lua_State* state)
 	else
 		pckname = pckpath;
 
-	m_instance->m_pcks[pckname] = new LuaPackage(state, m_instance->m_ptrs,pckpath, pckname,pckas);
+	m_instance->m_pcks[pckname] = new LuaPackage(state,pckpath, pckname,pckas);
 	try
 	{
 		m_instance->m_pcks[pckname]->initialize();
@@ -225,6 +225,12 @@ static int32_t _cdecl _lua_free(lua_State* state)
 	return 0;
 }
 
+static int32_t _cdecl _lua_delete(lua_State* state)
+{
+	delete (void*)lua_tointeger(state, 1);
+	return 0;
+}
+
 static int32_t _cdecl _lua_bzero(lua_State* state)
 {
 	ZeroMemory((void*)lua_tointeger(state, 1), lua_tointeger(state, 2));
@@ -351,6 +357,7 @@ bool _cdecl LuaManager::Initialize(const int argc, char* argv[])
 	lua_register(m_lua, "set", _lua_set);
 	lua_register(m_lua, "get", _lua_get);
 	lua_register(m_lua, "realloc", _lua_realloc);
+	lua_register(m_lua, "delete", _lua_delete);
 
 	result = luaL_loadfile(m_lua, m_file.c_str());
 	if (result)

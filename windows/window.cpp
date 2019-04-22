@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Window.h"
 
+lua_State* Window::m_state = nullptr;
+
 int32_t _stdcall doNothing(lua_State* state)
 {
 	return 0;
@@ -15,23 +17,24 @@ lua_CFunction EventHover = doNothing;
 LRESULT __stdcall WindowProcedure(HWND window, uint32_t msg, WPARAM wp, LPARAM lp)
 
 {
-	
+	lua_State* state = Window::m_state;
+
 	switch (msg)
 	
 	{
 	case WM_TIMER:
-		//EventTimer(state);
+		EventTimer(state);
 		return 0;
-	//case WM_PAINT:
-		//if (EventPaint == doNothing)
-			//return DefWindowProc(window, msg, wp, lp);
-		//EventPaint(state);
-		//return 0;
+	case WM_PAINT:
+		if (EventPaint == doNothing)
+			return DefWindowProc(window, msg, wp, lp);
+		EventPaint(state);
+		return 0;
 	case WM_MOUSEHOVER:
-		//EventHover(state);
+		EventHover(state);
 		return 0;
 	case WM_DESTROY:
-		//EventDestroy(state);
+		EventDestroy(state);
 		return 0;
 	default:
 	return DefWindowProc(window, msg, wp, lp);
@@ -39,8 +42,9 @@ LRESULT __stdcall WindowProcedure(HWND window, uint32_t msg, WPARAM wp, LPARAM l
 
 }
 
-Window::Window()
+Window::Window(lua_State* state)
 {
+	m_state = state;
 	const wchar_t* myclass = L"myclass";
 
 	WNDCLASSEX wndclass;

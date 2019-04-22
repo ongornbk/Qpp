@@ -101,11 +101,7 @@
 //
 
 //
-//static int32_t _cdecl __SendMessage(lua_State* state)
-//{
-//	//SendMessage(m_pickedWindow, lua_tointeger(state, 1), lua_tointeger(state, 2), MAKELPARAM(lua_tointeger(state, 3), lua_tointeger(state, 4)));
-//	return 0;
-//}
+
 //
 //static int32_t _cdecl __SendInput(lua_State* state)
 //{
@@ -140,11 +136,7 @@
 //	return 0;
 //}
 //
-//static int32_t _cdecl __PostMessage(lua_State* state)
-//{
-//	//PostMessage(m_pickedWindow, lua_tointeger(state, 1), lua_tointeger(state, 2), MAKELPARAM(lua_tointeger(state, 3), lua_tointeger(state, 4)));
-//	return 0;
-//}
+
 //
 //static int32_t _cdecl CursorPosition(lua_State* state)
 //{
@@ -221,16 +213,7 @@
 //	return 0;
 //}
 //
-//static int32_t _cdecl __ClientToScreen(lua_State* state)
-//{
-//	POINT p;
-//	p.x = lua_tointeger(state, 1);
-//	p.y = lua_tointeger(state, 2);
-//	//ClientToScreen(m_pickedWindow, &p);
-//	return 0;
-//
-//	
-//}
+
 //
 //
 //static int32_t _cdecl __SetCursorPosition(lua_State* state)
@@ -290,11 +273,7 @@
 //
 
 //
-//static int32_t _cdecl __RegisterHotKey(lua_State* state)
-//{
-//	RegisterHotKey(NULL, int32_t(lua_tointeger(state, 1)), MOD_NOREPEAT, uint32_t(lua_tointeger(state, 2)));
-//	return 1;
-//}
+
 //
 
 
@@ -341,12 +320,7 @@
 //	return 0;
 //}
 //
-//static int32_t _cdecl GetScreenMetrics(lua_State* state)
-//{
-//	lua_pushinteger(state, GetSystemMetrics(SM_CXSCREEN));
-//	lua_pushinteger(state, GetSystemMetrics(SM_CYSCREEN));
-//	return 2;
-//}
+
 //
 //static int32_t _cdecl _ReleaseDC(lua_State* state)
 //{
@@ -426,56 +400,7 @@
 //	return 1;
 //}
 //
-//static int32_t _cdecl RegisterEvent(lua_State* state)
-//{
-//
-//	const auto Event = lua_tointeger(state, 1);
-//	//lua_events[Event] = lua_tostring(state, 2);
-//
-//
-//	switch (Event)
-//	{
-//	case WM_PAINT:
-//		EventPaint = [](lua_State* state)
-//		{ 
-//			lua_pcall(m_lua, 0, 0, 0);
-//			//lua_getglobal(m_lua,lua_events[WM_PAINT].c_str());
-//			lua_pcall(m_lua, 0, 0,0);
-//			return 0; 
-//		};
-//		break;
-//	case WM_DESTROY:
-//		EventDestroy = [](lua_State* state)
-//		{
-//			lua_pcall(m_lua, 0, 0, 0);
-//			//lua_getglobal(m_lua, lua_events[WM_DESTROY].c_str());
-//			lua_pcall(m_lua, 0, 0,0);
-//			return 0;
-//		};
-//		break;
-//	case WM_TIMER:
-//		EventTimer = [](lua_State* state)
-//		{
-//			lua_pcall(m_lua, 1, 0, 0);
-//			//lua_getglobal(m_lua, lua_events[WM_TIMER].c_str());
-//			lua_pushinteger(m_lua, (int32_t)m_msg.wParam);
-//			lua_pcall(m_lua, 1, 0,0);
-//			return 0;
-//		};
-//		break;
-//	case WM_MOUSEHOVER:
-//		EventHover = [](lua_State* state)
-//		{
-//			lua_pcall(m_lua, 0, 0, 0);
-//			//lua_getglobal(m_lua, lua_events[WM_MOUSEHOVER].c_str());
-//			lua_pcall(m_lua, 0, 0, 0);
-//			return 0;
-//		};
-//		break;
-//	}
-//	
-//	return 0;
-//}
+
 //
 //
 //

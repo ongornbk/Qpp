@@ -70,15 +70,13 @@ struct File
 namespace
 {
 	static std::stack<File*> s_files;
-	static PointersManager* ptrs;
+
 }
 
 extern "C"
 {
-	long start(PointersManager* arg)
+	long start(const long arg)
 	{
-		ptrs = arg;
-		if (!arg) return 1;
 
 		return 0;
 	}
@@ -248,7 +246,7 @@ extern "C"
 	static int32_t _cdecl _lua_setattributes(lua_State* state)
 	{
 		std::string str = lua_tostring(state, 1);
-		const DWORD attribute = lua_tointeger(state, 2);
+		const DWORD attribute = (DWORD)lua_tointeger(state, 2);
 		lua_pushboolean(state,(int)SetFileAttributesA(str.c_str(), attribute));
 		return 0;
 	}
