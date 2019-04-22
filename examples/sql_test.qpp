@@ -1,0 +1,26 @@
+import("conio")
+conio.SetTitle("SQL")
+import("sql")
+
+local sqlite = 0
+
+conio.Println(tostring(sqlite))
+
+sqlite = sql.Open("test.db")
+
+sql.Exec(sqlite,"create table myTable (FirstName varchar(30), LastName varchar(30), Age smallint, Hometown varchar(30), Job varchar(30))")
+
+sql.Exec(sqlite,"insert into myTable (FirstName, LastName, Age, Hometown, Job) values ('Peter', 'Griffin', 41, 'Quahog', 'Brewery')")
+
+local count = sql.Exec(sqlite,"select * from myTable")
+
+for i = 0,count-1,1
+do
+conio.Print(sql.Extract())
+end
+
+
+conio.Pause()
+
+sql.Close(sqlite)
+
