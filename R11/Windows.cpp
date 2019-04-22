@@ -96,15 +96,7 @@
 //	return 2;
 //}
 //
-//static int32_t _cdecl __GetDesktopWindow(lua_State* state)
-//{
-//	ptrtype lptr(GetDesktopWindow());
-//
-//	lua_pushinteger(m_lua, lptr.lua.first);
-//	lua_pushinteger(m_lua, lptr.lua.second);
-//	return 2;
-//}
-//
+
 
 //
 
@@ -285,29 +277,8 @@
 //	return 0;
 //}
 //
-//static int32_t _cdecl __MaximizeWindow(lua_State* state)
-//{
-//	//ShowWindow(m_pickedWindow, SW_SHOWMAXIMIZED);
-//	return 0;
-//}
-//
-//static int32_t _cdecl __MinimizeWindow(lua_State* state)
-//{
-//	//ShowWindow(m_pickedWindow, SW_SHOWMINIMIZED);
-//	return 0;
-//}
-//
-//static int32_t _cdecl __UpdateWindow(lua_State* state)
-//{
-//	//UpdateWindow(m_pickedWindow);
-//	return 0;
-//}
-//
-//static int32_t _cdecl __SetWindowTitle(lua_State* state)
-//{
-//	//SetWindowTextA(m_pickedWindow,lua_tostring(state,1));
-//	return 0;
-//}
+
+
 //
 //static int32_t _cdecl __FindWindow(lua_State* state)
 //{
@@ -326,29 +297,7 @@
 //}
 //
 
-//
-//int32_t _cdecl keyPressed(int key) noexcept
-//{
-//	return (GetKeyState(key) & 0x8000 != 0);
-//}
-//
-//int32_t _cdecl keyDown(int key) noexcept
-//{
-//	return ((GetKeyState(key) & 0x100) != 0);
-//}
-//
-//static int32_t _cdecl KeyPressed(lua_State* state)
-//{
-//	lua_pushboolean(state, keyPressed(lua_tointeger(state, 1)));
-//	return 1;
-//}
-//
-//static int32_t _cdecl KeyDown(lua_State* state)
-//{
-//	lua_pushboolean(state, keyDown(lua_tointeger(state, 1)));
-//	return 1;
-//}
-//
+
 //void __private__DrawLine(HDC hdc, float StartX, float StartY, float EndX, float EndY, COLORREF Pen)
 //{
 //	int a, b = 0;

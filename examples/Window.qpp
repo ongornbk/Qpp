@@ -4,8 +4,11 @@ require "Sunflower/Sunflower"
 
 import("windows")
 
-Sunflower.Start(true)
+Sunflower.Start("Test Window",1)
 
-
+while Sunflower.Run()
+do
+Sunflower.Proc()
+end
 
 Sunflower.Close()

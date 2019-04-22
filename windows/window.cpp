@@ -15,28 +15,27 @@ lua_CFunction EventHover = doNothing;
 LRESULT __stdcall WindowProcedure(HWND window, uint32_t msg, WPARAM wp, LPARAM lp)
 
 {
-	//ptrs->x64(0);
-	//
-	//switch (msg)
-	//
-	//{
-	//case WM_TIMER:
-	//	//EventTimer(state);
-	//	return 0;
+	
+	switch (msg)
+	
+	{
+	case WM_TIMER:
+		//EventTimer(state);
+		return 0;
 	//case WM_PAINT:
-	//	if (EventPaint == doNothing)
-	//		return DefWindowProc(window, msg, wp, lp);
-	//	EventPaint(state);
-	//	return 0;
-	//case WM_MOUSEHOVER:
-	//	EventHover(state);
-	//	return 0;
-	//case WM_DESTROY:
-	//	EventDestroy(state);
-	//	return 0;
-	//default:
-		return DefWindowProc(window, msg, wp, lp);
-	//}
+		//if (EventPaint == doNothing)
+			//return DefWindowProc(window, msg, wp, lp);
+		//EventPaint(state);
+		//return 0;
+	case WM_MOUSEHOVER:
+		//EventHover(state);
+		return 0;
+	case WM_DESTROY:
+		//EventDestroy(state);
+		return 0;
+	default:
+	return DefWindowProc(window, msg, wp, lp);
+	}
 
 }
 
@@ -61,13 +60,6 @@ Window::Window()
 	if (RegisterClassEx(&wndclass))
 	{
 		window = CreateWindowEx(0, myclass, L"Window", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, 0, 0, GetModuleHandle(0), 0);
-		if (window)
-		{
-			ShowWindow(window, SW_SHOWDEFAULT);
-			MSG msg;
-			while (GetMessage(&msg, 0, 0, 0)) DispatchMessage(&msg);
-		}
-
 	}
 }
 

@@ -2,7 +2,7 @@ import("conio")
 import("math")
 conio.SetTitle("Pixels")
 
-for z = 1,500,2
+for x = 0,500,2
 do
 
 for y = 0,500,2
@@ -10,7 +10,7 @@ do
 
    local posx = x
    local posy = y
-  conio.DrawPixel(posx,posy500,x*y,1)
+  conio.DrawPixel(posx,posy,x*y,1)
 
 end
 

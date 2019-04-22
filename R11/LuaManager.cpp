@@ -215,19 +215,19 @@ static int32_t _cdecl _lua_release(lua_State* state)
 
 static int32_t _cdecl _lua_malloc(lua_State* state)
 {
-	lua_pushinteger(state, m_instance->m_ptrs->x32(malloc(lua_tointeger(state,1))));
+	lua_pushinteger(state,(lua_Integer)malloc(lua_tointeger(state,1)));
 	return 1;
 }
 
 static int32_t _cdecl _lua_free(lua_State* state)
 {
-	free(m_instance->m_ptrs->x64(lua_tointeger(state, 1)));
+	free((void*)lua_tointeger(state, 1));
 	return 0;
 }
 
 static int32_t _cdecl _lua_bzero(lua_State* state)
 {
-	ZeroMemory(m_instance->m_ptrs->x64(lua_tointeger(state, 1)), lua_tointeger(state, 2));
+	ZeroMemory((void*)lua_tointeger(state, 1), lua_tointeger(state, 2));
 	return 0;
 }
 
@@ -239,28 +239,28 @@ static int32_t _cdecl _lua_ptrs_size(lua_State* state)
 
 static int32_t _cdecl _lua_set(lua_State* state)
 {
-	long* mem = (long*)m_instance->m_ptrs->x64(lua_tointeger(state, 1));
+	lua_Integer* mem = (lua_Integer*)lua_tointeger(state, 1);
 	mem[lua_tointeger(state, 2)] = lua_tointeger(state, 3);
 	return 0;
 }
 
 static int32_t _cdecl _lua_get(lua_State* state)
 {
-	long* mem = (long*)m_instance->m_ptrs->x64(lua_tointeger(state, 1));
+	lua_Integer* mem = (lua_Integer*)lua_tointeger(state, 1);
 	lua_pushinteger(state, mem[lua_tointeger(state, 2)]);
 	return 1;
 }
 
 static int32_t _cdecl _lua_realloc(lua_State* state)
 {
-	long index = lua_tointeger(state, 1);
-	long size = lua_tointeger(state, 2);
+	lua_Integer index = lua_tointeger(state, 1);
+	lua_Integer size = lua_tointeger(state, 2);
 
-	void* data = m_instance->m_ptrs->x64(index);
+	void* data = (void*)lua_tointeger(state, 1);
 
-	release_ptr(index);
+	//release_ptr(index);
 
-	index = m_instance->m_ptrs->x32(realloc(data,(size_t)size));
+	index = (lua_Integer)realloc(data,(size_t)size);
 
 	lua_pushinteger(state, index);
 	return 1;

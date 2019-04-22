@@ -6,14 +6,13 @@ return
 {
     size = 0,
     capacity = 2,
-    element_size = 4,
-    data = malloc(8)
+    element_size = 8,
+    data = malloc(16)
 }
 end
 
 function vector.delete(vector)
 free(data)
-release(data)
 end
 
 function vector.get(vector,element)
@@ -40,7 +39,7 @@ function vector.push_back(vector,value)
     if(vector.size >= vector.capacity)
     then
         vector.capacity = vector.capacity * 2
-        vector.data = realloc(vector.data,vector.capacity * 4)
+        vector.data = realloc(vector.data,vector.capacity * 8)
     end
 
     set(vector.data,vector.size - 1,value)
