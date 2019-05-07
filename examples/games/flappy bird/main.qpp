@@ -79,7 +79,8 @@ require "bird"
 require "map"
 
 local map = Map.new()
-local bird = Bird.new()
+local bird0 = Bird.new()
+local bird1 = Bird.new()
 
 import("winmm")
 
@@ -104,16 +105,27 @@ Map.Initialize(map)
 
 
 
-bird.position.x = 30.0
-bird.position.y = 15.0
-bird.lastposition.x = bird.position.x
-bird.lastposition.y = bird.position.y
-bird.velocity.x = 0.0
-bird.velocity.y = 0.0
-bird.speed.up = -1.5
-bird.speed.down = 0.6
-bird.color = 77    
-bird.key = 0x20
+bird0.position.x = 30.0
+bird0.position.y = 15.0
+bird0.lastposition.x = bird0.position.x
+bird0.lastposition.y = bird0.position.y
+bird0.velocity.x = 0.0
+bird0.velocity.y = 0.0
+bird0.speed.up = -1.5
+bird0.speed.down = 0.6
+bird0.color = 144  
+bird0.key = 0x26
+
+bird1.position.x = 20.0
+bird1.position.y = 15.0
+bird1.lastposition.x = bird1.position.x
+bird1.lastposition.y = bird1.position.y
+bird1.velocity.x = 0.0
+bird1.velocity.y = 0.0
+bird1.speed.up = -1.5
+bird1.speed.down = 0.6
+bird1.color = 192  
+bird1.key = 0x20
 
 
 
@@ -124,20 +136,28 @@ do
     conio.SetTitle("Flappy Bird   score: " .. tostring(score) .. " cpu: " .. get_cpu() .. "%    ")
 
     Map.Update(map)
-    Bird.Update(bird)
-    Map.NormalizePosition(map,bird)
+    Bird.Update(bird0)
+    Map.NormalizePosition(map,bird0)
+    Bird.Update(bird1)
+    Map.NormalizePosition(map,bird1)
 
 
-    if(Map.CheckCollision(map,bird) == true)
+    if(Map.CheckCollision(map,bird0) == true)
     then
         score = 0
         running = false
     end
 
+    if(Map.CheckCollision(map,bird1) == true)
+    then
+        score = 0
+        running = false
+    end
 
     Map.Draw(map)
-    Bird.Draw(bird)
-    sleep(22000000)
+    Bird.Draw(bird0)
+    Bird.Draw(bird1)
+    sleep(23000000)
 end
 
 
