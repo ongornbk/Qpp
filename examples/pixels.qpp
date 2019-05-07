@@ -2,18 +2,17 @@ import("conio")
 import("math")
 conio.SetTitle("Pixels")
 
-for x = 0,500,2
+local ptr = 0
+
+for x = 0,500,1
 do
 
-for y = 0,500,2
-do
+ptr = realloc(ptr,x * 8)
 
-   local posx = x
-   local posy = y
-  conio.DrawPixel(posx,posy,x*y,1)
+conio.DrawPixel(x,5,math.ToColor(ptr,get(ptr,0),0),1)
 
 end
 
-end
+free(ptr)
 
 conio.Pause()

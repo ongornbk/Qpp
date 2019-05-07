@@ -1,12 +1,5 @@
 #pragma once
 
-struct cfpair
-{
-	lua_State* state;
-	std::string foo;
-};
-
-
 extern "C"
 {
 	struct cpair
@@ -15,7 +8,7 @@ extern "C"
 		lua_CFunction value;
 	};
 
-	
+
 	extern __declspec(dllexport) long start(const long arg);
 	extern __declspec(dllexport) long close(const long arg);
 	extern __declspec(dllexport) long foo_count(const long arg);

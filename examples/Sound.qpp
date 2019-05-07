@@ -1,6 +1,6 @@
-ImportPackage("windows")
-ImportPackage("conio")
-SetConsoleTitle("Sound")
+import("windows")
+import("conio")
+conio.SetTitle("Sound")
 SetTimer(1000,0)
 
 
@@ -13,7 +13,7 @@ local lparam,wparam,msg = RetrieveMessage()
 
 if msg == 0x113
 then
-PlaySound("sound.wav")
+PlaySound("theme.wav")
 else
 
 WindowProc(msg,wparam,lparam)

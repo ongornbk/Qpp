@@ -1,5 +1,6 @@
 import("conio")
 conio.SetTitle("GIT R11")
+conio.SetColor(11)
 import("system")
 system.System("@git status -s")
 conio.Println("Pushing R11")

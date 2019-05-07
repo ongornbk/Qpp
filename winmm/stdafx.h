@@ -15,6 +15,7 @@
 #include <lualib.h>
 #include <lauxlib.h>
 #include <unordered_map>
+#include <memory>
 #include <sal.h>
 
 #if _WIN64 
@@ -26,5 +27,6 @@
 #endif
 
 typedef int32_t(*lua_CFunction) (lua_State *L);
+
 
 // reference additional headers your program requires here

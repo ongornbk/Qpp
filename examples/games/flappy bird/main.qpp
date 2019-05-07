@@ -1,0 +1,88 @@
+import("conio")
+conio.SetTitle("Flappy Bird")
+
+import_as("windows","win")
+
+function floorPosition(x,y)
+conio.Gotoxy(math.floor(x),math.floor(y))
+end
+
+score = 0
+
+require "vector"
+require "bird"
+require "map"
+
+local map = Map.new()
+local bird = Bird.new()
+
+import("winmm")
+
+
+::START::
+
+
+
+map.sizex = 80
+map.sizey = 40
+map.color = 23
+map.default_color = 0
+map.border_color = 44
+map.distance = 35
+map.width = 5
+map.gap = 12
+map.min = 12
+map.max = 28
+map.margin_top = 1
+
+Map.Initialize(map)
+
+
+
+bird.position.x = 30.0
+bird.position.y = 15.0
+bird.lastposition.x = bird.position.x
+bird.lastposition.y = bird.position.y
+bird.velocity.x = 0.0
+bird.velocity.y = 0.0
+bird.speed.up = -1.5
+bird.speed.down = 0.6
+bird.color = 55    
+bird.key = 0x20
+
+
+
+running = true
+
+while running
+do
+    conio.SetTitle("Flappy Bird   score: " .. tostring(score) .. " cpu: " .. get_cpu() .. "%    ")
+
+    Map.Update(map)
+    Bird.Update(bird)
+    Map.NormalizePosition(map,bird)
+
+
+    if(Map.CheckCollision(map,bird) == true)
+    then
+        score = 0
+        running = false
+    end
+
+
+    Map.Draw(map)
+    Bird.Draw(bird)
+    sleep(22000000)
+end
+
+
+conio.SetColor(10)
+conio.Gotoxy(0,0)
+
+winmm.PlaySync("assets//lost.wav")
+import("system")
+system.System("cls")
+
+
+
+goto START

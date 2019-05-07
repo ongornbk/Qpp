@@ -1,0 +1,43 @@
+import("filesystem")
+import("sql")
+
+
+
+function iowl(str)
+filesystem.AppendString(str)
+end
+
+db = sql.Open("backup.db")
+
+local count = sql.Exec(db,"select * from windows")
+
+filesystem.Remove("db.html")
+
+filesystem.OpenAppend("db.html")
+iowl("<html><head>")
+iowl("<meta charset=\"utf-8\">")
+iowl("<link rel=\"stylesheet\" href=\"style.css\">")
+iowl("<title>Database backup windows</title></head><body><table><tr><th>HWND</th>")
+
+
+
+for i = 0,count-1,1
+do
+    local ext = sql.Extract()
+    
+    iowl("<tr>")
+
+    iowl("<td>")
+    iowl(ext)
+    iowl("</td>")
+    iowl("</tr>")
+
+end
+
+
+iowl("</table></body></html>")
+
+sql.Close(db)
+filesystem.Close()
+
+execute("db.html")

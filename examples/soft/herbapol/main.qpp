@@ -1,0 +1,45 @@
+import("conio")
+conio.SetTitle("Herbapol")
+
+import("windows")
+import("sql")
+import("filesystem")
+
+require "vector"
+
+_windows = vector.new()
+names = {}
+classes = {}
+
+filesystem.Remove("backup.db")
+
+db = sql.Open("backup.db")
+
+sql.Exec(db,"create table windows (hwnd bigint(30), name varchar(50), class varchar(50))")
+
+function enum_windows_callback(hwnd)
+
+vector.push_back(_windows,hwnd)
+
+local idx = _windows.size;
+names[idx] = windows.GetName(hwnd)
+classes[idx] = windows.GetClassName(hwnd)
+end
+
+
+windows.EnumWindows("enum_windows_callback")
+
+
+
+for i = 1,_windows.size,1
+do
+   conio.Gotoxy(0,0)
+  conio.Print(tostring(i) .. " of " .. _windows.size)
+  sql.Exec(db,"insert into windows (hwnd,name,class) values (" .. vector.get(_windows,i-1) .. ",'" .. names[i] .. "','" .. classes[i] .. "')")
+end
+
+sql.Close(db)
+
+vector.delete(_windows)
+
+conio.Pause()

@@ -270,6 +270,33 @@ extern "C"
 		return 2;
 	}
 
+	static BOOL CALLBACK _callback_enumproc(HWND hwnd, LPARAM lp)
+	{
+		cfpair* cp = (cfpair*)lp;
+
+		lua_getglobal(cp->state, cp->foo.c_str());
+		lua_pushinteger(cp->state, (lua_Integer)hwnd);
+		lua_call(cp->state, 1, 0);
+		//lua_pop(cp->state, 1);
+
+		return true;
+	}
+
+	
+
+	static int32_t _cdecl _lua_enumwindows(lua_State* state)
+	{
+
+		cfpair* cp = new cfpair();
+		cp->state = state;
+		cp->foo = lua_tostring(state, 1);
+
+		lua_pushboolean(state, EnumWindows(_callback_enumproc,(LPARAM)(cp)));
+
+		delete cp;
+		return 1;
+	}
+
 	static int32_t _cdecl _lua_registerevent(lua_State* state)
 	{
 
@@ -320,7 +347,7 @@ extern "C"
 	return 0;
 }
 
-	constexpr long FOO_COUNT = 36;
+	constexpr long FOO_COUNT = 37;
 
 	const char* sckeys[FOO_COUNT] = {
 		"BlockInput",
@@ -329,6 +356,7 @@ extern "C"
 		"CreateWindow",
 		"DestroyWindow",
 		"DispatchMessage",
+		"EnumWindows",
 		"GetClassName",
 		"GetDesktop",
 		"GetForeground",
@@ -367,6 +395,7 @@ extern "C"
 		_lua_createwindow,
 		_lua_destroywindow,
 		_lua_dispatchmessage,
+		_lua_enumwindows,
 		_lua_getclassname,
 		_lua_getdesktop,
 		_lua_getforegroundwindow,
