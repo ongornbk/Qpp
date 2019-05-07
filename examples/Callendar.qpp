@@ -1,5 +1,6 @@
 import("conio")
 conio.SetTitle("Callendar")
+conio.SetColor(15)
 
 CNUMBER_OF_MONTHS = 12
 CNUMBER_OF_DAYS = 7

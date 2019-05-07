@@ -1,5 +1,6 @@
 import("conio")
 conio.SetTitle("SQL")
+conio.SetColor(15)
 import("sql")
 
 local sqlite = 0

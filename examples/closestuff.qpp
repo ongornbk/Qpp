@@ -1,6 +1,7 @@
 import("packages/conio")
 import("packages/system")
 conio.SetTitle("Closing stuff...")
+conio.SetColor(15)
 system.System("@taskkill /F /T /IM httpd.exe")
 system.System("@taskkill /F /T /IM mysqld.exe")
 system.System("@taskkill /F /T /IM PnkBstrA.exe")
