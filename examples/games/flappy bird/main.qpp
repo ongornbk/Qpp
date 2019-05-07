@@ -9,6 +9,71 @@ end
 
 score = 0
 
+require "image"
+
+background = Image.new(82,40)
+
+for x = 1,81,1
+do
+
+    for y = 1,40,1
+    do
+    Image.set(background,x,y,177)
+    end
+
+end
+
+for x = 1,81,1
+do
+
+    for y = 30+(x%3)+math.random(0,1),39,1
+    do
+    Image.set(background,x,y,37)
+    end
+
+end
+
+for y = 0,82,1
+do
+    --Image.set(background,82,y,99)
+    Image.set(background,81,y,99)
+    Image.set(background,80,y,99)
+end
+
+Image.set(background,65,10,224)
+Image.set(background,66,10,224)
+Image.set(background,67,10,224)
+Image.set(background,68,10,224)
+Image.set(background,69,10,224)
+Image.set(background,70,10,224)
+Image.set(background,66,11,224)
+Image.set(background,67,11,224)
+Image.set(background,68,11,224)
+Image.set(background,69,11,224)
+Image.set(background,66,9,224)
+Image.set(background,67,9,224)
+Image.set(background,68,9,224)
+Image.set(background,69,9,224)
+
+Image.set(background,35,10,112)
+Image.set(background,36,10,112)
+Image.set(background,37,10,112)
+Image.set(background,38,10,112)
+Image.set(background,39,10,112)
+Image.set(background,34,10,112)
+Image.set(background,36,11,112)
+Image.set(background,37,11,112)
+Image.set(background,38,11,112)
+Image.set(background,39,11,112)
+Image.set(background,36,9,112)
+Image.set(background,37,9,112)
+Image.set(background,38,9,112)
+Image.set(background,39,9,112)
+Image.set(background,36,8,112)
+Image.set(background,37,8,112)
+Image.set(background,38,8,112)
+Image.set(background,39,7,112)
+
 require "vector"
 require "bird"
 require "map"
@@ -27,7 +92,7 @@ map.sizex = 80
 map.sizey = 40
 map.color = 23
 map.default_color = 0
-map.border_color = 44
+map.border_color = 99
 map.distance = 35
 map.width = 5
 map.gap = 12
@@ -47,7 +112,7 @@ bird.velocity.x = 0.0
 bird.velocity.y = 0.0
 bird.speed.up = -1.5
 bird.speed.down = 0.6
-bird.color = 55    
+bird.color = 77    
 bird.key = 0x20
 
 

@@ -1,0 +1,11 @@
+import("conio")
+
+local it = 0
+
+while true
+do
+    conio.Pause()
+    conio.SetColor(it)
+    conio.Println(it .. " #")
+    it = it + 1
+end

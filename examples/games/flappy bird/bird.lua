@@ -39,7 +39,8 @@ end
 
 function Bird.Draw(this)
 
-    conio.SetColor(this.default_color)
+
+    conio.SetColor(Image.get(background,math.floor(this.lastposition.x),math.floor(this.lastposition.y)))
 
     if(this.stance == 1)
     then

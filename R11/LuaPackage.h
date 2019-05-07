@@ -15,7 +15,7 @@ extern "C"
 	};
 }
 
-typedef long(__stdcall * package_start_close_count_function)(PointersManager* ptrs);
+typedef long(__stdcall * package_start_close_count_function)(void* ptrs);
 typedef cpair(__stdcall * package_get_foo_function)(const long index);
 
 class LuaPackage
@@ -91,7 +91,7 @@ public:
 		pckgetfoo = package_get_foo_function(GetProcAddress(m_lib, "get_foo"));
 
 		{
-			long result = pckstart(0);
+			long result = pckstart((void*)GetSetting("DefaultLibrariesLocation").c_str());
 			if (result)
 			{
 				throw std::exception((m_realName + ".pck " + "starting failed! code -> " + std::to_string(result)).c_str());

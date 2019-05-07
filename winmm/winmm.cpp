@@ -22,7 +22,7 @@ struct Winmm;
 
 namespace
 {
-	static std::unique_ptr<Winmm> m_url = nullptr;
+	static std::unique_ptr<Winmm> m_winmm = nullptr;
 }
 
 struct Winmm
@@ -35,14 +35,14 @@ struct Winmm
 
 	static Winmm* GetInstance()
 	{
-		if (m_url.get())
+		if (m_winmm.get())
 		{
-			return m_url.get();
+			return m_winmm.get();
 		}
 		else
 		{
-			m_url = std::make_unique<Winmm>();
-			return m_url.get();
+			m_winmm = std::make_unique<Winmm>();
+			return m_winmm.get();
 		}
 	}
 
@@ -56,7 +56,6 @@ extern "C"
 {
 	long start(const long arg)
 	{
-
 		return 0;
 	}
 

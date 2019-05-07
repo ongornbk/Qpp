@@ -37,7 +37,7 @@ function Map.Initialize(this)
 
     conio.SetColor(this.border_color)
 
-    for x = 0, this.sizex+this.width,1
+    for x = 0, this.sizex,1
     do
         conio.Gotoxy(x,0)
         conio.Print(" ")
@@ -49,9 +49,28 @@ function Map.Initialize(this)
     do
         conio.Gotoxy(0,y)
         conio.Print("  ")
-        conio.Gotoxy(this.sizex+6,y)
+        conio.Gotoxy(this.sizex+1,y)
         conio.Print("  ")
     end
+
+    for x = 2, this.sizex,1
+    do
+        for y = 1, this.sizey-1,1
+    do
+        conio.Gotoxy(x,y)
+        conio.SetColor(Image.get(background,x-1,y))
+        conio.Print(" ")
+
+    end
+    end
+
+    for x = 2, this.sizex+this.width-4,1
+    do
+        conio.Gotoxy(x,this.sizey)
+        conio.SetColor(Image.get(background,x,this.sizey-1))
+        conio.Print(" ")
+    end
+    
 end
 
 function Map.Update(this)
@@ -126,6 +145,6 @@ winmm.PlayAsync("assets//score.wav")
 
 end
 
-return false
+return false    
 
 end

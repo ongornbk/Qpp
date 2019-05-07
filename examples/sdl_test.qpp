@@ -1,0 +1,4 @@
+import("sdl")
+sdl.CreateWindow("sdl test",800,600,32)
+sdl.RunWindow()
+sdl.ReleaseWindow()

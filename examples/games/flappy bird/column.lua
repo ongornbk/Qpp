@@ -19,24 +19,26 @@ then
     for y = top,this.y - offset,1
     do
         conio.Gotoxy(this.x+this.width,y)
-        conio.SetColor(default_color)
+        conio.SetColor(Image.get(background,this.x+this.width,y))
         conio.Print(" ")
     end
 
     for y = this.y + offset,max,1
     do
         conio.Gotoxy(this.x+this.width,y)
-        conio.SetColor(default_color)
+        conio.SetColor(Image.get(background,this.x+this.width,y+1))
         conio.Print(" ")
     end
 
 
 else
 
+
+
     for y = top,this.y - offset,1
 do
     conio.Gotoxy(this.x+this.width,y)
-    conio.SetColor(default_color)
+    conio.SetColor(Image.get(background,this.x+this.width,y+1))
     conio.Print(" ")
     conio.Gotoxy(this.x,y)
     conio.SetColor(color)
@@ -46,7 +48,7 @@ end
 for y = this.y + offset,max,1
 do
     conio.Gotoxy(this.x+this.width,y)
-    conio.SetColor(default_color)
+    conio.SetColor(Image.get(background,this.x+this.width,y-1))
     conio.Print(" ")
     conio.Gotoxy(this.x,y)
     conio.SetColor(color)
