@@ -10,14 +10,15 @@ function Bird.new()
         speed = {},
         color = 0,
         default_color = 0,
-        key = 0x20,
-        stance = 0
+        key = 0,
+        stance = 0,
+        alt = 0
     }
     end
 
 function Bird.Update(this)
 
-    if(win.KeyDown(this.key))
+    if(win.KeyDown(this.key) or win.KeyDown(this.alt))
 then
     this.stance = 1
     this.velocity.y = this.speed.up

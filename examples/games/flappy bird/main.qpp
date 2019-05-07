@@ -74,15 +74,131 @@ Image.set(background,37,8,112)
 Image.set(background,38,8,112)
 Image.set(background,39,7,112)
 
-require "vector"
+
+
 require "bird"
 require "map"
-
-local map = Map.new()
-local bird0 = Bird.new()
-local bird1 = Bird.new()
+require "menu"
+require "credits"
 
 import("winmm")
+import("system")
+
+::MENU::
+
+
+local menu = Menu.new()
+
+Menu.PushOption(menu,"1 Player")
+Menu.PushOption(menu,"2 Players")
+Menu.PushOption(menu,"Options")
+Menu.PushOption(menu,"Credits")
+Menu.PushOption(menu,"Exit")
+
+local game_mode = Menu.Select(menu)
+
+menu = nil
+
+
+local birds = {}
+local number_of_birds = game_mode
+
+
+if game_mode == 0
+then
+birds[0] = Bird.new()
+birds[0].position.x = 30.0
+birds[0].position.y = 15.0
+birds[0].lastposition.x = birds[0].position.x
+birds[0].lastposition.y = birds[0].position.y
+birds[0].velocity.x = 0.0
+birds[0].velocity.y = 0.0
+birds[0].speed.up = -1.5
+birds[0].speed.down = 0.6
+birds[0].color = 144
+birds[0].key = 0x26
+birds[0].alt = 0x20
+end
+
+if game_mode == 1
+then
+birds[0] = Bird.new()
+birds[0].position.x = 30.0
+birds[0].position.y = 15.0
+birds[0].lastposition.x = birds[0].position.x
+birds[0].lastposition.y = birds[0].position.y
+birds[0].velocity.x = 0.0
+birds[0].velocity.y = 0.0
+birds[0].speed.up = -1.5
+birds[0].speed.down = 0.6
+birds[0].color = 144  
+birds[0].key = 0x26
+
+birds[1] = Bird.new()
+birds[1].position.x = 20.0
+birds[1].position.y = 15.0
+birds[1].lastposition.x = birds[1].position.x
+birds[1].lastposition.y = birds[1].position.y
+birds[1].velocity.x = 0.0
+birds[1].velocity.y = 0.0
+birds[1].speed.up = -1.5
+birds[1].speed.down = 0.6
+birds[1].color = 192  
+birds[1].key = 0x20
+end
+
+if game_mode == 2
+then
+    conio.Gotoxy(0,0)
+    conio.SetColor(15)
+    system.System("cls")
+conio.Println("In development!")
+
+while(true)
+do
+if(win.KeyDown(0x1B) or win.KeyDown(0x0D))
+then
+    while (win.KeyDown(0x0D))
+do
+sleep(500000)
+end
+    conio.SetColor(15)
+    system.System("cls")
+    goto MENU
+end
+end
+end
+
+if game_mode == 3
+then
+Credits()
+
+while(true)
+do
+if(win.KeyDown(0x1B) or win.KeyDown(0x0D))
+then
+    while (win.KeyDown(0x0D))
+do
+sleep(500000)
+end
+    conio.SetColor(15)
+    system.System("cls")
+    goto MENU
+end
+end
+
+end
+
+if game_mode == 4
+then
+Image.release(background)
+conio.SetColor(15)
+os.exit()
+end
+
+local map = Map.new()
+
+
 
 
 ::START::
@@ -103,32 +219,6 @@ map.margin_top = 1
 
 Map.Initialize(map)
 
-
-
-bird0.position.x = 30.0
-bird0.position.y = 15.0
-bird0.lastposition.x = bird0.position.x
-bird0.lastposition.y = bird0.position.y
-bird0.velocity.x = 0.0
-bird0.velocity.y = 0.0
-bird0.speed.up = -1.5
-bird0.speed.down = 0.6
-bird0.color = 144  
-bird0.key = 0x26
-
-bird1.position.x = 20.0
-bird1.position.y = 15.0
-bird1.lastposition.x = bird1.position.x
-bird1.lastposition.y = bird1.position.y
-bird1.velocity.x = 0.0
-bird1.velocity.y = 0.0
-bird1.speed.up = -1.5
-bird1.speed.down = 0.6
-bird1.color = 192  
-bird1.key = 0x20
-
-
-
 running = true
 
 while running
@@ -136,27 +226,38 @@ do
     conio.SetTitle("Flappy Bird   score: " .. tostring(score) .. " cpu: " .. get_cpu() .. "%    ")
 
     Map.Update(map)
-    Bird.Update(bird0)
-    Map.NormalizePosition(map,bird0)
-    Bird.Update(bird1)
-    Map.NormalizePosition(map,bird1)
+    for i = 0,number_of_birds,1
+    do
+        Bird.Update(birds[i])
+        Map.NormalizePosition(map,birds[i])
+    end
 
-
-    if(Map.CheckCollision(map,bird0) == true)
+    for i = 0,number_of_birds,1
+    do
+        if(Map.CheckCollision(map,birds[i]) == true)
     then
         score = 0
         running = false
     end
-
-    if(Map.CheckCollision(map,bird1) == true)
-    then
-        score = 0
-        running = false
     end
+
 
     Map.Draw(map)
-    Bird.Draw(bird0)
-    Bird.Draw(bird1)
+    
+    for i = 0,number_of_birds,1
+    do
+        Bird.Draw(birds[i])
+    end
+
+    if(win.KeyDown(0x1B))
+    then
+        birds = nil
+        map = nil
+        conio.SetColor(15)
+        system.System("cls")
+        goto MENU
+    end
+
     sleep(23000000)
 end
 
@@ -165,8 +266,8 @@ conio.SetColor(10)
 conio.Gotoxy(0,0)
 
 winmm.PlaySync("assets//lost.wav")
-import("system")
-system.System("cls")
+
+
 
 
 
