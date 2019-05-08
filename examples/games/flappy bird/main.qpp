@@ -246,12 +246,20 @@ then
     end
     Menu.MakeItemSelectable(menu)
     Menu.SetDefault(menu,width - 40)
+    Menu.PushOption(menu,"Height: ")
+    Menu.SetItemReference(menu,refp+192)
+    for i = 40,60,1
+    do
+    Menu.PushItem(menu,tostring(i))
+    end
+    Menu.MakeItemSelectable(menu)
+    Menu.SetDefault(menu,height - 40)
    
 
 
     Menu.PushOption(menu,"return")
 
-    while exitcode ~= 3
+    while exitcode ~= 4
     do
         exitcode = Menu.Select(menu)
     end
@@ -263,6 +271,7 @@ then
 difficulty = get(refp,0)
 sounds = get(refp+64,0)
 width = get(refp+128,0)+40
+height = get(refp+192,0)+40
 free(refp)
 refp = nil
 end
