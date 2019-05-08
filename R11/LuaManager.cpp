@@ -272,6 +272,24 @@ static int32_t _cdecl _lua_realloc(lua_State* state)
 	return 1;
 }
 
+static int32_t _cdecl _lua_discardsettings(lua_State* state)
+{
+	DiscardSettings();
+	return 0;
+}
+
+static int32_t _cdecl _lua_pushsetting(lua_State* state)
+{
+	PushSetting(lua_tostring(state, 1), lua_tostring(state, 2));
+	return 0;
+}
+
+static int32_t _cdecl _lua_loadsettings(lua_State* state)
+{
+	lua_pushinteger(state, LoadSettings(lua_tostring(state, 1)));
+	return 1;
+}
+
 Urlmon::Urlmon()
 {
 	std::string urlmonpath = GetSetting("DefaultLibrariesLocation").get_string() + "/urlmon.dll";
@@ -358,6 +376,9 @@ bool _cdecl LuaManager::Initialize(const int argc, char* argv[])
 	lua_register(m_lua, "get", _lua_get);
 	lua_register(m_lua, "realloc", _lua_realloc);
 	lua_register(m_lua, "delete", _lua_delete);
+	lua_register(m_lua, "push_setting", _lua_pushsetting);
+	lua_register(m_lua, "load_settings", _lua_loadsettings);
+	lua_register(m_lua, "discard_settings", _lua_discardsettings);
 
 	result = luaL_loadfile(m_lua, m_file.c_str());
 	if (result)

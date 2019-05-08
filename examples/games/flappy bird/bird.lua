@@ -1,4 +1,6 @@
 
+local difficulty_multiplier = {1.0,1.1,1.3,1.5}
+
 Bird = {}
 
 function Bird.new()
@@ -21,10 +23,10 @@ function Bird.Update(this)
     if(win.KeyDown(this.key) or win.KeyDown(this.alt))
 then
     this.stance = 1
-    this.velocity.y = this.speed.up
+    this.velocity.y = this.speed.up * difficulty_multiplier[difficulty + 1]
 else
     this.stance = 2
-    this.velocity.y = this.speed.down
+    this.velocity.y = this.speed.down * difficulty_multiplier[difficulty + 1]
 end
 
 this.lastposition.x = this.position.x

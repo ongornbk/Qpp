@@ -6,12 +6,13 @@ namespace
 	static std::map<const std::string, String> global_settings;
 }
 
-int32 InitializeSettings(const char* filename)
+int32 LoadSettings(const char* filename)
 {
 	std::ifstream stream(filename);
 	if (!stream.good())
 	{
-		MessageBoxA(NULL, "No config.ini found!", "Error", MB_OK);
+		std::string str = "No " + std::string(filename) + ".ini found!";
+		MessageBoxA(NULL, str.c_str(), "Error", MB_OK);
 		return 1;
 	}
 
@@ -32,9 +33,20 @@ int32 InitializeSettings(const char* filename)
 	return 0;
 }
 
+int32 InitializeSettings(const char* filename)
+{
+	return LoadSettings(filename);
+}
+
 void PushSetting(const std::string key, const std::string value)
 {
 	global_settings[key] = String(value);
+}
+
+int32 DiscardSettings()
+{
+	global_settings.clear();
+	return 0;
 }
 
 

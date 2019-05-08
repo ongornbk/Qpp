@@ -6,7 +6,7 @@ return
 {
     xsize = x,
     ysize = y,
-    data = malloc(x*y*9)
+    data = malloc(x*y*10)
 }
 end
 

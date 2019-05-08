@@ -1,3 +1,5 @@
+load_settings("settings.ini")
+
 import("conio")
 conio.SetTitle("Flappy Bird")
 
@@ -6,6 +8,7 @@ import_as("windows","win")
 function floorPosition(x,y)
 conio.Gotoxy(math.floor(x),math.floor(y))
 end
+
 
 score = 0
 
@@ -84,6 +87,24 @@ require "credits"
 import("winmm")
 import("system")
 
+difficulty = tonumber(get_setting("difficulty"))
+local difficulties = {"Easy","Medium","Hard","Hardcore"}
+local speeds = {23000000,21000000,20000000,18000000}
+
+
+function saveSettings()
+    import("filesystem")
+    
+    filesystem.Remove("settings.ini")
+    
+    filesystem.OpenTrunc("settings.ini")
+    
+    filesystem.AppendString("difficulty " .. tostring(difficulty))
+
+    filesystem.Close()
+    
+    end
+
 ::MENU::
 
 
@@ -91,6 +112,7 @@ local menu = Menu.new()
 
 Menu.PushOption(menu,"1 Player")
 Menu.PushOption(menu,"2 Players")
+Menu.PushOption(menu,"Stats")
 Menu.PushOption(menu,"Options")
 Menu.PushOption(menu,"Credits")
 Menu.PushOption(menu,"Exit")
@@ -171,6 +193,43 @@ end
 
 if game_mode == 3
 then
+
+    conio.SetColor(15)
+    system.System("cls")
+
+    local exitcode = 0
+    local ptr = malloc(64)
+
+    menu = Menu.new()
+
+    Menu.PushOption(menu,"Difficulty: ")
+    Menu.SetItemReference(menu,ptr)
+    Menu.MakeItemSelectable(menu)
+    Menu.SetDefault(menu,tonumber(get_setting("difficulty")))
+    Menu.PushItem(menu,"Easy")
+    Menu.PushItem(menu,"Medium")
+    Menu.PushItem(menu,"Hard")
+    Menu.PushItem(menu,"Hardcore")
+    Menu.PushOption(menu,"return")
+
+    while exitcode ~= 1
+    do
+exitcode = Menu.Select(menu)
+    end
+
+if ptr ~= nil and ptr ~= 0
+then
+difficulty = get(ptr,0)
+end
+
+    free(ptr)
+
+    goto MENU
+
+end
+
+if game_mode == 4
+then
 Credits()
 
 while(true)
@@ -189,10 +248,11 @@ end
 
 end
 
-if game_mode == 4
+if game_mode == 5
 then
 Image.release(background)
 conio.SetColor(15)
+saveSettings()
 os.exit()
 end
 
@@ -210,11 +270,11 @@ map.sizey = 40
 map.color = 23
 map.default_color = 0
 map.border_color = 99
-map.distance = 35
-map.width = 5
+map.distance = 35 - (difficulty * 4)
+map.width = 5 - (difficulty)
 map.gap = 12
-map.min = 12
-map.max = 28
+map.min = 12 - difficulty
+map.max = 28 + difficulty
 map.margin_top = 1
 
 Map.Initialize(map)
@@ -223,7 +283,7 @@ running = true
 
 while running
 do
-    conio.SetTitle("Flappy Bird   score: " .. tostring(score) .. " cpu: " .. get_cpu() .. "%    ")
+    conio.SetTitle("Flappy Bird   score: " .. tostring(score) .. " cpu: " .. get_cpu() .. "% Difficulty: " .. difficulties[difficulty+1] .. "      ")
 
     Map.Update(map)
     for i = 0,number_of_birds,1
@@ -258,7 +318,7 @@ do
         goto MENU
     end
 
-    sleep(23000000)
+    sleep(speeds[difficulty+1])
 end
 
 
