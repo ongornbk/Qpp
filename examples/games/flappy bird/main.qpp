@@ -9,38 +9,50 @@ function floorPosition(x,y)
 conio.Gotoxy(math.floor(x),math.floor(y))
 end
 
+width = get_setting("width")
+height = get_setting("height")
 
 score = 0
 
 require "image"
 
-background = Image.new(82,40)
 
-for x = 1,81,1
+background = 0
+
+function RedrawImage()
+
+if background ~= 0
+then
+Image.release(background)
+end
+
+background = Image.new(width,height)
+
+for x = 1,width,1
 do
 
-    for y = 1,40,1
+    for y = 1,height,1
     do
     Image.set(background,x,y,177)
     end
 
 end
 
-for x = 1,81,1
+for x = 1,width,1
 do
 
-    for y = 30+(x%3)+math.random(0,1),39,1
+    for y = 30+(x%3)+math.random(0,1),height-1,1
     do
     Image.set(background,x,y,37)
     end
 
 end
 
-for y = 0,82,1
+for y = 0,width,1
 do
     --Image.set(background,82,y,99)
-    Image.set(background,81,y,99)
-    Image.set(background,80,y,99)
+    Image.set(background,width,y,99)
+    Image.set(background,width-1,y,99)
 end
 
 Image.set(background,65,10,224)
@@ -77,7 +89,9 @@ Image.set(background,37,8,112)
 Image.set(background,38,8,112)
 Image.set(background,39,7,112)
 
+end
 
+RedrawImage()
 
 require "bird"
 require "map"
@@ -88,8 +102,9 @@ import("winmm")
 import("system")
 
 difficulty = tonumber(get_setting("difficulty"))
-local difficulties = {"Easy","Medium","Hard","Hardcore"}
-local speeds = {23000000,21000000,20000000,18000000}
+sounds = tonumber(get_setting("sounds"))
+local difficulties = {"Easy","Medium","Hard","Hardcore","Hell"}
+local speeds = {23000000,21000000,20000000,18000000,15000000}
 
 
 function saveSettings()
@@ -98,8 +113,14 @@ function saveSettings()
     filesystem.Remove("settings.ini")
     
     filesystem.OpenTrunc("settings.ini")
+
+    filesystem.AppendString("width " .. tostring(width).. "\n")
+
+    filesystem.AppendString("height " .. tostring(height).. "\n")
     
-    filesystem.AppendString("difficulty " .. tostring(difficulty))
+    filesystem.AppendString("difficulty " .. tostring(difficulty) .. "\n")
+
+    filesystem.AppendString("sounds " .. tostring(sounds))
 
     filesystem.Close()
     
@@ -198,31 +219,56 @@ then
     system.System("cls")
 
     local exitcode = 0
-    local ptr = malloc(64)
+    local refp = malloc(256)
 
     menu = Menu.new()
 
     Menu.PushOption(menu,"Difficulty: ")
-    Menu.SetItemReference(menu,ptr)
+    Menu.SetItemReference(menu,refp)
     Menu.MakeItemSelectable(menu)
-    Menu.SetDefault(menu,tonumber(get_setting("difficulty")))
+    Menu.SetDefault(menu,difficulty)
     Menu.PushItem(menu,"Easy")
     Menu.PushItem(menu,"Medium")
     Menu.PushItem(menu,"Hard")
     Menu.PushItem(menu,"Hardcore")
+    Menu.PushItem(menu,"Hell")
+    Menu.PushOption(menu,"Sounds: ")
+    Menu.SetItemReference(menu,refp+64)
+    Menu.MakeItemSelectable(menu)
+    Menu.SetDefault(menu,sounds)
+    Menu.PushItem(menu,"Off")
+    Menu.PushItem(menu,"On")
+    Menu.PushOption(menu,"Width: ")
+    Menu.SetItemReference(menu,refp+128)
+    for i = 40,160,1
+    do
+    Menu.PushItem(menu,tostring(i))
+    end
+    Menu.MakeItemSelectable(menu)
+    Menu.SetDefault(menu,width - 40)
+   
+
+
     Menu.PushOption(menu,"return")
 
-    while exitcode ~= 1
+    while exitcode ~= 3
     do
-exitcode = Menu.Select(menu)
+        exitcode = Menu.Select(menu)
     end
 
-if ptr ~= nil and ptr ~= 0
+
+
+if refp ~= nil and refp ~= 0
 then
-difficulty = get(ptr,0)
+difficulty = get(refp,0)
+sounds = get(refp+64,0)
+width = get(refp+128,0)+40
+free(refp)
+refp = nil
 end
 
-    free(ptr)
+saveSettings()
+RedrawImage()
 
     goto MENU
 
@@ -252,7 +298,6 @@ if game_mode == 5
 then
 Image.release(background)
 conio.SetColor(15)
-saveSettings()
 os.exit()
 end
 
@@ -265,16 +310,16 @@ local map = Map.new()
 
 
 
-map.sizex = 80
-map.sizey = 40
+map.sizex = width
+map.sizey = height
 map.color = 23
 map.default_color = 0
 map.border_color = 99
 map.distance = 35 - (difficulty * 4)
 map.width = 5 - (difficulty)
-map.gap = 12
+map.gap = 12 - difficulty
 map.min = 12 - difficulty
-map.max = 28 + difficulty
+map.max = height - 12 + difficulty
 map.margin_top = 1
 
 Map.Initialize(map)
@@ -325,8 +370,10 @@ end
 conio.SetColor(10)
 conio.Gotoxy(0,0)
 
+if sounds == 1
+then
 winmm.PlaySync("assets//lost.wav")
-
+end
 
 
 

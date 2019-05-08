@@ -24,6 +24,7 @@ conio.SetColor(15)
 
 for i = 0,this.size-1,1
 do
+MenuItem.Select(this.options[i])
 MenuItem.Draw(this.options[i])
 end
 
@@ -99,6 +100,10 @@ then
     while (win.KeyDown(0x0D))
 do
 sleep(500000)
+for i = 0,this.size-1,1
+do
+MenuItem.release(this.options[i])
+end
 end
 return pointer
 end

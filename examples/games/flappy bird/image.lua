@@ -6,7 +6,7 @@ return
 {
     xsize = x,
     ysize = y,
-    data = malloc(x*y*10)
+    data = malloc(x*y*64)
 }
 end
 
@@ -16,12 +16,12 @@ end
 
 function Image.get(this,x,y)
 
-    return get(this.data,39*x+y)
+    return get(this.data,(this.xsize-1)*x+y)
 
 end
 
 function Image.set(this,x,y,value)
 
-    set(this.data,39*x+y,value)
+    set(this.data,(this.xsize-1)*x+y,value)
 
 end

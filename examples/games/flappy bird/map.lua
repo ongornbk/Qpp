@@ -33,7 +33,7 @@ function Map.Initialize(this)
     end
 
     this.width_iteration = this.width
-    this.offset = this.gap / 2
+    this.offset = (this.gap+(this.gap%2)) / 2
 
     conio.SetColor(this.border_color)
 
@@ -141,7 +141,10 @@ return true
 end
 
 score = score + 1
+if sounds == 1
+then
 winmm.PlayAsync("assets//score.wav")
+end
 
 end
 

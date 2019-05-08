@@ -1,5 +1,5 @@
 
-local difficulty_multiplier = {1.0,1.1,1.3,1.5}
+local difficulty_multiplier = {1.0,1.1,1.3,1.5,2.0}
 
 Bird = {}
 

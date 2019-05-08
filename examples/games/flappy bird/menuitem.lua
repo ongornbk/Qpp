@@ -8,7 +8,7 @@ name = "",
 items = {},
 ref = 0,
 size = 0,
-ptr = " <--    ",
+ptr = " <--",
 cls = "    ",
 selectable = false,
 selection = 0
@@ -16,15 +16,21 @@ selection = 0
 end
 
 function MenuItem.release(this)
-
+this.items = nil
 end
 
 function MenuItem.Draw(this)
-conio.Println(this.name)
+if this.selectable == true
+then
+    conio.Println(this.name .. this.ptr .. "         ")
+else
+    conio.Println(this.name .. "          ")
+end
 end
 
 function MenuItem.DrawPtr(this)
-conio.Print(this.ptr .. "    ")
+
+conio.Print(this.ptr .. "        ")
 end
 
 function MenuItem.Clean(this)
@@ -44,6 +50,7 @@ then
 set(this.ref,0,this.selection)
 end
     end
+
 end
 
 function MenuItem.PushItem(this,item)
