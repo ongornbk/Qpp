@@ -1,0 +1,18 @@
+import("conio")
+conio.SetColor(11)
+conio.SetTitle("Test image")
+import_as("filesystem","fs")
+
+fs.OpenBmp("assets/image.bmp")
+
+local type,size,res1,res2,off = fs.GetBmpHeader()
+
+conio.Println(type)
+conio.Println(size)
+conio.Println(res1)
+conio.Println(res2)
+conio.Println(off)
+
+fs.Close()
+
+conio.Pause()

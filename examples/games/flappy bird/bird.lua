@@ -1,5 +1,5 @@
 
-local difficulty_multiplier = {1.0,1.1,1.3,1.5,2.0}
+local difficulty_multiplier = {0.8,1.0,1.0,1.1,1.1,1.2}
 
 Bird = {}
 
@@ -11,6 +11,7 @@ function Bird.new()
         lastposition = {},
         speed = {},
         color = 0,
+        darkcolor = 16,
         default_color = 0,
         key = 0,
         stance = 0,
@@ -49,27 +50,29 @@ function Bird.Draw(this)
     then
 
 floorPosition(this.lastposition.x,this.lastposition.y)
-conio.Print("    ")
+conio.FWrite("    ",4)
 floorPosition(this.lastposition.x,this.lastposition.y+1)
-conio.Print("    ")
-conio.SetColor(this.color)
+conio.FWrite("    ",4)
+conio.SetColor(this.darkcolor)
 floorPosition(this.position.x+1,this.position.y)
-conio.Print("   ")
+conio.FWrite("   ",3)
+conio.SetColor(this.color)
 floorPosition(this.position.x,this.position.y+1)
-conio.Print("    ")
+conio.FWrite("   ",3)
     else
         if(this.stance == 2)
         then
 
             floorPosition(this.lastposition.x,this.lastposition.y)
-            conio.Print("    ")
+            conio.FWrite("    ",4)
             floorPosition(this.lastposition.x,this.lastposition.y+1)
-            conio.Print("    ")
+            conio.FWrite("    ",4)
             conio.SetColor(this.color)
             floorPosition(this.position.x,this.position.y)
-            conio.Print("    ")
+            conio.FWrite("   ",3)
+            conio.SetColor(this.darkcolor)
             floorPosition(this.position.x+1,this.position.y+1)
-            conio.Print("   ")
+            conio.FWrite("   ",3)
        
         else
     

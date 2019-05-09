@@ -16,6 +16,8 @@ height = tonumber(get_setting("height"))
 
 score = 0
 
+
+import("filesystem")
 require "image"
 
 
@@ -23,17 +25,15 @@ background = 0
 
 function RedrawImage()
 
+
+
 if background ~= 0
 then
 Image.release(background)
 end
 
 
-
 background = Image.new(math.floor(width),math.floor(height))
-
-
-
 for x = 0,width-1,1
 do
 
@@ -97,6 +97,8 @@ Image.set(background,39,7,112)
 
 end
 
+
+
 RedrawImage()
 
 require "bird"
@@ -111,10 +113,10 @@ import("system")
 difficulty = tonumber(get_setting("difficulty"))
 sounds = tonumber(get_setting("sounds"))
 local initialized = tonumber(get_setting("initialized"))
-local difficulties = {"Easy","Medium","Hard","Hardcore","Hell"}
-local speeds = {23000000,24000000,25000000,25000000,25000000}
+local difficulties = {"Noob","Easy","Medium","Hard","Hardcore","Hell"}
+local speeds = {30000000,25000000,20000000,18000000,16000000,15000000}
 
-import("filesystem")
+
 
 
 
@@ -154,6 +156,7 @@ local menu = Menu.new()
 
 Menu.PushOption(menu,"1 Player")
 Menu.PushOption(menu,"2 Players")
+Menu.PushOption(menu,"3 Players")
 Menu.PushOption(menu,"Stats")
 Menu.PushOption(menu,"Options")
 Menu.PushOption(menu,"Credits")
@@ -195,7 +198,8 @@ birds[0].velocity.x = 0.0
 birds[0].velocity.y = 0.0
 birds[0].speed.up = -1.5
 birds[0].speed.down = 0.6
-birds[0].color = tonumber(get_setting("bird0.color"))  
+birds[0].color = tonumber(get_setting("bird0.color"))
+birds[0].darkcolor = tonumber(get_setting("bird0.darkcolor"))    
 birds[0].key = 0x26
 
 birds[1] = Bird.new()
@@ -207,11 +211,54 @@ birds[1].velocity.x = 0.0
 birds[1].velocity.y = 0.0
 birds[1].speed.up = -1.5
 birds[1].speed.down = 0.6
-birds[1].color = tonumber(get_setting("bird1.color"))  
+birds[1].color = tonumber(get_setting("bird1.color"))
+birds[1].darkcolor = tonumber(get_setting("bird1.darkcolor"))    
 birds[1].key = 0x20
 end
 
 if game_mode == 2
+then
+birds[0] = Bird.new()
+birds[0].position.x = 30.0
+birds[0].position.y = 15.0
+birds[0].lastposition.x = birds[0].position.x
+birds[0].lastposition.y = birds[0].position.y
+birds[0].velocity.x = 0.0
+birds[0].velocity.y = 0.0
+birds[0].speed.up = -1.5
+birds[0].speed.down = 0.6
+birds[0].color = tonumber(get_setting("bird0.color"))
+birds[0].darkcolor = tonumber(get_setting("bird0.darkcolor"))    
+birds[0].key = 0x26
+
+birds[1] = Bird.new()
+birds[1].position.x = 20.0
+birds[1].position.y = 15.0
+birds[1].lastposition.x = birds[1].position.x
+birds[1].lastposition.y = birds[1].position.y
+birds[1].velocity.x = 0.0
+birds[1].velocity.y = 0.0
+birds[1].speed.up = -1.5
+birds[1].speed.down = 0.6
+birds[1].color = tonumber(get_setting("bird1.color"))
+birds[1].darkcolor = tonumber(get_setting("bird1.darkcolor"))    
+birds[1].key = 0x20
+
+birds[2] = Bird.new()
+birds[2].position.x = 10.0
+birds[2].position.y = 15.0
+birds[2].lastposition.x = birds[2].position.x
+birds[2].lastposition.y = birds[2].position.y
+birds[2].velocity.x = 0.0
+birds[2].velocity.y = 0.0
+birds[2].speed.up = -1.5
+birds[2].speed.down = 0.6
+birds[2].color = tonumber(get_setting("bird2.color"))
+birds[2].darkcolor = tonumber(get_setting("bird2.darkcolor"))    
+birds[2].key = 0x57
+end
+
+if game_mode == 3
 then
 
 PrintRecords()
@@ -231,7 +278,7 @@ end
 end
 end
 
-if game_mode == 3
+if game_mode == 4
 then
 
     conio.SetColor(15)
@@ -246,6 +293,7 @@ then
     Menu.SetItemReference(menu,refp)
     Menu.MakeItemSelectable(menu)
     Menu.SetDefault(menu,difficulty)
+    Menu.PushItem(menu,"Noob")
     Menu.PushItem(menu,"Easy")
     Menu.PushItem(menu,"Medium")
     Menu.PushItem(menu,"Hard")
@@ -287,10 +335,10 @@ then
 
 if refp ~= nil and refp ~= 0
 then
-difficulty = get(refp,0)
-sounds = get(refp+64,0)
-width = get(refp+128,0)+40
-height = get(refp+192,0)+40
+difficulty = get64(refp,0)
+sounds = get64(refp+64,0)
+width = get64(refp+128,0)+40
+height = get64(refp+192,0)+40
 free(refp)
 refp = nil
 end
@@ -302,27 +350,13 @@ RedrawImage()
 
 end
 
-if game_mode == 4
+if game_mode == 5
 then
 Credits()
-
-while(true)
-do
-if(win.KeyDown(0x1B) or win.KeyDown(0x0D))
-then
-    while (win.KeyDown(0x0D))
-do
-sleep(500000)
-end
-    conio.SetColor(15)
-    system.System("cls")
-    goto MENU
-end
+goto MENU
 end
 
-end
-
-if game_mode == 5
+if game_mode == 6
 then
 Image.release(background)
 conio.SetColor(15)
@@ -342,11 +376,11 @@ map.sizex = width
 map.sizey = height
 map.color = tonumber(get_setting("map.color"))
 map.border_color = tonumber(get_setting("map.border_color"))
-map.distance = 35 - (difficulty * 4)
-map.width = 5 - (difficulty)
-map.gap = 12 - difficulty
-map.min = 12 - difficulty
-map.max = height - 12 + difficulty
+map.distance = 40 - (difficulty * 4)
+map.width = 6 - (difficulty)
+map.gap = 15 - difficulty
+map.min = 15 - difficulty
+map.max = height - 15 + difficulty
 map.margin_top = 1
 
 Map.Initialize(map)
@@ -394,7 +428,18 @@ do
         goto MENU
     end
 
+if game_mode == 0
+then
+
+    if win.KeyDown(0x27) == false
+    then
     sleep(speeds[difficulty+1])
+    else
+    sleep(speeds[difficulty+1]/2) 
+    end
+else
+    sleep(speeds[difficulty+1])
+end
 end
 
 

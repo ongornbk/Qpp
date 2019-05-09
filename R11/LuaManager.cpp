@@ -255,10 +255,17 @@ static int32_t _cdecl _lua_set(lua_State* state)
 
 
 
-static int32_t _cdecl _lua_get(lua_State* state)
+static int32_t _cdecl _lua_get64(lua_State* state)
 {
 	lua_Integer* mem = (lua_Integer*)lua_tointeger(state, 1);
 	lua_pushinteger(state, mem[lua_tointeger(state, 2)]);
+	return 1;
+}
+
+static int32_t _cdecl _lua_get8(lua_State* state)
+{
+	char* mem = (char*)lua_tointeger(state, 1);
+	lua_pushinteger(state, (char)mem[lua_tointeger(state, 2)]);
 	return 1;
 }
 
@@ -293,6 +300,12 @@ static int32_t _cdecl _lua_pushsetting(lua_State* state)
 static int32_t _cdecl _lua_loadsettings(lua_State* state)
 {
 	lua_pushinteger(state, LoadSettings(lua_tostring(state, 1)));
+	return 1;
+}
+
+static int32_t _cdecl _lua_memcpy(lua_State* state)
+{
+	lua_pushinteger(state,(lua_Integer)memcpy((void*)lua_tointeger(state, 1), (void*)lua_tointeger(state, 2), (size_t)lua_tointeger(state, 3)));
 	return 1;
 }
 
@@ -379,7 +392,9 @@ bool _cdecl LuaManager::Initialize(const int argc, char* argv[])
 	lua_register(m_lua, "bzero", _lua_bzero);
 	lua_register(m_lua, "ptrs_size", _lua_ptrs_size);
 	lua_register(m_lua, "set", _lua_set);
-	lua_register(m_lua, "get", _lua_get);
+	lua_register(m_lua, "get8", _lua_get8);
+	lua_register(m_lua, "get64", _lua_get64);
+	lua_register(m_lua, "memcpy", _lua_memcpy);
 	lua_register(m_lua, "realloc", _lua_realloc);
 	lua_register(m_lua, "delete", _lua_delete);
 	lua_register(m_lua, "push_setting", _lua_pushsetting);

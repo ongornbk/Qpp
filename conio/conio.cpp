@@ -215,13 +215,20 @@ extern "C"
 		return 0;
 	}
 
-	constexpr long FOO_COUNT = 17;
+	static int32_t _cdecl _lua_fwrite(lua_State* state)
+	{
+		fwrite(lua_tostring(state, 1),sizeof(char),lua_tointeger(state,2),stdout);
+		return 0;
+	}
+
+	constexpr long FOO_COUNT = 18;
 
 	const char* sckeys[FOO_COUNT] = {
 		"Clear",
 		"DrawPixel",
 		"Endline",
 		"Fill",
+		"FWrite",
 		"Getch",
 		"GetCursorPosition",
 		"Getline",
@@ -241,6 +248,7 @@ extern "C"
 		_lua_drawpixel,
 		_lua_endline,
 		_lua_fill,
+		_lua_fwrite,
 		_lua_getch,
 		_lua_getcursorposition,
 		_lua_getline,

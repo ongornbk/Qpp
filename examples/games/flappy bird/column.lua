@@ -20,14 +20,14 @@ then
     do
         conio.Gotoxy(this.x+this.width,y)
         conio.SetColor(Image.get(background,this.x+this.width,y-map.margin_top))
-        conio.Print(" ")
+        conio.FWrite(" ",1)
     end
 
     for y = this.y + map.offset,map.sizey,1
     do
         conio.Gotoxy(this.x+this.width,y)
         conio.SetColor(Image.get(background,this.x+this.width,y-map.margin_top))
-        conio.Print(" ")
+        conio.FWrite(" ",1)
     end
 
 
@@ -41,11 +41,11 @@ do
     then
     conio.Gotoxy(this.x+this.width,y)
     conio.SetColor(Image.get(background,this.x+this.width-1,y-map.margin_top))
-    conio.Print(" ")
+    conio.FWrite(" ",1)
     end
     conio.Gotoxy(this.x,y)
     conio.SetColor(map.color)
-    conio.Print(" ")
+    conio.FWrite(" ",1)
 end
 
 for y = this.y + map.offset,map.sizey,1 -- Bottom Column
@@ -54,11 +54,11 @@ do
     then
     conio.Gotoxy(this.x+this.width,y)
     conio.SetColor(Image.get(background,this.x+this.width-1,y-map.margin_top))
-    conio.Print(" ")
+    conio.FWrite(" ",1)
     end
     conio.Gotoxy(this.x,y)
     conio.SetColor(map.color)
-    conio.Print(" ")
+    conio.FWrite(" ",1)
 end
 
 end

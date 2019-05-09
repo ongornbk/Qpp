@@ -3,69 +3,8 @@
 
 #include "stdafx.h"
 #include "filesystem.h"
-
-struct File
-{
-	File()
-	{
-	}
-
-	~File()
-	{
-
-	}
-
-	void open(const char* path, uint32_t mode = 3)
-	{
-		m_stream.open(path, mode);
-	}
-
-	void close()
-	{
-		if (m_stream.is_open())
-		{
-			m_stream.close();
-		}
-	}
-
-	bool is_open()
-	{
-		return m_stream.is_open();
-	}
-
-	std::string to_string()
-	{
-		std::stringstream ss;
-		if (m_stream.is_open())
-		{
-			while (m_stream.peek() != EOF)
-			{
-				ss << (char)m_stream.get();
-			}
-
-		}
-		else
-		{
-			MessageBoxA(NULL, "Error! File not opened!", "Error!", MB_OK);
-		}
-		return ss.str();
-	}
-
-	void append_string(std::string str)
-	{
-		if (m_stream.is_open())
-		{
-			m_stream << str;
-		}
-		else
-		{
-			MessageBoxA(NULL, "Error! File not opened!", "Error!", MB_OK);
-		}
-	}
-
-	std::fstream m_stream;
-
-};
+#include "TextFile.h"
+#include "BmpFile.h"
 
 namespace
 {
@@ -152,7 +91,7 @@ extern "C"
 	static int32_t _cdecl _lua_openappend(lua_State* state)
 	{
 
-		File* file = new File();
+		File* file = new TextFile();
 		file->open(lua_tostring(state, 1), std::ios::out | std::ios::in | std::ios::app);
 		if (file->is_open())
 		{
@@ -167,7 +106,7 @@ extern "C"
 
 	static int32_t _cdecl _lua_opentrunc(lua_State* state)
 	{
-		File* file = new File();
+		File* file = new TextFile();
 		file->open(lua_tostring(state, 1), std::ios::out | std::ios::in | std::ios::trunc);
 		if (file->is_open())
 		{
@@ -180,10 +119,10 @@ extern "C"
 		return 0;
 	}
 
-	static int32_t _cdecl _lua_open(lua_State* state)
+	static int32_t _cdecl _lua_openbmp(lua_State* state)
 	{
-		File* file = new File();
-		file->open(lua_tostring(state, 1), (uint32_t)lua_tointeger(state,2));
+		File* file = new BmpFile();
+		file->open(lua_tostring(state, 1),0);
 		if (file->is_open())
 		{
 			s_files.push(file);
@@ -224,7 +163,9 @@ extern "C"
 		}
 		else
 		{
-			str = s_files.top()->to_string();
+			TextFile* textFile = dynamic_cast<TextFile*>(s_files.top());
+			if(textFile)
+			str = textFile->to_string();
 		}
 		lua_pushstring(state, str.c_str());
 		return 1;
@@ -234,11 +175,13 @@ extern "C"
 	{
 		if (s_files.empty())
 		{
-			MessageBoxA(NULL, "Error! No files to load!", "Error!", MB_OK);
+			MessageBoxA(NULL, "Error! No files loaded!", "Error!", MB_OK);
 		}
 		else
 		{
-			s_files.top()->append_string(lua_tostring(state, 1));
+			TextFile* textFile = dynamic_cast<TextFile*>(s_files.top());
+			if (textFile)
+			textFile->append_string(lua_tostring(state, 1));
 		}
 		return 0;
 	}
@@ -251,15 +194,62 @@ extern "C"
 		return 0;
 	}
 
-	constexpr long FOO_COUNT = 10;
+	static int32_t _cdecl _lua_bmpread(lua_State* state)
+	{
+		BmpFile* bmp = dynamic_cast<BmpFile*>(s_files.top());
+		if (bmp)
+		{ 
+			char* data = (char*)malloc((size_t)lua_tointeger(state, 1));
+			bmp->read(data, (size_t)lua_tointeger(state, 1));
+			lua_pushinteger(state, (lua_Integer)data);
+			return 1;
+		}
+		lua_pushinteger(state, 0);
+		return 1;
+	}
+
+	static int32_t _cdecl _lua_getbmpheader(lua_State* state)
+	{
+		
+			if (s_files.empty())
+			{
+				MessageBoxA(NULL, "Error! No files loaded!", "Error!", MB_OK);
+			}
+			else
+			{
+				BmpFile* bmp = dynamic_cast<BmpFile*>(s_files.top());
+				if (bmp)
+				{
+					BITMAPFILEHEADER temp = bmp->get_header();
+					lua_pushinteger(state, (lua_Integer)temp.bfType);
+					lua_pushinteger(state, (lua_Integer)temp.bfSize);
+					lua_pushinteger(state, (lua_Integer)temp.bfReserved1);
+					lua_pushinteger(state, (lua_Integer)temp.bfReserved2);
+					lua_pushinteger(state, (lua_Integer)temp.bfOffBits);
+					return 5;
+				}
+				
+				
+			}
+			lua_pushinteger(state,0);
+			lua_pushinteger(state,0);
+			lua_pushinteger(state,0);
+			lua_pushinteger(state,0);
+			lua_pushinteger(state,0);
+		return 5;
+	}
+
+	constexpr long FOO_COUNT = 12;
 
 	const char* sckeys[FOO_COUNT] = {
 	"AppendString",
+	"BmpRead",
 	"Close",
 	"CopyFile",
+	"GetBmpHeader",
 	"Mkdir",
-	"Open",
 	"OpenAppend",
+	"OpenBmp",
 	"OpenTrunc",
 	"Remove",
 	"SetAttributes",
@@ -267,11 +257,13 @@ extern "C"
 	};
 	const lua_CFunction scfooes[FOO_COUNT] = {
 	_lua_appendstring,
+	_lua_bmpread,
 	_lua_close,
 	_lua_copyfile,
+	_lua_getbmpheader,
 	_lua_mkdir,
-	_lua_open,
 	_lua_openappend,
+	_lua_openbmp,
 	_lua_opentrunc,
 	_lua_removefile,
 	_lua_setattributes,
