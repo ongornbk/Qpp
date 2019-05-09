@@ -161,7 +161,7 @@ static int32_t _cdecl _lua_getcpu(lua_State* state)
 	GetProcessTimes(self, &ftime, &ftime, &fsys, &fuser);
 	memcpy(&sys, &fsys, sizeof(FILETIME));
 	memcpy(&user, &fuser, sizeof(FILETIME));
-	percent = (sys.QuadPart - lastSysCPU.QuadPart) +
+	percent = (float)(sys.QuadPart - lastSysCPU.QuadPart) +
 		(user.QuadPart - lastUserCPU.QuadPart);
 	percent /= (now.QuadPart - lastCPU.QuadPart);
 	percent /= numProcessors;
@@ -185,7 +185,7 @@ static int32_t _cdecl _lua_getcpu(lua_State* state)
 
 	sum = ceilf(sum * 100);
 
-	lua_pushinteger(state, sum);
+	lua_pushinteger(state, (lua_Integer)sum);
 	return 1;
 
 }
@@ -215,15 +215,18 @@ static int32_t _cdecl _lua_release(lua_State* state)
 
 static int32_t _cdecl _lua_malloc(lua_State* state)
 {
-	lua_pushinteger(state,(lua_Integer)malloc(lua_tointeger(state,1)));
+	lua_pushinteger(state,(lua_Integer)malloc(lua_tointeger(state,1)*64));
 	return 1;
 }
+
+
 
 static int32_t _cdecl _lua_free(lua_State* state)
 {
 	free((void*)lua_tointeger(state, 1));
 	return 0;
 }
+
 
 static int32_t _cdecl _lua_delete(lua_State* state)
 {
@@ -250,12 +253,15 @@ static int32_t _cdecl _lua_set(lua_State* state)
 	return 0;
 }
 
+
+
 static int32_t _cdecl _lua_get(lua_State* state)
 {
 	lua_Integer* mem = (lua_Integer*)lua_tointeger(state, 1);
 	lua_pushinteger(state, mem[lua_tointeger(state, 2)]);
 	return 1;
 }
+
 
 static int32_t _cdecl _lua_realloc(lua_State* state)
 {

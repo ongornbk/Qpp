@@ -10,7 +10,6 @@ function Map.new()
        sizex = 0,
        sizey = 0,
        color = 0,
-       default_color = 0,
        border_color = 0,
        velocity = {},
        width = 0,
@@ -37,36 +36,36 @@ function Map.Initialize(this)
 
     conio.SetColor(this.border_color)
 
-    for x = 0, this.sizex,1
+    for x = 0, this.sizex+1,1
     do
         conio.Gotoxy(x,0)
         conio.Print(" ")
-        conio.Gotoxy(x,this.sizey+1)
+        conio.Gotoxy(x,this.sizey+ this.margin_top)
         conio.Print(" ")
     end
 
-    for y = 0, this.sizey+1,1
+    for y = 0, this.sizey,1
     do
         conio.Gotoxy(0,y)
         conio.Print("  ")
-        conio.Gotoxy(this.sizex+1,y)
+        conio.Gotoxy(this.sizex,y + this.margin_top)
         conio.Print("  ")
     end
 
-    for x = 2, this.sizex,1
+    for x = 2, this.sizex-1,1
     do
-        for y = 1, this.sizey-1,1
+        for y = 0, this.sizey-1,1
     do
-        conio.Gotoxy(x,y)
+        conio.Gotoxy(x,y+this.margin_top)
         conio.SetColor(Image.get(background,x-1,y))
         conio.Print(" ")
 
     end
     end
 
-    for x = 2, this.sizex+this.width-4,1
+    for x = 2, this.sizex-3,1
     do
-        conio.Gotoxy(x,this.sizey)
+        conio.Gotoxy(x,this.sizey-1)
         conio.SetColor(Image.get(background,x,this.sizey-1))
         conio.Print(" ")
     end
@@ -100,7 +99,7 @@ do
 if this.matrix[x].rendering == true
 then
 
-column.Draw(this.matrix[x],this.color,this.default_color,this.offset,this.sizey,this.margin_top)
+column.Draw(this.matrix[x],this)
 
 
 end

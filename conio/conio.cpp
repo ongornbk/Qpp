@@ -206,7 +206,16 @@ extern "C"
 		return 0;
 	}
 
-	constexpr long FOO_COUNT = 16;
+	static int32_t _cdecl _lua_showcursor(lua_State* state)
+	{
+		CONSOLE_CURSOR_INFO     cursorInfo;
+		GetConsoleCursorInfo(HandleOut, &cursorInfo);
+		cursorInfo.bVisible = lua_toboolean(state,1);
+		SetConsoleCursorInfo(HandleOut, &cursorInfo);
+		return 0;
+	}
+
+	constexpr long FOO_COUNT = 17;
 
 	const char* sckeys[FOO_COUNT] = {
 		"Clear",
@@ -224,7 +233,8 @@ extern "C"
 		"Printf",
 		"Println",
 		"SetColor",
-		"SetTitle"
+		"SetTitle",
+		"ShowCursor"
 	};
 	const lua_CFunction scfooes[FOO_COUNT] = {
 		_lua_cls,
@@ -242,7 +252,8 @@ extern "C"
 		_lua_printf,
 		_lua_println,
 		_lua_setcolor,
-		_lua_setconsoletitle
+		_lua_setconsoletitle,
+		_lua_showcursor
 	};
 
 	long foo_count(const long arg)

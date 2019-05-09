@@ -7,7 +7,7 @@ return
     size = 0,
     capacity = 2,
     element_size = 8,
-    data = malloc(16)
+    data = malloc(2)
 }
 end
 

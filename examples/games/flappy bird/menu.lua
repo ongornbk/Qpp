@@ -50,6 +50,8 @@ end
 if pointer > 0
 then
 conio.Gotoxy(string.len(this.options[pointer].name),pointer)
+MenuItem.DrawPtr(this.options[pointer])
+conio.Gotoxy(string.len(this.options[pointer].name),pointer)
 MenuItem.Clean(this.options[pointer])
 pointer = pointer - 1
 end
@@ -65,6 +67,8 @@ end
 
 if pointer < this.size - 1
 then
+conio.Gotoxy(string.len(this.options[pointer].name),pointer)
+MenuItem.DrawPtr(this.options[pointer])
 conio.Gotoxy(string.len(this.options[pointer].name),pointer)
 MenuItem.Clean(this.options[pointer])
 pointer = pointer + 1

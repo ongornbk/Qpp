@@ -11,7 +11,8 @@ size = 0,
 ptr = " <--",
 cls = "    ",
 selectable = false,
-selection = 0
+selection = 0,
+selected = false
 }
 end
 
@@ -19,18 +20,23 @@ function MenuItem.release(this)
 this.items = nil
 end
 
-function MenuItem.Draw(this)
+function MenuItem.Draw(this,selected)
 if this.selectable == true
 then
-    conio.Println(this.name .. this.ptr .. "         ")
+    conio.Println(this.name  .. this.ptr  .. "         ")
 else
     conio.Println(this.name .. "          ")
 end
 end
 
 function MenuItem.DrawPtr(this)
-
+    if this.selectable == true and this.selected == true
+    then
+        conio.Print("[" .. this.ptr .. "]       ") 
+    else
 conio.Print(this.ptr .. "        ")
+    end
+    this.selected = false
 end
 
 function MenuItem.Clean(this)
@@ -41,7 +47,7 @@ conio.Print(this.cls)
 end
 
 function MenuItem.Select(this)
-    
+    this.selected = true
     if this.selectable == true
     then
 this.ptr = this.items[this.selection]

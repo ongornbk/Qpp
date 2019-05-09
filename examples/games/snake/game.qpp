@@ -2,8 +2,6 @@ import_as("conio","con")
 con.SetTitle("Snake!")
 
 require "map"
-require "snake_blue"
-require "snake_red"
 require "snake_class"
 
 map.Begin()

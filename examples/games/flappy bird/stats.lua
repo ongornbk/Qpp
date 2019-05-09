@@ -30,6 +30,7 @@ local sqlite = sql.Open("stats.db")
 
 conio.Gotoxy(0,0)
 system.System("cls")
+conio.SetColor(11)
 
 conio.Println("Stats:")
 

@@ -1,7 +1,9 @@
 load_settings("settings.ini")
+load_settings("styles.ini")
 
 import("conio")
 conio.SetTitle("Flappy Bird")
+conio.ShowCursor(false)
 
 import_as("windows","win")
 
@@ -9,8 +11,8 @@ function floorPosition(x,y)
 conio.Gotoxy(math.floor(x),math.floor(y))
 end
 
-width = get_setting("width")
-height = get_setting("height")
+width = tonumber(get_setting("width"))
+height = tonumber(get_setting("height"))
 
 score = 0
 
@@ -26,19 +28,23 @@ then
 Image.release(background)
 end
 
-background = Image.new(width,height)
 
-for x = 1,width,1
+
+background = Image.new(math.floor(width),math.floor(height))
+
+
+
+for x = 0,width-1,1
 do
 
-    for y = 1,height,1
+    for y = 0,height-1,1
     do
     Image.set(background,x,y,177)
     end
 
 end
 
-for x = 1,width,1
+for x = 0,width-1,1
 do
 
     for y = 30+(x%3)+math.random(0,1),height-1,1
@@ -48,9 +54,9 @@ do
 
 end
 
-for y = 0,width,1
+for y = 0,width-1,1
 do
-    --Image.set(background,82,y,99)
+    Image.set(background,82,y,99)
     Image.set(background,width,y,99)
     Image.set(background,width-1,y,99)
 end
@@ -106,7 +112,7 @@ difficulty = tonumber(get_setting("difficulty"))
 sounds = tonumber(get_setting("sounds"))
 local initialized = tonumber(get_setting("initialized"))
 local difficulties = {"Easy","Medium","Hard","Hardcore","Hell"}
-local speeds = {23000000,21000000,20000000,18000000,15000000}
+local speeds = {23000000,24000000,25000000,25000000,25000000}
 
 import("filesystem")
 
@@ -173,7 +179,7 @@ birds[0].velocity.x = 0.0
 birds[0].velocity.y = 0.0
 birds[0].speed.up = -1.5
 birds[0].speed.down = 0.6
-birds[0].color = 144
+birds[0].color = tonumber(get_setting("bird0.color"))
 birds[0].key = 0x26
 birds[0].alt = 0x20
 end
@@ -189,7 +195,7 @@ birds[0].velocity.x = 0.0
 birds[0].velocity.y = 0.0
 birds[0].speed.up = -1.5
 birds[0].speed.down = 0.6
-birds[0].color = 144  
+birds[0].color = tonumber(get_setting("bird0.color"))  
 birds[0].key = 0x26
 
 birds[1] = Bird.new()
@@ -201,7 +207,7 @@ birds[1].velocity.x = 0.0
 birds[1].velocity.y = 0.0
 birds[1].speed.up = -1.5
 birds[1].speed.down = 0.6
-birds[1].color = 192  
+birds[1].color = tonumber(get_setting("bird1.color"))  
 birds[1].key = 0x20
 end
 
@@ -232,7 +238,7 @@ then
     system.System("cls")
 
     local exitcode = 0
-    local refp = malloc(256)
+    local refp = malloc(4)
 
     menu = Menu.new()
 
@@ -334,9 +340,8 @@ local map = Map.new()
 
 map.sizex = width
 map.sizey = height
-map.color = 23
-map.default_color = 0
-map.border_color = 99
+map.color = tonumber(get_setting("map.color"))
+map.border_color = tonumber(get_setting("map.border_color"))
 map.distance = 35 - (difficulty * 4)
 map.width = 5 - (difficulty)
 map.gap = 12 - difficulty
@@ -380,6 +385,8 @@ do
 
     if(win.KeyDown(0x1B))
     then
+        InsertRecord(score,difficulties[difficulty + 1])
+        score = 0
         birds = nil
         map = nil
         conio.SetColor(15)
