@@ -15,6 +15,7 @@
 #include <lualib.h>
 #include <lauxlib.h>
 #include <unordered_map>
+#include <ctime>
 #include <sal.h>
 
 #if _WIN64 

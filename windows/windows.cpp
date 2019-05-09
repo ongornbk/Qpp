@@ -4,7 +4,7 @@
 #include "stdafx.h"
 #include "windows.h"
 #include "window.h"
-
+#include "time.h"
 
 namespace
 {
@@ -255,6 +255,12 @@ extern "C"
 		p.y = (long)lua_tointeger(state, 3);
 		ClientToScreen((HWND)lua_tointeger(state,1), &p);
 		return 0;
+	}
+	
+	static int32_t _cdecl _lua_gettime(lua_State* state)//todo
+	{
+		//Time t;
+		//lua_pushinteger(state,t.)
 	}
 
 	static int32_t _cdecl _lua_registerhotkey(lua_State* state)

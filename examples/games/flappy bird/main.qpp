@@ -97,18 +97,31 @@ require "bird"
 require "map"
 require "menu"
 require "credits"
+require "stats"
 
 import("winmm")
 import("system")
 
 difficulty = tonumber(get_setting("difficulty"))
 sounds = tonumber(get_setting("sounds"))
+local initialized = tonumber(get_setting("initialized"))
 local difficulties = {"Easy","Medium","Hard","Hardcore","Hell"}
 local speeds = {23000000,21000000,20000000,18000000,15000000}
 
+import("filesystem")
+
+
+
+
+
+
+if initialized == 0
+then
+    Initialize(initialized)
+    initialized = 1
+end
 
 function saveSettings()
-    import("filesystem")
     
     filesystem.Remove("settings.ini")
     
@@ -120,7 +133,9 @@ function saveSettings()
     
     filesystem.AppendString("difficulty " .. tostring(difficulty) .. "\n")
 
-    filesystem.AppendString("sounds " .. tostring(sounds))
+    filesystem.AppendString("sounds " .. tostring(sounds) .. "\n")
+
+    filesystem.AppendString("initialized " .. tostring(initialized))
 
     filesystem.Close()
     
@@ -192,10 +207,8 @@ end
 
 if game_mode == 2
 then
-    conio.Gotoxy(0,0)
-    conio.SetColor(15)
-    system.System("cls")
-conio.Println("In development!")
+
+PrintRecords()
 
 while(true)
 do
@@ -350,8 +363,10 @@ do
     do
         if(Map.CheckCollision(map,birds[i]) == true)
     then
+        InsertRecord(score,difficulties[difficulty + 1])
         score = 0
         running = false
+        
     end
     end
 
