@@ -114,7 +114,7 @@ difficulty = tonumber(get_setting("difficulty"))
 sounds = tonumber(get_setting("sounds"))
 local initialized = tonumber(get_setting("initialized"))
 local difficulties = {"Noob","Easy","Medium","Hard","Hardcore","Hell"}
-local speeds = {30000000,25000000,20000000,18000000,16000000,15000000}
+local speeds = {30000000,25000000,20000000,18000000,16000000,18500000}
 
 
 
@@ -123,11 +123,7 @@ local speeds = {30000000,25000000,20000000,18000000,16000000,15000000}
 
 
 
-if initialized == 0
-then
-    Initialize(initialized)
-    initialized = 1
-end
+
 
 function saveSettings()
     
@@ -149,6 +145,13 @@ function saveSettings()
     
     end
 
+    if initialized == 0
+then
+    Initialize(initialized)
+    initialized = 1
+    saveSettings()
+end
+
 ::MENU::
 
 
@@ -162,7 +165,7 @@ Menu.PushOption(menu,"Options")
 Menu.PushOption(menu,"Credits")
 Menu.PushOption(menu,"Exit")
 
-local game_mode = Menu.Select(menu)
+local game_mode = Menu.Select(menu) -- also number of players
 
 menu = nil
 
@@ -293,32 +296,60 @@ then
     Menu.SetItemReference(menu,refp)
     Menu.MakeItemSelectable(menu)
     Menu.SetDefault(menu,difficulty)
-    Menu.PushItem(menu,"Noob")
-    Menu.PushItem(menu,"Easy")
-    Menu.PushItem(menu,"Medium")
-    Menu.PushItem(menu,"Hard")
-    Menu.PushItem(menu,"Hardcore")
-    Menu.PushItem(menu,"Hell")
+    Menu.PushColoredItem(menu,"Noob",10)
+    Menu.PushColoredItem(menu,"Easy",10)
+    Menu.PushColoredItem(menu,"Medium",14)
+    Menu.PushColoredItem(menu,"Hard",14)
+    Menu.PushColoredItem(menu,"Hardcore",12)
+    Menu.PushColoredItem(menu,"Hell",12)
     Menu.PushOption(menu,"Sounds: ")
     Menu.SetItemReference(menu,refp+64)
     Menu.MakeItemSelectable(menu)
     Menu.SetDefault(menu,sounds)
-    Menu.PushItem(menu,"Off")
-    Menu.PushItem(menu,"On")
+    Menu.PushColoredItem(menu,"Off",12)
+    Menu.PushColoredItem(menu,"On",10)
     Menu.PushOption(menu,"Width: ")
     Menu.SetItemReference(menu,refp+128)
-    for i = 40,160,1
+
+    for i = 40,59,1
     do
-    Menu.PushItem(menu,tostring(i))
+    Menu.PushColoredItem(menu,tostring(i),14)
     end
+
+    for i = 60,99,1
+    do
+    Menu.PushColoredItem(menu,tostring(i),10)
+    end
+
+    for i = 100,119,1
+    do
+    Menu.PushColoredItem(menu,tostring(i),14)
+    end
+
+    for i = 120,160,1
+    do
+    Menu.PushColoredItem(menu,tostring(i),12)
+    end
+
     Menu.MakeItemSelectable(menu)
     Menu.SetDefault(menu,width - 40)
     Menu.PushOption(menu,"Height: ")
     Menu.SetItemReference(menu,refp+192)
-    for i = 40,60,1
+    for i = 40,49,1
     do
-    Menu.PushItem(menu,tostring(i))
+    Menu.PushColoredItem(menu,tostring(i),10)
     end
+
+    for i = 50,54,1
+    do
+    Menu.PushColoredItem(menu,tostring(i),14)
+    end
+
+    for i = 55,60,1
+    do
+    Menu.PushColoredItem(menu,tostring(i),12)
+    end
+
     Menu.MakeItemSelectable(menu)
     Menu.SetDefault(menu,height - 40)
    
@@ -402,7 +433,7 @@ do
     do
         if(Map.CheckCollision(map,birds[i]) == true)
     then
-        InsertRecord(score,difficulties[difficulty + 1])
+        InsertRecord(score,difficulties[difficulty + 1],game_mode)
         score = 0
         running = false
         
@@ -417,9 +448,9 @@ do
         Bird.Draw(birds[i])
     end
 
-    if(win.KeyDown(0x1B))
+    if(win.KeyDown(0x1B) and running == true)
     then
-        InsertRecord(score,difficulties[difficulty + 1])
+        InsertRecord(score,difficulties[difficulty + 1],game_mode)
         score = 0
         birds = nil
         map = nil

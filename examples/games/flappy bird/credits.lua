@@ -1,5 +1,9 @@
 local style = tonumber(get_setting("credits.color"))
 
+local velocity = 1
+
+local offset = 0
+
 function Credits()
 
 local guard = true
@@ -8,11 +12,14 @@ system.System("cls")
 
     while guard == true
     do
+	 conio.Gotoxy(0,offset)
+	conio.SetColor(15)
+	conio.FWrite("                                                                                ",80)
         conio.SetColor(11)
-        local string_style = " style: " .. style .. " "
-        conio.Gotoxy(40- string.len(string_style,0))
+        local string_style = "style: " .. style
+        conio.Gotoxy(40- string.len(string_style,offset))
         conio.Print(string_style)
-        conio.Gotoxy(0,1)
+        conio.Gotoxy(0,offset+1)
         conio.SetColor(style)
      conio.FWrite(" __       __                  __                  _______                       \n",81)
      conio.FWrite("|  \\     /  \\                |  \\                |       \\                      \n",81)
@@ -38,6 +45,9 @@ system.System("cls")
      conio.FWrite("                    |  \\__| $$                                                  \n",81)
      conio.FWrite("                     \\$$    $$                                                  \n",81)
      conio.FWrite("                      \\$$$$$$                                                   \n",81)
+	 conio.SetColor(15)
+	 conio.FWrite("                                                                                ",80)
+
 
      if(win.KeyDown(0x25))
      then
@@ -77,6 +87,23 @@ system.System("cls")
         system.System("cls")
         guard = false
     end
+	
+		sleep(50000000)
+	    offset = offset + velocity
+		
+		if offset > 20
+		then
+		velocity = -1
+		else
+		if offset < 1
+		then
+		velocity = 1
+		end
+		end
+		
+	
     end
+	
+
     
 end

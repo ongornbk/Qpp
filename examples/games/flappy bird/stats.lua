@@ -4,7 +4,7 @@ function Initialize()
 
     local sqlite = sql.Open("stats.db")
 
-    sql.Exec(sqlite,"create table stats (Score smallint, Difficulty varchar(30), Date datetime)")
+    sql.Exec(sqlite,"create table stats (Score smallint,Players smallint, Difficulty varchar(30), Date datetime)")
     
     sql.Close(sqlite)
 
@@ -12,11 +12,16 @@ function Initialize()
 
 end
 
-function InsertRecord(score,diff)
+function InsertRecord(score,diff,players)
+
+    if score < 10
+    then
+        return 
+    end
 
     local sqlite = sql.Open("stats.db")
 
-    sql.Exec(sqlite,"insert into stats (Score, Difficulty, Date) values (" .. score ..", '" .. diff .."', datetime('now'))")
+    sql.Exec(sqlite,"insert into stats (Score,Players, Difficulty, Date) values (" .. score .. "," .. players + 1 ..",'" .. diff .."', datetime('now'))")
     
     sql.Close(sqlite)
 

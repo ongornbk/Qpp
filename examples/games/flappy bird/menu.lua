@@ -127,6 +127,10 @@ function Menu.PushItem(this,item)
 MenuItem.PushItem(this.options[this.size-1],item)
 end
 
+function Menu.PushColoredItem(this,item,color)
+    MenuItem.PushColoredItem(this.options[this.size-1],item,color)
+    end
+
 function Menu.SetDefault(this,ptr)
 this.options[this.size-1].selection = ptr
 end

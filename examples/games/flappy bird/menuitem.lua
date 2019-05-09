@@ -12,7 +12,8 @@ ptr = " <--",
 cls = "    ",
 selectable = false,
 selection = 0,
-selected = false
+selected = false,
+colors = {}
 }
 end
 
@@ -32,7 +33,11 @@ end
 function MenuItem.DrawPtr(this)
     if this.selectable == true and this.selected == true
     then
-        conio.Print("[" .. this.ptr .. "]       ") 
+        conio.Print("[")
+        conio.SetColor(this.colors[this.selection])
+        conio.Print(this.ptr)
+        conio.SetColor(15)
+        conio.Print("]       ") 
     else
 conio.Print(this.ptr .. "        ")
     end
@@ -61,6 +66,14 @@ end
 
 function MenuItem.PushItem(this,item)
     this.items[this.size] = item
+    this.colors[this.size] = 15
+    this.size = this.size + 1
+    
+end
+
+function MenuItem.PushColoredItem(this,item,color)
+    this.items[this.size] = item
+    this.colors[this.size] = color
     this.size = this.size + 1
 end
 
