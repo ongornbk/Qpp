@@ -64,6 +64,30 @@ static int32_t _cdecl _lua_import(lua_State* state)
 	return 0;
 }
 
+static int32_t _cdecl _lua_import_managed(lua_State* state)
+{
+	std::string pckpath = lua_tostring(state, 1);
+	std::string pckname;
+	size_t off = pckpath.find_last_of("/\\");
+	if (off != pckpath.npos)
+		pckname = pckpath.substr(off + 1);
+	else
+		pckname = pckpath;
+
+	//m_instance->m_pcks[pckname] = new LuaPackage(state, pckpath, pckname);
+
+	try
+	{
+		//m_instance->m_pcks[pckname]->initialize();
+	}
+	catch (std::exception exception)
+	{
+		MessageBoxA(NULL, exception.what(), "Dll Error", MB_OK);
+		return 0;
+	}
+	return 0;
+}
+
 static int32_t _cdecl _lua_import_as(lua_State* state)
 {
 	std::string pckpath = lua_tostring(state, 1);

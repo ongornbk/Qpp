@@ -22,6 +22,15 @@
     <Filter Include="Packages\Source">
       <UniqueIdentifier>{1d06c626-b830-4fec-b770-c48ad72dee15}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Package">
+      <UniqueIdentifier>{d851b684-c609-40c7-90d9-40809b1462a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Package\ManagedPackage">
+      <UniqueIdentifier>{ff39413e-1ad8-4b26-9912-0932aeab7df7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Package\UnmanagedPackage">
+      <UniqueIdentifier>{db1c5910-ac70-4770-b44d-fb59a8bb0357}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -54,12 +63,6 @@
     <ClInclude Include="XML.h">
       <Filter>Packages\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Collector.h">
-      <Filter>Packages\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="GdiPlus.h">
-      <Filter>Packages\Headers</Filter>
-    </ClInclude>
     <ClInclude Include="Network.h">
       <Filter>Packages\Headers</Filter>
     </ClInclude>
@@ -80,6 +83,12 @@
     </ClInclude>
     <ClInclude Include="PointersManager.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IPackage.h">
+      <Filter>Package</Filter>
+    </ClInclude>
+    <ClInclude Include="UnmanagedPackage.h">
+      <Filter>Package\UnmanagedPackage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -118,6 +127,12 @@
     </ClCompile>
     <ClCompile Include="PointersManager.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IPackage.cpp">
+      <Filter>Package</Filter>
+    </ClCompile>
+    <ClCompile Include="UnmanagedPackage.cpp">
+      <Filter>Package\UnmanagedPackage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

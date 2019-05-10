@@ -6,14 +6,7 @@
 #include "Settings.h"
 #include "PointersManager.h"
 
-extern "C"
-{
-	struct cpair
-	{
-		const char* key;
-		lua_CFunction value;
-	};
-}
+
 
 typedef long(__stdcall * package_start_close_count_function)(void* ptrs);
 typedef cpair(__stdcall * package_get_foo_function)(const long index);
