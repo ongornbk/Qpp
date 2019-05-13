@@ -20,6 +20,7 @@ public:
 	explicit String(const double);
 
 	std::string get_string() const noexcept;
+	std::string get_extension() const noexcept;
 	const char* c_str() const noexcept;
 
 	size_t length() const noexcept;

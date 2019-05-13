@@ -288,6 +288,12 @@ extern "C"
 		return true;
 	}
 
+	static int32_t _cdecl _lua_releasedc(lua_State* state)
+	{
+	lua_pushinteger(state,ReleaseDC((HWND)lua_tointeger(state,1), (HDC)lua_tointeger(state,2)));
+	return 0;
+	}
+
 	
 
 	static int32_t _cdecl _lua_enumwindows(lua_State* state)
@@ -301,6 +307,18 @@ extern "C"
 
 		delete cp;
 		return 1;
+	}
+
+	static int32_t _cdecl _lua_findwindow(lua_State* state)
+	{
+	lua_pushinteger(state,(lua_Integer)::FindWindowExA(0,0, lua_tostring(state, 1),lua_tostring(state,2)));
+	return 1;
+	}
+
+	static int32_t _cdecl _lua_hidemenu(lua_State* state)
+	{
+	SetMenu((HWND)lua_tointeger(state,1),NULL);
+	return 0;
 	}
 
 	static int32_t _cdecl _lua_registerevent(lua_State* state)
@@ -353,7 +371,7 @@ extern "C"
 	return 0;
 }
 
-	constexpr long FOO_COUNT = 37;
+	constexpr long FOO_COUNT = 40;
 
 	const char* sckeys[FOO_COUNT] = {
 		"BlockInput",
@@ -363,6 +381,7 @@ extern "C"
 		"DestroyWindow",
 		"DispatchMessage",
 		"EnumWindows",
+		"Find",
 		"GetClassName",
 		"GetDesktop",
 		"GetForeground",
@@ -372,6 +391,7 @@ extern "C"
 		"GetRect",
 		"GetScreenMetrics",
 		"GetWindowHandle",
+		"HideMenu",
 		"InvalidateRect",
 		"KeyDown",
 		"KeyPressed",
@@ -382,6 +402,7 @@ extern "C"
 		"Proc",
 		"RegisterEvent",
 		"RegisterHotkey",
+		"ReleaseDC",
 		"RetrieveMessage",
 		"SendMessage",
 		"SetActive",
@@ -402,6 +423,7 @@ extern "C"
 		_lua_destroywindow,
 		_lua_dispatchmessage,
 		_lua_enumwindows,
+		_lua_findwindow,
 		_lua_getclassname,
 		_lua_getdesktop,
 		_lua_getforegroundwindow,
@@ -411,6 +433,7 @@ extern "C"
 		_lua_getrect,
 		_lua_getscreenmetrics,
 		_lua_getwindowhandle,
+		_lua_hidemenu,
 		_lua_invalidaterect,
 		_lua_keydown,
 		_lua_keypressed,
@@ -421,6 +444,7 @@ extern "C"
 		_lua_proc,
 		_lua_registerevent,
 		_lua_registerhotkey,
+		_lua_releasedc,
 		_lua_retrievemessage,
 		_lua_sendmessage,
 		_lua_setactive,

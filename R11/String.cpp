@@ -68,6 +68,15 @@ std::string String::get_string() const noexcept
 	return text;
 }
 
+std::string String::get_extension() const noexcept
+{
+		size_t i = text.rfind('.', text.length());
+		if (i != std::string::npos) {
+			return(text.substr(i + 1, text.length() - i));
+		}
+		return("");
+}
+
 const char* String::c_str() const noexcept
 {
 	return text.c_str();

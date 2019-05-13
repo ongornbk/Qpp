@@ -22,15 +22,6 @@
     <Filter Include="Packages\Source">
       <UniqueIdentifier>{1d06c626-b830-4fec-b770-c48ad72dee15}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Package">
-      <UniqueIdentifier>{d851b684-c609-40c7-90d9-40809b1462a7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Package\ManagedPackage">
-      <UniqueIdentifier>{ff39413e-1ad8-4b26-9912-0932aeab7df7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Package\UnmanagedPackage">
-      <UniqueIdentifier>{db1c5910-ac70-4770-b44d-fb59a8bb0357}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -39,34 +30,10 @@
     <ClInclude Include="LuaManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Package.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PackageMap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="luaH.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Windows.h">
-      <Filter>Packages\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Input.h">
-      <Filter>Packages\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectInput.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="XML.h">
-      <Filter>Packages\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Network.h">
-      <Filter>Packages\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Enet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LuaPackage.h">
@@ -81,15 +48,6 @@
     <ClInclude Include="String.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PointersManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IPackage.h">
-      <Filter>Package</Filter>
-    </ClInclude>
-    <ClInclude Include="UnmanagedPackage.h">
-      <Filter>Package\UnmanagedPackage</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -101,22 +59,7 @@
     <ClCompile Include="LuaManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DirectInput.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Input.cpp">
-      <Filter>Packages\Source</Filter>
-    </ClCompile>
     <ClCompile Include="Windows.cpp">
-      <Filter>Packages\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="XML.cpp">
-      <Filter>Packages\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Collector.cpp">
-      <Filter>Packages\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Network.cpp">
       <Filter>Packages\Source</Filter>
     </ClCompile>
     <ClCompile Include="Settings.cpp">
@@ -124,15 +67,6 @@
     </ClCompile>
     <ClCompile Include="String.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PointersManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="IPackage.cpp">
-      <Filter>Package</Filter>
-    </ClCompile>
-    <ClCompile Include="UnmanagedPackage.cpp">
-      <Filter>Package\UnmanagedPackage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -11,9 +11,9 @@ struct Pair
 
 	}
 
-	Pair(A a) : first(a) {}
+	constexpr Pair(A a) : first(a) {}
 
-	Pair(A a, B b) : first(a), second(b) {}
+	constexpr Pair(A a, B b) : first(a), second(b) {}
 
 	~Pair()
 	{

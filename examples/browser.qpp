@@ -1,5 +1,0 @@
-import("conio")
-set_urloutput("result.html")
-local result = download("www.github.com")
-conio.Println(tostring(result))
-conio.Pause()

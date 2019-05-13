@@ -157,46 +157,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="DirectInput.h" />
-    <ClInclude Include="Enet.h" />
-    <ClInclude Include="Input.h" />
-    <ClInclude Include="IPackage.h" />
     <ClInclude Include="luaH.h" />
     <ClInclude Include="LuaManager.h" />
     <ClInclude Include="LuaPackage.h" />
-    <ClInclude Include="Network.h" />
-    <ClInclude Include="Package.h" />
-    <ClInclude Include="PackageMap.h" />
     <ClInclude Include="Pair.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="PointersManager.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="String.h" />
-    <ClInclude Include="UnmanagedPackage.h" />
-    <ClInclude Include="Windows.h" />
-    <ClInclude Include="XML.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Collector.cpp" />
-    <ClCompile Include="DirectInput.cpp" />
-    <ClCompile Include="Input.cpp" />
-    <ClCompile Include="IPackage.cpp" />
     <ClCompile Include="LuaManager.cpp" />
-    <ClCompile Include="Network.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="PointersManager.cpp" />
     <ClCompile Include="R11.cpp" />
     <ClCompile Include="Settings.cpp" />
     <ClCompile Include="String.cpp" />
-    <ClCompile Include="UnmanagedPackage.cpp" />
     <ClCompile Include="Windows.cpp" />
-    <ClCompile Include="XML.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="test.qpp">

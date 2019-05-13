@@ -263,13 +263,7 @@
 
 
 //
-//static int32_t _cdecl __FindWindow(lua_State* state)
-//{
-//	//m_pickedWindow = ::FindWindowExA(0,0, lua_tostring(state, 1),lua_tostring(state,2));
-//	if (m_pickedWindow)lua_pushboolean(state, true);
-//	else lua_pushboolean(state, false);
-//	return 1;
-//}
+
 //
 
 //
@@ -314,19 +308,11 @@
 //	return 1;
 //}
 //
-//static int32_t _cdecl _HideMenu(lua_State* state)
-//{
-//	//SetMenu(m_pickedWindow,NULL);
-//	return 0;
-//}
+
 //
 
 //
-//static int32_t _cdecl _ReleaseDC(lua_State* state)
-//{
-////	ReleaseDC(m_pickedWindow, m_pickedDC);
-//	return 0;
-//}
+
 //
 //static int32_t _cdecl _SetPixel(lua_State* state)
 //{

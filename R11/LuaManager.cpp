@@ -55,30 +55,7 @@ static int32_t _cdecl _lua_import(lua_State* state)
 	try
 	{
 		m_instance->m_pcks[pckname]->initialize();
-	}
-	catch (std::exception exception)
-	{
-		MessageBoxA(NULL, exception.what(), "Dll Error", MB_OK);
-		return 0;
-	}
-	return 0;
-}
 
-static int32_t _cdecl _lua_import_managed(lua_State* state)
-{
-	std::string pckpath = lua_tostring(state, 1);
-	std::string pckname;
-	size_t off = pckpath.find_last_of("/\\");
-	if (off != pckpath.npos)
-		pckname = pckpath.substr(off + 1);
-	else
-		pckname = pckpath;
-
-	//m_instance->m_pcks[pckname] = new LuaPackage(state, pckpath, pckname);
-
-	try
-	{
-		//m_instance->m_pcks[pckname]->initialize();
 	}
 	catch (std::exception exception)
 	{
@@ -231,12 +208,6 @@ static int32_t _cdecl _lua_execute(lua_State* state)
 	return 1;
 }
 
-static int32_t _cdecl _lua_release(lua_State* state)
-{
-	lua_pushboolean(state, release_ptr(lua_tointeger(state, 1)));
-	return 1;
-}
-
 static int32_t _cdecl _lua_malloc(lua_State* state)
 {
 	lua_pushinteger(state,(lua_Integer)malloc(lua_tointeger(state,1)*64));
@@ -264,12 +235,6 @@ static int32_t _cdecl _lua_bzero(lua_State* state)
 	return 0;
 }
 
-static int32_t _cdecl _lua_ptrs_size(lua_State* state)
-{
-	lua_pushinteger(state, ptrs_size());
-	return 1;
-}
-
 static int32_t _cdecl _lua_set(lua_State* state)
 {
 	lua_Integer* mem = (lua_Integer*)lua_tointeger(state, 1);
@@ -279,17 +244,10 @@ static int32_t _cdecl _lua_set(lua_State* state)
 
 
 
-static int32_t _cdecl _lua_get64(lua_State* state)
+static int32_t _cdecl _lua_get(lua_State* state)
 {
 	lua_Integer* mem = (lua_Integer*)lua_tointeger(state, 1);
 	lua_pushinteger(state, mem[lua_tointeger(state, 2)]);
-	return 1;
-}
-
-static int32_t _cdecl _lua_get8(lua_State* state)
-{
-	char* mem = (char*)lua_tointeger(state, 1);
-	lua_pushinteger(state, (char)mem[lua_tointeger(state, 2)]);
 	return 1;
 }
 
@@ -327,12 +285,6 @@ static int32_t _cdecl _lua_loadsettings(lua_State* state)
 	return 1;
 }
 
-static int32_t _cdecl _lua_memcpy(lua_State* state)
-{
-	lua_pushinteger(state,(lua_Integer)memcpy((void*)lua_tointeger(state, 1), (void*)lua_tointeger(state, 2), (size_t)lua_tointeger(state, 3)));
-	return 1;
-}
-
 Urlmon::Urlmon()
 {
 	std::string urlmonpath = GetSetting("DefaultLibrariesLocation").get_string() + "/urlmon.dll";
@@ -356,7 +308,6 @@ LuaManager::LuaManager()
 {
 	m_instance = this;
 	m_lua = nullptr;
-	m_ptrs = new PointersManager();
 }
 
 LuaManager::~LuaManager()
@@ -373,12 +324,6 @@ LuaManager::~LuaManager()
 		}
 	}
 	m_pcks.clear();
-
-	if (m_ptrs)
-	{
-		delete m_ptrs;
-		m_ptrs = nullptr;
-	}
 }
 
 Urlmon& LuaManager::GetUrlmon()
@@ -410,15 +355,11 @@ bool _cdecl LuaManager::Initialize(const int argc, char* argv[])
 	lua_register(m_lua, "sleep", _lua_sleep);
 	lua_register(m_lua, "get_cpu", _lua_getcpu);
 	lua_register(m_lua, "execute", _lua_execute);
-	lua_register(m_lua, "release", _lua_release);
 	lua_register(m_lua, "malloc", _lua_malloc);
 	lua_register(m_lua, "free", _lua_free);
 	lua_register(m_lua, "bzero", _lua_bzero);
-	lua_register(m_lua, "ptrs_size", _lua_ptrs_size);
 	lua_register(m_lua, "set", _lua_set);
-	lua_register(m_lua, "get8", _lua_get8);
-	lua_register(m_lua, "get64", _lua_get64);
-	lua_register(m_lua, "memcpy", _lua_memcpy);
+	lua_register(m_lua, "get", _lua_get);
 	lua_register(m_lua, "realloc", _lua_realloc);
 	lua_register(m_lua, "delete", _lua_delete);
 	lua_register(m_lua, "push_setting", _lua_pushsetting);

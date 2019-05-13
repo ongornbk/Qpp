@@ -4,7 +4,6 @@
 
 #include "LuaH.h"
 #include "Settings.h"
-#include "PointersManager.h"
 
 
 

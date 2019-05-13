@@ -81,3 +81,7 @@ conio.FWrite("   ",3)
 
 
 end
+
+function Bird.Reset(this)
+this.position.y = 15
+end

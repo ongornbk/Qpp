@@ -7,19 +7,14 @@ conio.ShowCursor(false)
 
 import_as("windows","win")
 
-function floorPosition(x,y)
-conio.Gotoxy(math.floor(x),math.floor(y))
-end
+require "util"
 
-width = tonumber(get_setting("width"))
-height = tonumber(get_setting("height"))
-
+local width = tonumber(get_setting("width"))
+local height = tonumber(get_setting("height"))
 score = 0
-
 
 import("filesystem")
 require "image"
-
 
 background = 0
 
@@ -119,62 +114,51 @@ local speeds = {30000000,25000000,20000000,18000000,16000000,18500000}
 
 
 
-
-
-
-
-
-
-function saveSettings()
-    
-    filesystem.Remove("settings.ini")
-    
-    filesystem.OpenTrunc("settings.ini")
-
-    filesystem.AppendString("width " .. tostring(width).. "\n")
-
-    filesystem.AppendString("height " .. tostring(height).. "\n")
-    
-    filesystem.AppendString("difficulty " .. tostring(difficulty) .. "\n")
-
-    filesystem.AppendString("sounds " .. tostring(sounds) .. "\n")
-
-    filesystem.AppendString("initialized " .. tostring(initialized))
-
-    filesystem.Close()
-    
-    end
-
-    if initialized == 0
-then
-    Initialize(initialized)
-    initialized = 1
-    saveSettings()
-end
+local number_of_birds = 0
 
 ::MENU::
 
 
 local menu = Menu.new()
 
-Menu.PushOption(menu,"1 Player")
-Menu.PushOption(menu,"2 Players")
-Menu.PushOption(menu,"3 Players")
+Menu.PushOption(menu,"Play")
 Menu.PushOption(menu,"Stats")
 Menu.PushOption(menu,"Options")
 Menu.PushOption(menu,"Credits")
 Menu.PushOption(menu,"Exit")
 
-local game_mode = Menu.Select(menu) -- also number of players
+local selection = Menu.Select(menu) -- also number of players
 
 menu = nil
 
 
+
+
+
+if selection == 0
+then
+menu = Menu.new()
+
+Menu.PushOption(menu,"1 Player")
+Menu.PushOption(menu,"2 Players")
+Menu.PushOption(menu,"3 Players")
+Menu.PushOption(menu,"4 Players")
+Menu.PushOption(menu,"return")
+
+number_of_birds = Menu.Select(menu)
+
+menu = nil
+
+if number_of_birds == 4
+then
+goto MENU
+end
+end
+
 local birds = {}
-local number_of_birds = game_mode
 
 
-if game_mode == 0
+if number_of_birds == 0
 then
 birds[0] = Bird.new()
 birds[0].position.x = 30.0
@@ -190,7 +174,7 @@ birds[0].key = 0x26
 birds[0].alt = 0x20
 end
 
-if game_mode == 1
+if number_of_birds == 1
 then
 birds[0] = Bird.new()
 birds[0].position.x = 30.0
@@ -219,7 +203,7 @@ birds[1].darkcolor = tonumber(get_setting("bird1.darkcolor"))
 birds[1].key = 0x20
 end
 
-if game_mode == 2
+if number_of_birds == 2
 then
 birds[0] = Bird.new()
 birds[0].position.x = 30.0
@@ -261,7 +245,62 @@ birds[2].darkcolor = tonumber(get_setting("bird2.darkcolor"))
 birds[2].key = 0x57
 end
 
-if game_mode == 3
+if number_of_birds == 3
+then
+birds[0] = Bird.new()
+birds[0].position.x = 30.0
+birds[0].position.y = 15.0
+birds[0].lastposition.x = birds[0].position.x
+birds[0].lastposition.y = birds[0].position.y
+birds[0].velocity.x = 0.0
+birds[0].velocity.y = 0.0
+birds[0].speed.up = -1.5
+birds[0].speed.down = 0.6
+birds[0].color = tonumber(get_setting("bird0.color"))
+birds[0].darkcolor = tonumber(get_setting("bird0.darkcolor"))    
+birds[0].key = 0x26
+
+birds[1] = Bird.new()
+birds[1].position.x = 22.0
+birds[1].position.y = 15.0
+birds[1].lastposition.x = birds[1].position.x
+birds[1].lastposition.y = birds[1].position.y
+birds[1].velocity.x = 0.0
+birds[1].velocity.y = 0.0
+birds[1].speed.up = -1.5
+birds[1].speed.down = 0.6
+birds[1].color = tonumber(get_setting("bird1.color"))
+birds[1].darkcolor = tonumber(get_setting("bird1.darkcolor"))    
+birds[1].key = 0x20
+
+birds[2] = Bird.new()
+birds[2].position.x = 14.0
+birds[2].position.y = 15.0
+birds[2].lastposition.x = birds[2].position.x
+birds[2].lastposition.y = birds[2].position.y
+birds[2].velocity.x = 0.0
+birds[2].velocity.y = 0.0
+birds[2].speed.up = -1.5
+birds[2].speed.down = 0.6
+birds[2].color = tonumber(get_setting("bird2.color"))
+birds[2].darkcolor = tonumber(get_setting("bird2.darkcolor"))    
+birds[2].key = 0x57
+
+birds[3] = Bird.new()
+birds[3].position.x = 6.0
+birds[3].position.y = 15.0
+birds[3].lastposition.x = birds[3].position.x
+birds[3].lastposition.y = birds[3].position.y
+birds[3].velocity.x = 0.0
+birds[3].velocity.y = 0.0
+birds[3].speed.up = -1.5
+birds[3].speed.down = 0.6
+birds[3].color = tonumber(get_setting("bird3.color"))
+birds[3].darkcolor = tonumber(get_setting("bird3.darkcolor"))    
+birds[3].key = 0x68
+end
+
+if selection == 1
 then
 
 PrintRecords()
@@ -281,7 +320,7 @@ end
 end
 end
 
-if game_mode == 4
+if selection == 2
 then
 
     conio.SetColor(15)
@@ -366,10 +405,10 @@ then
 
 if refp ~= nil and refp ~= 0
 then
-difficulty = get64(refp,0)
-sounds = get64(refp+64,0)
-width = get64(refp+128,0)+40
-height = get64(refp+192,0)+40
+difficulty = get(refp,0)
+sounds = get(refp+64,0)
+width = get(refp+128,0)+40
+height = get(refp+192,0)+40
 free(refp)
 refp = nil
 end
@@ -381,13 +420,13 @@ RedrawImage()
 
 end
 
-if game_mode == 5
+if selection == 3
 then
 Credits()
 goto MENU
 end
 
-if game_mode == 6
+if selection == 4
 then
 Image.release(background)
 conio.SetColor(15)
@@ -433,10 +472,9 @@ do
     do
         if(Map.CheckCollision(map,birds[i]) == true)
     then
-        InsertRecord(score,difficulties[difficulty + 1],game_mode)
+        InsertRecord(score,difficulties[difficulty + 1],number_of_birds)
         score = 0
-        running = false
-        
+        running = false        
     end
     end
 
@@ -450,7 +488,7 @@ do
 
     if(win.KeyDown(0x1B) and running == true)
     then
-        InsertRecord(score,difficulties[difficulty + 1],game_mode)
+        InsertRecord(score,difficulties[difficulty + 1],number_of_birds)
         score = 0
         birds = nil
         map = nil
@@ -459,7 +497,7 @@ do
         goto MENU
     end
 
-if game_mode == 0
+if number_of_birds == 0
 then
 
     if win.KeyDown(0x27) == false
@@ -480,6 +518,10 @@ conio.Gotoxy(0,0)
 if sounds == 1
 then
 winmm.PlaySync("assets//lost.wav")
+for i = 0,number_of_birds,1
+    do
+        Bird.Reset(birds[i])
+    end
 end
 
 
