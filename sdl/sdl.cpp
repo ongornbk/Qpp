@@ -51,9 +51,9 @@ extern "C"
 			lua_tostring(state,1),
 			SDL_WINDOWPOS_UNDEFINED,
 			SDL_WINDOWPOS_UNDEFINED,
-			lua_tointeger(state,2),
-			lua_tointeger(state,3),
-			lua_tointeger(state,4));
+			(int)lua_tointeger(state,2),
+			(int)lua_tointeger(state,3),
+			(Uint32)lua_tointeger(state,4));
 
 		if (!m_window)
 		{

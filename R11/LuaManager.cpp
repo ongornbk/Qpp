@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "LuaManager.h"
+#include "Settings.h"
 
 namespace
 {
@@ -50,7 +51,7 @@ static int32_t _cdecl _lua_import(lua_State* state)
 	else
 		pckname = pckpath;
 
-	m_instance->m_pcks[pckname] = new LuaPackage(state,pckpath, pckname);
+	m_instance->m_pcks[pckname] = new UnmanagedPackage(state,pckpath, pckname);
 
 	try
 	{
@@ -65,6 +66,32 @@ static int32_t _cdecl _lua_import(lua_State* state)
 	return 0;
 }
 
+static int32_t _cdecl _lua_importmanaged(lua_State* state)
+{
+	std::string pckpath = lua_tostring(state, 1);
+	std::string pckname;
+	size_t off = pckpath.find_last_of("/\\");
+	if (off != pckpath.npos)
+		pckname = pckpath.substr(off + 1);
+	else
+		pckname = pckpath;
+
+	m_instance->m_pcks[pckname] = new ManagedPackage(state, pckpath, pckname);
+
+	try
+	{
+		m_instance->m_pcks[pckname]->initialize();
+
+	}
+	catch (std::exception exception)
+	{
+		MessageBoxA(NULL, exception.what(), "Dll Error", MB_OK);
+		return 0;
+	}
+	return 0;
+}
+
+
 static int32_t _cdecl _lua_import_as(lua_State* state)
 {
 	std::string pckpath = lua_tostring(state, 1);
@@ -77,7 +104,7 @@ static int32_t _cdecl _lua_import_as(lua_State* state)
 	else
 		pckname = pckpath;
 
-	m_instance->m_pcks[pckname] = new LuaPackage(state,pckpath, pckname,pckas);
+	m_instance->m_pcks[pckname] = new UnmanagedPackage(state,pckpath, pckname,pckas);
 	try
 	{
 		m_instance->m_pcks[pckname]->initialize();
@@ -347,6 +374,7 @@ bool _cdecl LuaManager::Initialize(const int argc, char* argv[])
 	bool result;
 	lua_register(m_lua, "import", _lua_import);
 	lua_register(m_lua, "import_as", _lua_import_as);
+	lua_register(m_lua, "import_managed", _lua_importmanaged);
 	lua_register(m_lua, "get_argument", _lua_get_argument);
 	lua_register(m_lua, "get_argc", _lua_get_argc);
 	lua_register(m_lua, "get_setting", _lua_setting);

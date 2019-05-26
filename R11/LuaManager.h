@@ -1,5 +1,6 @@
 #pragma once
-#include "LuaPackage.h"
+#include "UnmanagedPackage.h"
+#include "ManagedPackage.h"
 #include "luaH.h"
 #include <vector>
 
@@ -30,6 +31,7 @@ private:
 
 	friend int32_t _cdecl _lua_import(lua_State* state);
 	friend int32_t _cdecl _lua_import_as(lua_State* state);
+	friend int32_t _cdecl _lua_importmanaged(lua_State* state);
 	friend int32_t _cdecl _lua_get_argument(lua_State* state);
 	friend int32_t _cdecl _lua_get_argc(lua_State* state);
 	friend int32_t _cdecl _lua_malloc(lua_State* state);
@@ -50,7 +52,7 @@ private:
 
 	std::vector<std::string> m_args;
 
-	std::map<std::string, LuaPackage*> m_pcks;
+	std::map<std::string, IPackage*> m_pcks;
 	
 	
 };

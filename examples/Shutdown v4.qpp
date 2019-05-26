@@ -35,8 +35,8 @@ import("windows")
 
 import("math")
 Sunflower.Start("Auto - Shutdown",false)
-Sunflower.SetTimer(1000,0)
-Sunflower.SetTimer(ti * 1000,1)
+Sunflower.SetTimer(0,1000)
+Sunflower.SetTimer(1,ti * 1000)
 --GetDC()
 
 conio.Gotoxy(5,1)
