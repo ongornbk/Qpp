@@ -16,7 +16,7 @@ extern "C"
 	static COORD  ConsoleCursorPosition;
 	static HDC    ConsoleHDC;
 
-	COORD GetConsoleCursorPosition(HANDLE hConsoleOutput)
+	COORD GetConsoleCursorPosition(HANDLE const hConsoleOutput)
 	{
 		CONSOLE_SCREEN_BUFFER_INFO cbsi;
 		if (GetConsoleScreenBufferInfo(hConsoleOutput, &cbsi))
