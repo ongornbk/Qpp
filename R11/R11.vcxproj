@@ -168,6 +168,7 @@
     <ClInclude Include="Settings.h" />
     <ClInclude Include="SettingsWrapper.h" />
     <ClInclude Include="String.h" />
+    <ClInclude Include="SystemHelper.h" />
     <ClInclude Include="types.hpp" />
     <ClInclude Include="UnmanagedPackage.h" />
   </ItemGroup>
@@ -198,6 +199,7 @@
     <ClCompile Include="Settings.cpp" />
     <ClCompile Include="SettingsWrapper.cpp" />
     <ClCompile Include="String.cpp" />
+    <ClCompile Include="SystemHelper.cpp" />
     <ClCompile Include="UnmanagedPackage.cpp" />
     <ClCompile Include="Windows.cpp" />
   </ItemGroup>

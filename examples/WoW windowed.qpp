@@ -1,0 +1,15 @@
+import("conio")
+conio.SetTitle("World Of Warcraft - Multiple Windows Opener")
+
+conio.Println("How many windows would You like to open?")
+local windows = tonumber(conio.Getline())
+
+if(windows<1 or windows>8)
+then
+os.exit()
+end
+
+for i = 0,windows-1,1
+do
+execute("Wow.exe","-windowed")
+end

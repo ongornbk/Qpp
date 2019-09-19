@@ -1,0 +1,11 @@
+
+import("conio")
+conio.SetTitle("SystemInfo")
+conio.SetColor(15)
+
+conio.Println("Major " .. get_setting("System.major"))
+conio.Println("Minor " .. get_setting("System.minor"))
+conio.Println("Platform " .. get_setting("System.platform"))
+conio.Println("Build " .. get_setting("System.build"))
+
+conio.Pause()

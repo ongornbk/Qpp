@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Settings.h"
+#include "SystemHelper.h"
 
 namespace
 {
@@ -35,6 +36,22 @@ int32 LoadSettings(const char* filename)
 
 int32 InitializeSettings(const char* filename)
 {
+
+	try 
+	{
+		const struct SystemInfo info = SystemHelper::GetSystemVersion();
+		PushSetting("System.major", String(info.major).get_string());
+		PushSetting("System.minor", String(info.minor).get_string());
+		PushSetting("System.build", String(info.build).get_string());
+		PushSetting("System.platform", String(info.platform).get_string());
+	}
+	catch (std::exception ex)
+	{
+		MessageBoxA(NULL, ex.what(), "Error", MB_OK);
+	}
+
+
+
 	return LoadSettings(filename);
 }
 

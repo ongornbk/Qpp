@@ -1,5 +1,5 @@
 import("conio")
-conio.SetTitle("Callendar")
+conio.SetTitle("Callendar System: " .. tostring(math.floor(get_setting("SystemVersion"))))
 conio.SetColor(15)
 
 CNUMBER_OF_MONTHS = 12

@@ -63,6 +63,9 @@
     <ClInclude Include="SettingsWrapper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SystemHelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -93,6 +96,9 @@
       <Filter>Header Files</Filter>
     </ClCompile>
     <ClCompile Include="SettingsWrapper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SystemHelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
