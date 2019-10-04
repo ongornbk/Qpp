@@ -4,8 +4,30 @@
 #include "stdafx.h"
 #include "conio.h"
 #include <conio.h>
+#include <list>
 
 std::string getline();
+
+namespace
+{
+	std::list<std::string> m_inputlist;
+}
+
+void addtoinputlist(std::string str)
+{
+	m_inputlist.push_back(str);
+	if (m_inputlist.size() > 10u)
+	{
+		m_inputlist.pop_front();
+	}
+}
+
+std::string getinputlistfront()
+{
+	if (m_inputlist.size())
+		return m_inputlist.front();
+	else return "";
+}
 
 extern "C"
 {
@@ -110,7 +132,9 @@ extern "C"
 
 	static int32_t _cdecl _lua_getline(lua_State* state)
 	{
-		lua_pushstring(state,getline().c_str());
+		std::string str = getline();
+		addtoinputlist(str);
+		lua_pushstring(state,str.c_str());
 		return 1;
 	}
 
@@ -305,7 +329,12 @@ std::string getline()
 			SetConsoleCursorPosition(HandleOut, ConsoleCursorPosition);
 			break;
 		}
-
+		case 0x57:
+		{
+			ConsoleCursorPosition = GetConsoleCursorPosition(HandleOut);
+			printf_s("%s",getinputlistfront().c_str());
+			break;
+		}
 		default:
 		{
 
