@@ -39,17 +39,17 @@ function Map.Initialize(this)
     for x = 0, this.sizex,1
     do
         conio.Gotoxy(x,0)
-        conio.FWrite(" ",1)
+        conio.FPutc(" ")
         conio.Gotoxy(x,this.sizey+ this.margin_top)
-        conio.FWrite(" ",1)
+        conio.FPutc(" ")
     end
 
     for y = 0, this.sizey,1
     do
         conio.Gotoxy(0,y)
-        conio.FWrite(" ",1)
+        conio.FPutc(" ")
         conio.Gotoxy(this.sizex,y + this.margin_top)
-        conio.FWrite(" ",1)
+        conio.FPutc(" ")
     end
 
     for x = 1, this.sizex-1,1
@@ -58,7 +58,7 @@ function Map.Initialize(this)
     do
         conio.Gotoxy(x,y+this.margin_top)
         conio.SetColor(Image.get(background,x-1,y))
-        conio.FWrite(" ",1)
+        conio.FPutc(" ")
     end
     end
 
@@ -66,7 +66,7 @@ function Map.Initialize(this)
     do
         conio.Gotoxy(x,this.sizey-1)
         conio.SetColor(Image.get(background,x,this.sizey-1))
-        conio.FWrite(" ",1)
+        conio.FPutc(" ")
     end
     
 end

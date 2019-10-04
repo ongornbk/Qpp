@@ -8,15 +8,15 @@ function floorPosition(x,y)
         
         filesystem.OpenTrunc("settings.ini")
     
-        filesystem.AppendString("width " .. tostring(width).. "\n")
+        filesystem.AppendString("width " .. tostring(get_setting("width")).. "\n")
     
-        filesystem.AppendString("height " .. tostring(height).. "\n")
+        filesystem.AppendString("height " .. tostring(get_setting("height")).. "\n")
         
-        filesystem.AppendString("difficulty " .. tostring(difficulty) .. "\n")
+        filesystem.AppendString("difficulty " .. tostring(get_setting("difficulty")) .. "\n")
     
-        filesystem.AppendString("sounds " .. tostring(sounds) .. "\n")
+        filesystem.AppendString("sounds " .. tostring(get_setting("sounds")) .. "\n")
     
-        filesystem.AppendString("initialized " .. tostring(initialized))
+        filesystem.AppendString("initialized " .. tostring(get_setting("initialized")))
     
         filesystem.Close()
         

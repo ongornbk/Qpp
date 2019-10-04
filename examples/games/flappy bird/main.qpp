@@ -412,8 +412,6 @@ height = get(refp+192,0)+40
 free(refp)
 refp = nil
 end
-
-saveSettings()
 RedrawImage()
 
     goto MENU
@@ -428,6 +426,7 @@ end
 
 if selection == 4
 then
+saveSettings()
 Image.release(background)
 conio.SetColor(15)
 os.exit()

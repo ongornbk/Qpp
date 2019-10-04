@@ -1,8 +1,8 @@
 require "List"
 
-ImportPackage("conio")
-ImportPackage("filesystem")
-SetConsoleTitle("List testing...")
+import("conio")
+import("filesystem")
+conio.SetTitle("List testing...")
 
 list = List.new()
 
@@ -11,9 +11,9 @@ List.pushleft(list, "Two")
 List.pushright(list,"Three")
 List.pushright(list,"Four")
 
-Println(List.popleft(list))
-Println(List.popleft(list))
-Println(List.popleft(list))
-Println(List.popleft(list))
+conio.Println(List.popleft(list))
+conio.Println(List.popleft(list))
+conio.Println(List.popleft(list))
+conio.Println(List.popleft(list))
 
-Pause()
+conio.Pause()

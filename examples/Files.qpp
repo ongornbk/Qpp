@@ -1,5 +1,5 @@
-import("packages/conio")
-import_as("packages/filesystem","fs")
+import("conio")
+import_as("filesystem","fs")
 conio.SetTitle("Files testing...")
 fs.OpenAppend("text.txt")
 local text = fs.ToString()

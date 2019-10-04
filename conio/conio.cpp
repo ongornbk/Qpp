@@ -230,22 +230,43 @@ extern "C"
 		return 0;
 	}
 
-	static int32_t _cdecl _lua_showcursor(lua_State* state)
+	static int32_t _cdecl _lua_showcursor(
+		struct lua_State* const state
+	)
 	{
 		CONSOLE_CURSOR_INFO     cursorInfo;
+		cursorInfo.dwSize = 1;
 		GetConsoleCursorInfo(HandleOut, &cursorInfo);
 		cursorInfo.bVisible = lua_toboolean(state,1);
 		SetConsoleCursorInfo(HandleOut, &cursorInfo);
 		return 0;
 	}
 
-	static int32_t _cdecl _lua_fwrite(lua_State* state)
+	static int32_t _cdecl _lua_fwrite(
+		struct lua_State* const state
+	)
 	{
 		fwrite(lua_tostring(state, 1),sizeof(char),lua_tointeger(state,2),stdout);
 		return 0;
 	}
 
-	constexpr long FOO_COUNT = 18;
+	static int32_t _cdecl _lua_fputc(
+		struct lua_State* const state
+	)
+	{
+		fputc((int)(lua_tostring(state,1)[0]),stdout);
+		return 0;
+	}
+
+	static int32_t _cdecl _lua_getwindow(
+		struct lua_State* const state
+	)
+	{
+		lua_pushinteger(state, (lua_Integer)(ConsoleWindow));
+		return 1;
+	}
+
+	constexpr long FOO_COUNT = 20;
 
 	const char* sckeys[FOO_COUNT] = {
 		"Clear",
@@ -253,9 +274,11 @@ extern "C"
 		"Endline",
 		"Fill",
 		"FWrite",
+		"FPutc",
 		"Getch",
 		"GetCursorPosition",
 		"Getline",
+		"GetWindow",
 		"Gotox",
 		"Gotoxy",
 		"Gotoy",
@@ -273,9 +296,11 @@ extern "C"
 		_lua_endline,
 		_lua_fill,
 		_lua_fwrite,
+		_lua_fputc,
 		_lua_getch,
 		_lua_getcursorposition,
 		_lua_getline,
+		_lua_getwindow,
 		_lua_gotox,
 		_lua_gotoxy,
 		_lua_gotoy,

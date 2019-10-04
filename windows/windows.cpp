@@ -31,13 +31,15 @@ extern "C"
 	return 1;
 	}
 
-	static int32_t _cdecl _lua_cursorposition(lua_State* state)
+	static int32_t _cdecl _lua_cursorposition(
+		struct lua_State* const state
+	)
 	{
 	POINT p;
 	GetCursorPos(&p);
 	p.y -= 22;
-	lua_pushinteger(state, p.x);
-	lua_pushinteger(state, p.y);
+	lua_pushinteger(state, (lua_Integer)(p.x));
+	lua_pushinteger(state, (lua_Integer)(p.y));
 	return 2;
 	}
 
@@ -242,19 +244,25 @@ extern "C"
 		return 0;
 	}
 
-	static int32_t _cdecl _lua_postmessage(lua_State* state)
+	static int32_t _cdecl _lua_postmessage(
+		struct lua_State* const state
+	)
 	{
 		PostMessage((HWND)lua_tointeger(state, 1), (UINT)lua_tointeger(state, 2), lua_tointeger(state, 3), MAKELPARAM(lua_tointeger(state, 4), lua_tointeger(state, 5)));
 		return 0;
 	}
 	
-	static int32_t _cdecl _lua_clienttoscreen(lua_State* state)
+	static int32_t _cdecl _lua_clienttoscreen(
+		struct lua_State* const state
+	)
 	{
 		POINT p;
-		p.x = (long)lua_tointeger(state, 2);
-		p.y = (long)lua_tointeger(state, 3);
+		p.x = (int32_t)lua_tointeger(state, 2);
+		p.y = (int32_t)lua_tointeger(state, 3);
 		ClientToScreen((HWND)lua_tointeger(state,1), &p);
-		return 0;
+		lua_pushinteger(state,(lua_Integer)(p.x));
+		lua_pushinteger(state,(lua_Integer)(p.y));
+		return 2;
 	}
 	
 	static int32_t _cdecl _lua_gettime(lua_State* state)//todo
@@ -294,6 +302,14 @@ extern "C"
 	return 0;
 	}
 
+	static int32_t _cdecl _lua_messagebox(
+		struct lua_State* const state
+	)
+	{
+		const int32_t result = MessageBoxA((HWND)(lua_tointeger(state, 1)), lua_tostring(state, 2), lua_tostring(state, 3), (UINT)(lua_tointeger(state, 4)));
+		lua_pushinteger(state, (lua_Integer)(result));
+		return 1;
+	}
 	
 
 	static int32_t _cdecl _lua_enumwindows(lua_State* state)
@@ -371,7 +387,7 @@ extern "C"
 	return 0;
 }
 
-	constexpr long FOO_COUNT = 40;
+	constexpr long FOO_COUNT = 41;
 
 	const char* sckeys[FOO_COUNT] = {
 		"BlockInput",
@@ -396,6 +412,7 @@ extern "C"
 		"KeyDown",
 		"KeyPressed",
 		"KillTimer",
+		"MessageBox",
 		"PeekMessage",
 		"PostMessage",
 		"PostQuitMessage",
@@ -438,6 +455,7 @@ extern "C"
 		_lua_keydown,
 		_lua_keypressed,
 		_lua_killtimer,
+		_lua_messagebox,
 		_lua_peekmessage,
 		_lua_postmessage,
 		_lua_postquitmessage,

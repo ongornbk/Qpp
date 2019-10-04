@@ -1,8 +1,2 @@
-
-
-ImportPackage("conio")
-FreeConsole()
-
-ImportPackage("windows")
-
-MessageBox(false,"OK","MessageBox",0);
+import("windows")
+windows.MessageBox(0,"OK","MessageBox",0);

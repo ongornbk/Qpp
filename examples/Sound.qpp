@@ -1,24 +1,27 @@
 import("windows")
 import("conio")
+import("winmm")
 conio.SetTitle("Sound")
-SetTimer(1000,0)
+
+require "Sunflower/Sunflower"
+
+Sunflower.Start("Sound",false)
+Sunflower.SetTimer(0,1000)
 
 
 while(true)
 do
-while(GetMessage())
+while(Sunflower.Run())
 do
 
-local lparam,wparam,msg = RetrieveMessage()
-
-if msg == 0x113
+if Sunflower.msg == 0x113
 then
-PlaySound("theme.wav")
+winmm.PlayAsync("theme.wav")
 else
-
-WindowProc(msg,wparam,lparam)
+Sunflower.Proc()
 end
-DispatchMessage()
 end
 Sleep(1000)
 end
+
+Sunflower.Close()
