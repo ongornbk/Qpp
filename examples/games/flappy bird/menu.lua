@@ -20,7 +20,7 @@ end
 function Menu.Select(this)
 
 conio.Gotoxy(0,0)
-conio.SetColor(15)
+conio.SetColor(tonumber(get_setting("font.color")))
 
 for i = 0,this.size-1,1
 do

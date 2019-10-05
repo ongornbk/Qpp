@@ -1,0 +1,39 @@
+
+
+
+import("conio")
+conio.Print("Search for: ")
+conio.SetTitle("Szrot Downloader")
+
+local item = string.gsub(tostring(conio.Getline())," ",".")
+
+import_as("filesystem","fs")
+fs.OpenAppend("sites.urls")
+local sites = tostring(fs.ToString())
+fs.Close()
+
+require "lua/HtmlManager"
+
+set_urloutput("result.html")
+
+for str in string.gmatch(sites,"[^%s]+")
+do
+
+local result = download("www." .. str .. "/search/" .. item)
+if result
+then
+conio.Println("Failed request from: " .. str)
+conio.Println("Error code -> " .. tostring(result))
+conio.Endline()
+else
+conio.Println("Successfull request from: " .. str)
+fs.OpenAppend("result.html")
+local site = tostring(fs.ToString())
+fs.Close()
+fs.Remove("magnets.html")
+UnpackResult(site,item,str)
+execute("magnets.html")
+return
+end
+end
+

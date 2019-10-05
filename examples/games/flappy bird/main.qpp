@@ -414,6 +414,9 @@ refp = nil
 end
 RedrawImage()
 
+conio.Gotoxy(0,0)
+system.System("cls")
+
     goto MENU
 
 end
@@ -516,7 +519,7 @@ conio.Gotoxy(0,0)
 
 if sounds == 1
 then
-winmm.PlaySync("assets//lost.wav")
+winmm.PlaySync("lost.wav")
 for i = 0,number_of_birds,1
     do
         Bird.Reset(birds[i])

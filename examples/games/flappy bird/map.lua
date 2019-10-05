@@ -141,7 +141,7 @@ end
 score = score + 1
 if sounds == 1
 then
-winmm.PlayAsync("assets//score.wav")
+winmm.PlayAsync("score.wav")
 end
 
 end

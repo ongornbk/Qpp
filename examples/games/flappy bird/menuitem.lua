@@ -8,8 +8,9 @@ name = "",
 items = {},
 ref = 0,
 size = 0,
-ptr = " <--",
-cls = "    ",
+ptr = " " .. tostring(get_setting("menu.pointer")),
+ptrsize = string.len(tostring(get_setting("menu.pointer"))),
+cls = " ",
 selectable = false,
 selection = 0,
 selected = false,
@@ -36,7 +37,7 @@ function MenuItem.DrawPtr(this)
         conio.Print("[")
         conio.SetColor(this.colors[this.selection])
         conio.Print(this.ptr)
-        conio.SetColor(15)
+        conio.SetColor(tonumber(get_setting("font.color")))
         conio.Print("]       ") 
     else
 conio.Print(this.ptr .. "        ")
@@ -47,7 +48,11 @@ end
 function MenuItem.Clean(this)
     if this.selectable == false
     then
-conio.Print(this.cls)
+        conio.FPutc(this.cls)
+        for i = 1,this.ptrsize, 1
+        do
+            conio.FPutc(this.cls)
+        end
     end
 end
 
