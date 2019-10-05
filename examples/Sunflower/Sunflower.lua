@@ -8,6 +8,7 @@ Sunflower.lpmsg = 0
 Sunflower.msg = 0
 Sunflower.wparam = 0
 Sunflower.lparam = 0
+Sunflower.result = 0
 Sunflower.timers = vector.new()
 
 function Sunflower.Start(title,show)
@@ -42,16 +43,28 @@ vector.push_back(Sunflower.timers,id)
 end
 
 function Sunflower.Proc()
-windows.Proc(Sunflower.hwnd,Sunflower.msg,Sunflower.wparam,Sunflower.lparam)
+Sunflower.result = windows.Proc(Sunflower.hwnd,Sunflower.msg,Sunflower.wparam,Sunflower.lparam)
 end
 
 function Sunflower.Close()
 windows.DestroyWindow(Sunflower.window)
 
-for i = 0,vec.size-1,1
+for i = 0,Sunflower.timers.size-1,1
 do
-windows.KillTimer(Sunflower.hwnd,vector.get(vec,i))
+windows.KillTimer(Sunflower.hwnd,vector.get(Sunflower.timers,i))
 end
 
 vector.delete(Sunflower.timers)
+end
+
+function Sunflower.HideMenu()
+windows.HideMenu(Sunflower.hwnd)
+end
+
+function Sunflower.OnClose(foo)
+windows.RegisterEvent(0x0010,foo)
+end
+
+function Sunflower.OnPaint(foo)
+windows.RegisterEvent(0x000f,foo)
 end

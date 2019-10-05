@@ -3,38 +3,51 @@
 
 lua_State* Window::m_state = nullptr;
 
-int32_t _stdcall doNothing(lua_State* state)
+bool _stdcall HandleEvent(lua_CFunction const foo)
 {
-	return 0;
+	if (foo == nullptr)
+		return true;
+	foo(Window::m_state);
+	return false;
 }
 
-lua_CFunction EventTimer = doNothing;
-lua_CFunction EventDestroy = doNothing;
-lua_CFunction EventPaint = doNothing;
-lua_CFunction EventHover = doNothing;
+lua_CFunction EventTimer = nullptr;
+lua_CFunction EventDestroy = nullptr;
+lua_CFunction EventPaint = nullptr;
+lua_CFunction EventHover = nullptr;
+lua_CFunction EventClose = nullptr;
+lua_CFunction EventQuit = nullptr;
 
 
 LRESULT __stdcall WindowProcedure(HWND window, uint32_t msg, WPARAM wp, LPARAM lp)
 
 {
-	lua_State* state = Window::m_state;
-
 	switch (msg)
 	
 	{
 	case WM_TIMER:
-		EventTimer(state);
+		if (HandleEvent(EventTimer))
+			return DefWindowProc(window, msg, wp, lp);
 		return 0;
 	case WM_PAINT:
-		if (EventPaint == doNothing)
+		if (HandleEvent(EventPaint))
 			return DefWindowProc(window, msg, wp, lp);
-		EventPaint(state);
 		return 0;
 	case WM_MOUSEHOVER:
-		EventHover(state);
+		if(HandleEvent(EventHover))
+			return DefWindowProc(window, msg, wp, lp);
 		return 0;
 	case WM_DESTROY:
-		EventDestroy(state);
+		if (HandleEvent(EventDestroy))
+			return DefWindowProc(window, msg, wp, lp);
+		return 0;
+	case WM_CLOSE:
+		if (HandleEvent(EventClose))
+			return DefWindowProc(window, msg, wp, lp);
+		return 0;
+	case WM_QUIT:
+		if (HandleEvent(EventQuit))
+			return DefWindowProc(window, msg, wp, lp);
 		return 0;
 	default:
 	return DefWindowProc(window, msg, wp, lp);

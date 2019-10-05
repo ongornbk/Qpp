@@ -37,19 +37,23 @@ extern "C"
 		return 0;
 	}
 
-	static int32_t _cdecl _lua_mkdir(lua_State* state)
+	static int32_t _cdecl _lua_mkdir(
+		struct lua_State*const state
+	)
 	{
 		lua_pushboolean(state, CreateDirectoryA(lua_tostring(state, 1), NULL));
 		return 1;
 	}
 
-	static int32_t _cdecl _lua_copyfile(lua_State* state)
+	static int32_t _cdecl _lua_copyfile(
+		struct lua_State* const state
+	)
 	{
 
 #pragma warning(disable : 4996)
 
 		char buf[BUFSIZ];
-		size_t size;
+		size_t size{};
 
 		std::string out = lua_tostring(state, 2);
 		std::string in = lua_tostring(state, 1);
@@ -81,40 +85,52 @@ extern "C"
 		return 0;
 	}
 
-	static int32_t _cdecl _lua_removefile(lua_State* state)
+	static int32_t _cdecl _lua_removefile(
+		struct lua_State* const state
+	)
 {
 #pragma warning(disable : 4996)
 	remove(lua_tostring(state, 1));
 	return 0;
 }
 
-	static int32_t _cdecl _lua_openappend(lua_State* state)
+	static int32_t _cdecl _lua_openappend(
+		struct lua_State* const state
+	)
 	{
 
-		File* file = new TextFile();
-		file->open(lua_tostring(state, 1), std::ios::out | std::ios::in | std::ios::app);
+		struct File* const file = new TextFile();
+
+		std::string file_name = lua_tostring(state, 1);
+
+		file->open(file_name.c_str(), std::ios::out | std::ios::in | std::ios::app);
 		if (file->is_open())
 		{
 			s_files.push(file);
 		}
 		else
 		{
-			MessageBoxA(NULL, "Error! File not opened!", "Error!", MB_OK);
+			MessageBoxA(NULL, (std::string("Error! Cannot open ") + file_name + "!").c_str(), "Error!", MB_OK);
 		}
 		return 0;
 	}
 
-	static int32_t _cdecl _lua_opentrunc(lua_State* state)
+	static int32_t _cdecl _lua_opentrunc(
+		struct lua_State* const state
+	)
 	{
-		File* file = new TextFile();
-		file->open(lua_tostring(state, 1), std::ios::out | std::ios::in | std::ios::trunc);
+		struct File* const file = new TextFile();
+
+		std::string file_name = lua_tostring(state, 1);
+
+		file->open(file_name.c_str(), std::ios::out | std::ios::in | std::ios::trunc);
 		if (file->is_open())
 		{
 			s_files.push(file);
 		}
 		else
 		{
-			MessageBoxA(NULL, "Error! File not opened!", "Error!", MB_OK);
+			MessageBoxA(NULL, (std::string("Error! Cannot open ") + file_name + "!").c_str(), "Error!", MB_OK);
 		}
 		return 0;
 	}

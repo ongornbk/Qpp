@@ -180,7 +180,9 @@ extern "C"
 		return 0;
 	}
 
-	static int32_t _cdecl _lua_cls(lua_State* state)
+	static int32_t _cdecl _lua_cls(
+		struct lua_State* const state
+	)
 	{
 		ConsoleCursorPosition = { 0,0 };
 		SetConsoleCursorPosition(HandleOut, ConsoleCursorPosition);
@@ -199,7 +201,9 @@ extern "C"
 		return 0;
 	}
 
-	static int32_t _cdecl _lua_fill(lua_State* state)
+	static int32_t _cdecl _lua_fill(
+		struct lua_State* const state
+	)
 	{
 		ConsoleCursorPosition = { 0,0 };
 		SetConsoleCursorPosition(HandleOut, ConsoleCursorPosition);
@@ -218,15 +222,19 @@ extern "C"
 		return 0;
 	}
 
-	static int32_t _cdecl _lua_getch(lua_State* state)
+	static int32_t _cdecl _lua_getch(
+		struct lua_State* const state
+	)
 	{
 		lua_pushinteger(state, getch());
 		return 1;
 	}
 
-	static int32_t _cdecl _lua_setcolor(lua_State* state)
+	static int32_t _cdecl _lua_setcolor(
+		struct lua_State* const state
+	)
 	{
-		SetConsoleTextAttribute(HandleOut,(unsigned short) lua_tointeger(state,1));
+		SetConsoleTextAttribute(HandleOut,(WORD) lua_tointeger(state,1));
 		return 0;
 	}
 
@@ -258,6 +266,15 @@ extern "C"
 		return 0;
 	}
 
+	static int32_t _cdecl _lua_set(
+		struct lua_State* const state
+	)
+	{
+		_lua_gotoxy(state);
+		fputc((int)(lua_tostring(state, 3)[0]), stdout);
+		return 0;
+	}
+
 	static int32_t _cdecl _lua_getwindow(
 		struct lua_State* const state
 	)
@@ -266,7 +283,7 @@ extern "C"
 		return 1;
 	}
 
-	constexpr long FOO_COUNT = 20;
+	constexpr long FOO_COUNT = 21;
 
 	const char* sckeys[FOO_COUNT] = {
 		"Clear",
@@ -286,6 +303,7 @@ extern "C"
 		"Print",
 		"Printf",
 		"Println",
+		"Set",
 		"SetColor",
 		"SetTitle",
 		"ShowCursor"
@@ -308,6 +326,7 @@ extern "C"
 		_lua_print,
 		_lua_printf,
 		_lua_println,
+		_lua_set,
 		_lua_setcolor,
 		_lua_setconsoletitle,
 		_lua_showcursor

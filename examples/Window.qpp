@@ -3,11 +3,26 @@ require "Sunflower/Sunflower"
 
 
 import("windows")
+import("conio")
 
 Sunflower.Start("Test Window",1)
 
-while Sunflower.Run()
+local running = true
+
+function exit()
+running = false
+end
+
+function paint()
+conio.Println("Paint")
+end
+
+Sunflower.OnClose("exit")
+Sunflower.OnPaint("paint")
+
+while running == true
 do
+Sunflower.Run()
 Sunflower.Proc()
 end
 

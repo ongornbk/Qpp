@@ -1,5 +1,6 @@
 import("conio")
 import("windows")
+
 conio.SetTitle("Cursor")
 
 local console_handle = conio.GetWindow()

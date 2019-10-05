@@ -18,47 +18,38 @@ then
 
     for y = map.margin_top,this.y - map.offset,1
     do
-        conio.Gotoxy(this.x+this.width,y)
         conio.SetColor(Image.get(background,this.x+this.width,y-map.margin_top))
-        conio.FPutc(" ")
+        conio.Set(this.x+this.width,y," ")
     end
 
     for y = this.y + map.offset,map.sizey,1
     do
-        conio.Gotoxy(this.x+this.width,y)
         conio.SetColor(Image.get(background,this.x+this.width,y-map.margin_top))
-        conio.FPutc(" ")
+        conio.Set(this.x+this.width,y," ")
     end
 
-
 else
-
-
 
     for y = map.margin_top,this.y - map.offset,1 -- Top Column
 do
     if this.x+this.width < map.sizex
     then
-    conio.Gotoxy(this.x+this.width,y)
     conio.SetColor(Image.get(background,this.x+this.width-1,y-map.margin_top))
-    conio.FPutc(" ")
+    conio.Set(this.x+this.width,y," ")
     end
-    conio.Gotoxy(this.x,y)
     conio.SetColor(map.color)
-    conio.FPutc(" ")
+    conio.Set(this.x,y," ")
 end
 
 for y = this.y + map.offset,map.sizey,1 -- Bottom Column
 do
     if this.x+this.width < map.sizex
     then
-    conio.Gotoxy(this.x+this.width,y)
     conio.SetColor(Image.get(background,this.x+this.width-1,y-map.margin_top))
-    conio.FPutc(" ")
+    conio.Set(this.x+this.width,y," ")
     end
-    conio.Gotoxy(this.x,y)
     conio.SetColor(map.color)
-    conio.FPutc(" ")
+    conio.Set(this.x,y," ")
 end
 
 end

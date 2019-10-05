@@ -25,10 +25,23 @@ extern "C"
 		return 0;
 	}
 
-	static int32_t _cdecl _lua_blockinput(lua_State* state)
+	static int32_t _cdecl _lua_blockinput(
+		struct lua_State* const state
+	)
 	{
 	lua_pushboolean(state,BlockInput(lua_toboolean(state, 1)));
 	return 1;
+	}
+
+	static int32_t _cdecl _lua_windowfrompoint(
+		struct lua_State* const state
+	)
+	{
+		POINT point;
+		point.x = (LONG)(lua_tointeger(state, 1));
+		point.y = (LONG)(lua_tointeger(state, 2));
+		lua_pushinteger(state,(lua_Integer)WindowFromPoint(point));
+		return 1;
 	}
 
 	static int32_t _cdecl _lua_cursorposition(
@@ -146,10 +159,17 @@ extern "C"
 		return 1;
 	}
 	
-	static int32_t _cdecl _lua_proc(lua_State* state)
+	static int32_t _cdecl _lua_proc(
+		struct lua_State* const state
+	)
 	{
-		WindowProcedure((HWND)lua_tointeger(state, 1), (uint32_t)lua_tointeger(state, 2), (WPARAM)lua_tointeger(state, 3), (LPARAM)lua_tointeger(state, 4));
-		return 0;
+		lua_pushinteger(state,(lua_Integer)WindowProcedure(
+			(HWND)lua_tointeger(state, 1),
+			(uint32_t)lua_tointeger(state, 2),
+			(WPARAM)lua_tointeger(state, 3),
+			(LPARAM)lua_tointeger(state, 4)
+		));
+		return 1;
 		
 	}
 	
@@ -183,25 +203,31 @@ extern "C"
 		return 1;
 	}
 
-	static int32_t _cdecl _lua_retrievemessage(lua_State* state)
+	static int32_t _cdecl _lua_retrievemessage(
+		struct lua_State* const state
+	)
 	{
-		MSG* msg = (MSG*)lua_tointeger(state, 1);
+		MSG* const msg = (MSG*)lua_tointeger(state, 1);
 		lua_pushinteger(state, (lua_Integer)msg->lParam);
 		lua_pushinteger(state, (lua_Integer)msg->wParam);
 		lua_pushinteger(state, (lua_Integer)msg->message);
 		return 3;
 	}
 
-	static int32_t _cdecl _lua_createwindow(lua_State* state)
+	static int32_t _cdecl _lua_createwindow(
+		struct lua_State* const state
+	)
 	{
-		Window* window = new Window(state);
+		class Window* const window = new class Window(state);
 		lua_pushinteger(state,(lua_Integer)window);
 		return 1;
 	}
 
-	static int32_t _cdecl _lua_destroywindow(lua_State* state)
+	static int32_t _cdecl _lua_destroywindow(
+		struct lua_State* const state
+	)
 	{
-		Window* window = (Window*)lua_tointeger(state, 1);
+		class Window* const window = (class Window* const)lua_tointeger(state, 1);
 		if (window)
 		{
 			delete window;
@@ -211,34 +237,43 @@ extern "C"
 		return 1;
 	}
 
-	static int32_t _cdecl _lua_getwindowhandle(lua_State* state)
+	static int32_t _cdecl _lua_getwindowhandle(
+		struct lua_State* const state
+	)
 	{
-		Window* window = (Window*)lua_tointeger(state, 1);
+		class Window* const window = (class Window* const)lua_tointeger(state, 1);
 		if (window) lua_pushinteger(state, (lua_Integer)window->window);
 		else lua_pushinteger(state, 0);
-
 		return 1;
 	}
 
-	static int32_t _cdecl _lua_update(lua_State* state)
+	static int32_t _cdecl _lua_update(
+		struct lua_State* const state
+	)
 	{
 		UpdateWindow((HWND)lua_tointeger(state, 1));
 		return 0;
 	}
 	
-	static int32_t _cdecl _lua_settitle(lua_State* state)
+	static int32_t _cdecl _lua_settitle(
+		struct lua_State* const state
+	)
 	{
 		SetWindowTextA((HWND)lua_tointeger(state, 1),lua_tostring(state,2));
 		return 0;
 	}
 
-	static int32_t _cdecl _lua_getdesktop(lua_State* state)
+	static int32_t _cdecl _lua_getdesktop(
+		struct lua_State* const state
+	)
 	{
 		lua_pushinteger(state, (lua_Integer)GetDesktopWindow());
 		return 1;
 	}
 
-	static int32_t _cdecl _lua_sendmessage(lua_State* state)
+	static int32_t _cdecl _lua_sendmessage(
+		struct lua_State* const state
+	)
 	{
 		SendMessage((HWND)lua_tointeger(state,1), (UINT)lua_tointeger(state, 2), lua_tointeger(state, 3), MAKELPARAM(lua_tointeger(state, 4), lua_tointeger(state, 5)));
 		return 0;
@@ -331,16 +366,20 @@ extern "C"
 	return 1;
 	}
 
-	static int32_t _cdecl _lua_hidemenu(lua_State* state)
+	static int32_t _cdecl _lua_hidemenu(
+		struct lua_State* const state
+	)
 	{
 	SetMenu((HWND)lua_tointeger(state,1),NULL);
 	return 0;
 	}
 
-	static int32_t _cdecl _lua_registerevent(lua_State* state)
+	static int32_t _cdecl _lua_registerevent(
+		struct lua_State* const state
+	)
 	{
 
-	const auto Event = lua_tointeger(state, 1);
+	const lua_Integer Event = lua_tointeger(state, 1);
 	lua_events[(uint32_t)Event] = lua_tostring(state, 2);
 
 
@@ -382,12 +421,30 @@ extern "C"
 			return 0;
 		};
 		break;
+	case WM_CLOSE:
+		EventClose = [](lua_State* state)
+		{
+			lua_pcall(state, 0, 0, 0);
+			lua_getglobal(state, lua_events[WM_CLOSE].c_str());
+			lua_pcall(state, 0, 0, 0);
+			return 0;
+		};
+		break;
+	case WM_QUIT:
+		EventQuit = [](lua_State* state)
+		{
+			lua_pcall(state, 0, 0, 0);
+			lua_getglobal(state, lua_events[WM_QUIT].c_str());
+			lua_pcall(state, 0, 0, 0);
+			return 0;
+		};
+		break;
 	}
 	
 	return 0;
 }
 
-	constexpr long FOO_COUNT = 41;
+	constexpr long FOO_COUNT = 42;
 
 	const char* sckeys[FOO_COUNT] = {
 		"BlockInput",
@@ -430,7 +487,8 @@ extern "C"
 		"TranslateMessage",
 		"Show",
 		"Update",
-		"ValidateRect"
+		"ValidateRect",
+		"WindowFromPoint"
 	};
 	const lua_CFunction scfooes[FOO_COUNT] = {
 		_lua_blockinput,
@@ -473,7 +531,8 @@ extern "C"
 		_lua_translatemessage,
 		_lua_show,
 		_lua_update,
-		_lua_validaterect
+		_lua_validaterect,
+		_lua_windowfrompoint
 	};
 
 	long foo_count(const long arg)
