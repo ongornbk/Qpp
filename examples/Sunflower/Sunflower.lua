@@ -68,3 +68,7 @@ end
 function Sunflower.OnPaint(foo)
 windows.RegisterEvent(0x000f,foo)
 end
+
+function Sunflower.OnHover(foo)
+windows.RegisterEvent(0x02a1,foo)
+end

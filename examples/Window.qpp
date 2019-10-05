@@ -1,9 +1,6 @@
 require "Sunflower/Sunflower"
 
-
-
 import("windows")
-import("conio")
 
 Sunflower.Start("Test Window",1)
 
@@ -13,12 +10,8 @@ function exit()
 running = false
 end
 
-function paint()
-conio.Println("Paint")
-end
-
 Sunflower.OnClose("exit")
-Sunflower.OnPaint("paint")
+
 
 while running == true
 do
