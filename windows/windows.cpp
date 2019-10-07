@@ -319,19 +319,43 @@ extern "C"
 		return 2;
 	}
 
+	static int32_t _cdecl _lua_beginpaint(
+		struct lua_State* const state
+	)
+	{
+		HDC const hdc = BeginPaint((HWND)lua_tointeger(state, 1), (PAINTSTRUCT*)lua_tointeger(state, 2));
+		lua_pushinteger(state, (lua_Integer)(hdc));
+		return 1;
+	}
+
+	static int32_t _cdecl _lua_endpaint(
+		struct lua_State* const state
+	)
+	{
+		const BOOL result = EndPaint((HWND)lua_tointeger(state, 1), (PAINTSTRUCT*)lua_tointeger(state, 2));
+		lua_pushboolean(state,result);
+		return 1;
+	}
+
+
+
 	static BOOL CALLBACK _callback_enumproc(HWND hwnd, LPARAM lp)
 	{
-		cfpair* cp = (cfpair*)lp;
+		{
+			struct cfpair* const cp = (cfpair * const)lp;
 
-		lua_getglobal(cp->state, cp->foo.c_str());
-		lua_pushinteger(cp->state, (lua_Integer)hwnd);
-		lua_call(cp->state, 1, 0);
+			lua_getglobal(cp->state, cp->foo.c_str());
+			lua_pushinteger(cp->state, (lua_Integer)hwnd);
+			lua_call(cp->state, 1, 0);
+		}
 		//lua_pop(cp->state, 1);
 
 		return true;
 	}
 
-	static int32_t _cdecl _lua_releasedc(lua_State* state)
+	static int32_t _cdecl _lua_releasedc(
+		struct lua_State* const state
+	)
 	{
 	lua_pushinteger(state,ReleaseDC((HWND)lua_tointeger(state,1), (HDC)lua_tointeger(state,2)));
 	return 0;
@@ -444,15 +468,17 @@ extern "C"
 	return 0;
 }
 
-	constexpr long FOO_COUNT = 42;
+	constexpr long FOO_COUNT = 44;
 
 	const char* sckeys[FOO_COUNT] = {
+		"BeginPaint",
 		"BlockInput",
 		"ClientToScreen",
 		"CursorPosition",
 		"CreateWindow",
 		"DestroyWindow",
 		"DispatchMessage",
+		"EndPaint",
 		"EnumWindows",
 		"Find",
 		"GetClassName",
@@ -491,12 +517,14 @@ extern "C"
 		"WindowFromPoint"
 	};
 	const lua_CFunction scfooes[FOO_COUNT] = {
+		_lua_beginpaint,
 		_lua_blockinput,
 		_lua_clienttoscreen,
 		_lua_cursorposition,
 		_lua_createwindow,
 		_lua_destroywindow,
 		_lua_dispatchmessage,
+		_lua_endpaint,
 		_lua_enumwindows,
 		_lua_findwindow,
 		_lua_getclassname,
