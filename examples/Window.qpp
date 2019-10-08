@@ -10,8 +10,16 @@ function exit()
 running = false
 end
 
-Sunflower.OnClose("exit")
+function paint()
+Sunflower.BeginPaint()
 
+Sunflower.DrawPixel(5,5,100)
+
+Sunflower.EndPaint()
+end
+
+Sunflower.OnClose("exit")
+Sunflower.OnPaint("paint")
 
 while running == true
 do

@@ -88,9 +88,11 @@ extern "C"
 		return 1;
 	}
 	
-	static int32_t _cdecl _lua_getrect(lua_State* state)
+	static int32_t _cdecl _lua_getrect(
+		struct lua_State* const state
+	)
 	{
-		RECT rect;
+		RECT rect{};
 		GetWindowRect((HWND)lua_tointeger(state, 1),&rect);
 		lua_pushinteger(state, rect.bottom);
 		lua_pushinteger(state, rect.left);
@@ -99,7 +101,22 @@ extern "C"
 		return 4;
 	}
 
-	static int32_t _cdecl _lua_validaterect(lua_State* state)
+	static int32_t _cdecl _lua_getclientrect(
+		struct lua_State* const state
+	)
+	{
+		RECT rect{};
+		GetClientRect((HWND)lua_tointeger(state, 1), &rect);
+		lua_pushinteger(state, rect.bottom);
+		lua_pushinteger(state, rect.left);
+		lua_pushinteger(state, rect.right);
+		lua_pushinteger(state, rect.top);
+		return 4;
+	}
+
+	static int32_t _cdecl _lua_validaterect(
+		struct lua_State* const state
+	)
 	{
 		ValidateRect((HWND)lua_tointeger(state, 1), 0);
 		return 0;
@@ -337,7 +354,75 @@ extern "C"
 		return 1;
 	}
 
+	static int32_t _cdecl _lua_allocpaintstruct(
+		struct lua_State* const state
+	)
+	{
+		PAINTSTRUCT* const ps = new PAINTSTRUCT();
+		lua_pushinteger(state, (lua_Integer)(ps));
+		return 1;
+	}
 
+	static int32_t _cdecl _lua_freepaintstruct(
+		struct lua_State* const state
+	)
+	{
+		PAINTSTRUCT* const ps = (PAINTSTRUCT * const)lua_tointeger(state, 1);
+		if (ps) delete(ps);
+		lua_pushinteger(state, (lua_Integer)(0));
+		return 1;
+	}
+
+	static int32_t _cdecl _lua_setpixel(
+		struct lua_State* const state
+	)
+	{
+
+		lua_pushinteger(state,
+			(lua_Integer)SetPixel(
+			(HDC)lua_tointeger(state,1),
+				(int)lua_tointeger(state,2),
+				(int)lua_tointeger(state,3),
+				(COLORREF)lua_tointeger(state,4)
+			));
+		return 1;
+	}
+
+	static int32_t _cdecl _lua_createcompatibledc(
+		struct lua_State* const state
+	)
+	{
+		lua_pushinteger(state,(lua_Integer)(CreateCompatibleDC((HDC)(lua_tointeger(state, 1)))));
+		return 1;
+	}
+
+	static int32_t _cdecl _lua_deletedc(
+		struct lua_State* const state
+	)
+	{
+		lua_pushboolean(state, (lua_Integer)(DeleteDC((HDC)(lua_tointeger(state, 1)))));
+		return 1;
+	}
+
+	static int32_t _cdecl _lua_bitblt(
+		struct lua_State* const state
+	)
+	{
+		lua_pushboolean(state,
+			BitBlt(
+			(HDC)lua_tointeger(state,1),
+				(int)lua_tointeger(state, 2),
+				(int)lua_tointeger(state, 3),
+				(int)lua_tointeger(state, 4),
+				(int)lua_tointeger(state, 5),
+				(HDC)lua_tointeger(state, 6),
+				(int)lua_tointeger(state, 7),
+				(int)lua_tointeger(state, 8),
+				(DWORD)lua_tointeger(state, 9)));
+		return 1;
+	}
+
+	
 
 	static BOOL CALLBACK _callback_enumproc(HWND hwnd, LPARAM lp)
 	{
@@ -370,6 +455,13 @@ extern "C"
 		return 1;
 	}
 	
+	static int32_t _cdecl _lua_getdc(
+		struct lua_State* const state
+	)
+	{
+		lua_pushinteger(state,(lua_Integer)GetDC((HWND)lua_tointeger(state, 1)));
+		return 1;
+	}
 
 	static int32_t _cdecl _lua_enumwindows(lua_State* state)
 	{
@@ -468,71 +560,86 @@ extern "C"
 	return 0;
 }
 
-	constexpr long FOO_COUNT = 44;
-
+	constexpr long FOO_COUNT = 52;
+	
 	const char* sckeys[FOO_COUNT] = {
-		"BeginPaint",
-		"BlockInput",
-		"ClientToScreen",
-		"CursorPosition",
-		"CreateWindow",
-		"DestroyWindow",
-		"DispatchMessage",
-		"EndPaint",
-		"EnumWindows",
-		"Find",
-		"GetClassName",
-		"GetDesktop",
-		"GetForeground",
-		"GetMessage",
-		"GetName",
-		"GetProcessId",
-		"GetRect",
-		"GetScreenMetrics",
-		"GetWindowHandle",
-		"HideMenu",
-		"InvalidateRect",
-		"KeyDown",
-		"KeyPressed",
-		"KillTimer",
-		"MessageBox",
-		"PeekMessage",
-		"PostMessage",
-		"PostQuitMessage",
-		"Proc",
-		"RegisterEvent",
-		"RegisterHotkey",
-		"ReleaseDC",
-		"RetrieveMessage",
-		"SendMessage",
-		"SetActive",
-		"SetFocus",
-		"SetForeground",
-		"SetTimer",
-		"SetTitle",
-		"TranslateMessage",
-		"Show",
-		"Update",
-		"ValidateRect",
-		"WindowFromPoint"
+		"AllocPaintStruct",		   
+		"BeginPaint",			   
+		"BitBlt",				   
+		"BlockInput",			   
+		"ClientToScreen",		   
+		"CursorPosition",		   
+		"CreateCompatibleDC",	   
+		"CreateWindow",			   
+		"DeleteDC",				   
+		"DestroyWindow",		   
+		"DispatchMessage",		   
+		"EndPaint",				   
+		"EnumWindows",			   
+		"Find",					   
+		"FreePaintStruct",		   
+		"GetDC",
+		"GetClassName",			   
+		"GetDesktop",			   
+		"GetForeground",		   
+		"GetMessage",			   
+		"GetName",				   
+		"GetProcessId",	
+		"GetClientRect",
+		"GetRect",				   
+		"GetScreenMetrics",		   
+		"GetWindowHandle",		   
+		"HideMenu",				   
+		"InvalidateRect",		   
+		"KeyDown",				   
+		"KeyPressed",			   
+		"KillTimer",			   
+		"MessageBox",			   
+		"PeekMessage",			   
+		"PostMessage",			   
+		"PostQuitMessage",		   
+		"Proc",					   
+		"RegisterEvent",		   
+		"RegisterHotkey",		   
+		"ReleaseDC",			   
+		"RetrieveMessage",		   
+		"SendMessage",			   
+		"SetActive",			   
+		"SetFocus",				   
+		"SetForeground",		   
+		"SetPixel",				   
+		"SetTimer",				   
+		"SetTitle",				   
+		"TranslateMessage",		   
+		"Show",					   
+		"Update",				   
+		"ValidateRect",			   
+		"WindowFromPoint"		   
 	};
 	const lua_CFunction scfooes[FOO_COUNT] = {
+		_lua_allocpaintstruct,
 		_lua_beginpaint,
+		_lua_bitblt,
 		_lua_blockinput,
 		_lua_clienttoscreen,
 		_lua_cursorposition,
+		_lua_createcompatibledc,
 		_lua_createwindow,
+		_lua_deletedc,
 		_lua_destroywindow,
 		_lua_dispatchmessage,
 		_lua_endpaint,
 		_lua_enumwindows,
 		_lua_findwindow,
+		_lua_freepaintstruct,
+		_lua_getdc,
 		_lua_getclassname,
 		_lua_getdesktop,
 		_lua_getforegroundwindow,
 		_lua_getmessage,
 		_lua_getname,
 		_lua_getprocessid,
+		_lua_getclientrect,
 		_lua_getrect,
 		_lua_getscreenmetrics,
 		_lua_getwindowhandle,
@@ -554,6 +661,7 @@ extern "C"
 		_lua_setactive,
 		_lua_setfocus,
 		_lua_setforeground,
+		_lua_setpixel,
 		_lua_settimer,
 		_lua_settitle,
 		_lua_translatemessage,
