@@ -105,10 +105,11 @@ Sunflower.buffer = windows.CreateCompatibleDC(Sunflower.dc)
 end
 
 function Sunflower.EndPaint()
-windows.BitBlt(Sunflower.dc,0,0,50,50,Sunflower.buffer,0,0,Sunflower.raster.srccopy)
+windows.BitBlt(Sunflower.dc,Sunflower.client.position.left,Sunflower.client.position.top,Sunflower.client.position.right,Sunflower.client.position.bottom,Sunflower.buffer,0,0,Sunflower.raster.srccopy)
 windows.DeleteDC(dc)
-windows.DeleteDC(buffer)
+windows.DeleteDC(hdc)
 Sunflower.dc = 0
+Sunflower.hdc = 0
 Sunflower.buffer = 0
 windows.EndPaint(Sunflower.hwnd,Sunflower.paintstruct)
 Sunflower.paintstruct = windows.FreePaintStruct(Sunflower.paintstruct)
@@ -144,5 +145,9 @@ end
 end
 
 function Sunflower.Fill(color)
-windows.FillRect(Sunflower.hdc,color,Sunflower.client.position.bottom,Sunflower.client.position.left,Sunflower.client.position.right,Sunflower.client.position.top)
+windows.FillRect(Sunflower.dc,color,Sunflower.client.position.bottom,Sunflower.client.position.left,Sunflower.client.position.right,Sunflower.client.position.top)
 end
+
+function Sunflower.DrawRect(x1,y1,x2,y2,color)
+    windows.FillRect(Sunflower.dc,color,y2,x1,x2,y1)
+    end
