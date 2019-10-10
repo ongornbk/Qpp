@@ -17,7 +17,7 @@ lua_CFunction EventPaint = nullptr;
 lua_CFunction EventHover = nullptr;
 lua_CFunction EventClose = nullptr;
 lua_CFunction EventQuit = nullptr;
-
+lua_CFunction EventCreate = nullptr;
 
 LRESULT __stdcall WindowProcedure(HWND window, uint32_t msg, WPARAM wp, LPARAM lp)
 
@@ -47,6 +47,10 @@ LRESULT __stdcall WindowProcedure(HWND window, uint32_t msg, WPARAM wp, LPARAM l
 		return 0;
 	case WM_QUIT:
 		if (HandleEvent(EventQuit))
+			return DefWindowProc(window, msg, wp, lp);
+		return 0;
+	case WM_CREATE:
+		if (HandleEvent(EventCreate))
 			return DefWindowProc(window, msg, wp, lp);
 		return 0;
 	default:

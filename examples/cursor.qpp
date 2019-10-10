@@ -11,5 +11,5 @@ local bottom,left,right,top = windows.GetRect(console_handle)
 local x,y = windows.CursorPosition()
 x = x - left
 y = y - top
-conio.DrawPixel(x,y,x * y,20)
+conio.DrawPixel(x,y,x * y,2)
 end

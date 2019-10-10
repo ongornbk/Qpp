@@ -1,6 +1,6 @@
 import("conio")
 conio.SetTitle("Snowrain")
-conio.SetColor(15)
+conio.ShowCursor(false)
 import("system")
 import("windows")
 import("math")

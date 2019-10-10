@@ -6,7 +6,8 @@ conio.Print("Time to shutdown : ")
 
 
 
-local is = conio.Getline();
+local is = conio.Getline()
+conio.ShowCursor(false)
 local lc = string.sub(is,-1)
 local ctt = 0
 if lc == 'm'

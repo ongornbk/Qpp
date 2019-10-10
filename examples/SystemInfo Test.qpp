@@ -1,7 +1,6 @@
 
 import("conio")
 conio.SetTitle("SystemInfo")
-conio.SetColor(15)
 
 conio.Println("Major " .. get_setting("System.major"))
 conio.Println("Minor " .. get_setting("System.minor"))

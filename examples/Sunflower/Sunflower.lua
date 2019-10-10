@@ -2,9 +2,23 @@ require "Sunflower/vector"
 
 Sunflower = {}
 
+Sunflower.client = {}
+Sunflower.client.position = {}
+Sunflower.client.position.left = 0
+Sunflower.client.position.top = 0
+Sunflower.client.position.bottom = 0
+Sunflower.client.position.right = 0
+Sunflower.position = {}
+Sunflower.position.left = 0
+Sunflower.position.top = 0
+Sunflower.position.bottom = 0
+Sunflower.position.right = 0
+Sunflower.width = 0
+Sunflower.height = 0
 Sunflower.window = 0
 Sunflower.hwnd = 0
 Sunflower.dc = 0
+Sunflower.hdc = 0
 Sunflower.lpmsg = 0
 Sunflower.msg = 0
 Sunflower.wparam = 0
@@ -80,9 +94,13 @@ windows.RegisterEvent(0x02a1,foo)
 end
 
 function Sunflower.BeginPaint()
+Sunflower.client.position.bottom, Sunflower.client.position.left, Sunflower.client.position.right, Sunflower.client.position.top = windows.GetClientRect(Sunflower.hwnd)
+Sunflower.position.bottom, Sunflower.position.left, Sunflower.position.right, Sunflower.position.top = windows.GetRect(Sunflower.hwnd)
+Sunflower.width = Sunflower.client.position.right - Sunflower.client.position.left
+Sunflower.height = Sunflower.client.position.bottom - Sunflower.client.position.top
 Sunflower.dc = windows.GetDC(Sunflower.hwnd)
 Sunflower.paintstruct = windows.AllocPaintStruct()
-windows.BeginPaint(Sunflower.hwnd,Sunflower.paintstruct)
+Sunflower.hdc = windows.BeginPaint(Sunflower.hwnd,Sunflower.paintstruct)
 Sunflower.buffer = windows.CreateCompatibleDC(Sunflower.dc)
 end
 
@@ -97,5 +115,34 @@ Sunflower.paintstruct = windows.FreePaintStruct(Sunflower.paintstruct)
 end
 
 function Sunflower.DrawPixel(x,y,color)
-windows.SetPixel(Sunflower.buffer,x,y,color)
+windows.SetPixel(Sunflower.hdc,x,y,color)
+end
+
+function Sunflower.GetTaskBarHeight()
+
+if tonumber(get_setting("System.major")) >= 10
+then
+
+local taskBar = windows.Find("Shell_traywnd",0)
+local bottom, left, right, top = windows.GetRect(taskBar)
+
+if taskBar
+then
+return bottom - top
+end
+return -1
+end
+return 0
+end
+
+function Sunflower.ShowTaskBar(flag)
+if tonumber(get_setting("System.major")) >= 10
+then
+local taskBar = windows.Find("Shell_traywnd", 0);
+windows.Show(taskBar, flag);
+end
+end
+
+function Sunflower.Fill(color)
+windows.FillRect(Sunflower.hdc,color,Sunflower.client.position.bottom,Sunflower.client.position.left,Sunflower.client.position.right,Sunflower.client.position.top)
 end

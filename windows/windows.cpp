@@ -345,6 +345,19 @@ extern "C"
 		return 1;
 	}
 
+	static int32_t _cdecl _lua_fillrect(
+		struct lua_State* const state
+	)
+	{
+		RECT rect{};
+		rect.bottom = (LONG)lua_tointeger(state, 3);
+		rect.left = (LONG)lua_tointeger(state, 4);
+		rect.right = (LONG)lua_tointeger(state, 5);
+		rect.top = (LONG)lua_tointeger(state, 6);
+		lua_pushinteger(state, (lua_Integer)(FillRect((HDC)lua_tointeger(state, 1), &rect, (HBRUSH)lua_tointeger(state, 2))));
+		return 1;
+	}
+
 	static int32_t _cdecl _lua_endpaint(
 		struct lua_State* const state
 	)
@@ -554,13 +567,21 @@ extern "C"
 			lua_pcall(state, 0, 0, 0);
 			return 0;
 		};
+	case WM_CREATE:
+		EventQuit = [](lua_State* state)
+		{
+			lua_pcall(state, 0, 0, 0);
+			lua_getglobal(state, lua_events[WM_CREATE].c_str());
+			lua_pcall(state, 0, 0, 0);
+			return 0;
+		};
 		break;
 	}
 	
 	return 0;
 }
 
-	constexpr long FOO_COUNT = 52;
+	constexpr long FOO_COUNT = 53;
 	
 	const char* sckeys[FOO_COUNT] = {
 		"AllocPaintStruct",		   
@@ -576,7 +597,8 @@ extern "C"
 		"DispatchMessage",		   
 		"EndPaint",				   
 		"EnumWindows",			   
-		"Find",					   
+		"Find",		
+		"FillRect",
 		"FreePaintStruct",		   
 		"GetDC",
 		"GetClassName",			   
@@ -631,6 +653,7 @@ extern "C"
 		_lua_endpaint,
 		_lua_enumwindows,
 		_lua_findwindow,
+		_lua_fillrect,
 		_lua_freepaintstruct,
 		_lua_getdc,
 		_lua_getclassname,
