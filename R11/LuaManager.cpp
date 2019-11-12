@@ -41,7 +41,8 @@ extern "C"
 
 
 
-static int32_t _cdecl _lua_import(lua_State* state)
+static int32_t _cdecl _lua_import(
+	struct lua_State* const state)
 {
 	std::string pckpath = lua_tostring(state, 1);
 	std::string pckname;
@@ -60,7 +61,7 @@ static int32_t _cdecl _lua_import(lua_State* state)
 	}
 	catch (std::exception exception)
 	{
-		MessageBoxA(NULL, exception.what(), "Dll Error", MB_OK);
+		MessageBoxA(NULL, exception.what(), "DLL Error", MB_OK);
 		return 0;
 	}
 	return 0;
@@ -85,7 +86,7 @@ static int32_t _cdecl _lua_importmanaged(lua_State* state)
 	}
 	catch (std::exception exception)
 	{
-		MessageBoxA(NULL, exception.what(), "Dll Error", MB_OK);
+		MessageBoxA(NULL, exception.what(), "DLL Error", MB_OK);
 		return 0;
 	}
 	return 0;
@@ -111,7 +112,7 @@ static int32_t _cdecl _lua_import_as(lua_State* state)
 	}
 	catch (std::exception exception)
 	{
-		MessageBoxA(NULL, exception.what(), "Dll Error", MB_OK);
+		MessageBoxA(NULL, exception.what(), "DLL Error", MB_OK);
 		return 0;
 	}
 	return 0;
@@ -327,7 +328,7 @@ Urlmon::Urlmon()
 	}
 	else
 	{
-		MessageBoxA(NULL, ("Error! urlmon.dll! not found! at: " + urlmonpath).c_str(), "Error!", NULL);
+		MessageBoxA(NULL, ("Error! compatible urlmon.dll! not found! at: " + urlmonpath + "\n Some utilities may not work properly!").c_str(), "Critical Warning!", NULL);
 	}
 }
 

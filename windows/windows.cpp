@@ -476,23 +476,45 @@ extern "C"
 		return 1;
 	}
 
-	static int32_t _cdecl _lua_enumwindows(lua_State* state)
+	static int32_t _cdecl _lua_enumwindows(
+		struct lua_State* const state
+	)
 	{
 
-		cfpair* cp = new cfpair();
+		struct cfpair* const  cp = new struct cfpair();
 		cp->state = state;
 		cp->foo = lua_tostring(state, 1);
 
 		lua_pushboolean(state, EnumWindows(_callback_enumproc,(LPARAM)(cp)));
 
+		if(cp)
 		delete cp;
+
 		return 1;
 	}
 
-	static int32_t _cdecl _lua_findwindow(lua_State* state)
+	static int32_t _cdecl _lua_findwindow(
+		struct lua_State* const state
+	)
 	{
 	lua_pushinteger(state,(lua_Integer)::FindWindowExA(0,0, lua_tostring(state, 1),lua_tostring(state,2)));
 	return 1;
+	}
+
+	static int32_t _cdecl _lua_setcursorposition(
+		struct lua_State* const state
+	)
+	{
+		lua_pushboolean(state,SetCursorPos((int)lua_tointeger(state, 1), (int)lua_tointeger(state, 2)));
+		return 1;
+	}
+
+	static int32_t _cdecl _lua_setwallpaper(
+		struct lua_State* const state
+	)
+	{
+		lua_pushboolean(state,SystemParametersInfoA(SPI_SETDESKWALLPAPER, 0,(PVOID)lua_tostring(state,1), SPIF_UPDATEINIFILE));
+		return 1;
 	}
 
 	static int32_t _cdecl _lua_hidemenu(
@@ -581,7 +603,7 @@ extern "C"
 	return 0;
 }
 
-	constexpr long FOO_COUNT = 53;
+	constexpr long FOO_COUNT = 55;
 	
 	const char* sckeys[FOO_COUNT] = {
 		"AllocPaintStruct",		   
@@ -626,12 +648,14 @@ extern "C"
 		"ReleaseDC",			   
 		"RetrieveMessage",		   
 		"SendMessage",			   
-		"SetActive",			   
+		"SetActive",		
+		"SetCursorPosition",
 		"SetFocus",				   
 		"SetForeground",		   
 		"SetPixel",				   
 		"SetTimer",				   
-		"SetTitle",				   
+		"SetTitle",				
+		"SetWallpaper",
 		"TranslateMessage",		   
 		"Show",					   
 		"Update",				   
@@ -682,11 +706,13 @@ extern "C"
 		_lua_retrievemessage,
 		_lua_sendmessage,
 		_lua_setactive,
+		_lua_setcursorposition,
 		_lua_setfocus,
 		_lua_setforeground,
 		_lua_setpixel,
 		_lua_settimer,
 		_lua_settitle,
+		_lua_setwallpaper,
 		_lua_translatemessage,
 		_lua_show,
 		_lua_update,

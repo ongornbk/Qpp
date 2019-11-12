@@ -12,8 +12,8 @@ map.food.x = 10
 map.food.y = 10
 
 function map.CreateFood()
-    map.food.x = math.random(1,35)
-    map.food.y = math.random(1,16)
+    map.food.x = math.random(1,map.width)
+    map.food.y = math.random(1,map.height)
 end
 
 function map.Draw()

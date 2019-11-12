@@ -1,3 +1,4 @@
+
 Snake = {}
 
 function Snake.new()
@@ -8,7 +9,8 @@ return
     velocity = {},
     lastposition = {},
     color = 0,
-    key = {}
+    key = {},
+    pc = false
 }
 end
 
@@ -66,30 +68,88 @@ end
     map.Print(snake.element[snake.size].x,snake.element[snake.size].y,"*")
     end
 
-    map.Print(snake.lastposition.x,snake.lastposition.y," ")
+    map.Print(snake.lastposition.x,snake.lastposition.y,".")
 end
 
 function Snake.Update(snake)
 
-    if(win.KeyDown(snake.key[0]))
+if snake.pc == true
+then
+    if math.random(0,3) == 1
+    then
+        if snake.element[0].x < map.food.x
+        then
+            if snake.velocity.x == -1
+            then
+                snake.velocity.x = 0
+                snake.velocity.y = 1
+            else
+                snake.velocity.x = 1
+                snake.velocity.y = 0
+            end
+        else
+            if snake.element[0].x > map.food.x
+            then
+                if snake.velocity.x == 1
+                then
+                    snake.velocity.x = 0
+                    snake.velocity.y = 1
+                else
+                    snake.velocity.x = -1
+                    snake.velocity.y = 0
+                end
+            else
+                if snake.element[0].y < map.food.y
+                then
+                    if snake.velocity.y == -1
+                    then
+                        snake.velocity.x = 1
+                        snake.velocity.y = 0
+                    else
+                        snake.velocity.x = 0
+                        snake.velocity.y = 1
+                    end
+                else
+                    if snake.element[0].y > map.food.y
+                    then
+                        if snake.velocity.y == 1
+                        then
+                            snake.velocity.x = 1
+                            snake.velocity.y = 0
+                        else
+                            snake.velocity.x = 0
+                            snake.velocity.y = -1
+                        end
+                    end
+                end
+            end
+        end
+    end
+
+else
+
+    if(win.KeyDown(snake.key[0])) and snake.velocity.y ~= 1
 then
     snake.velocity.x = 0
     snake.velocity.y = -1
 else
 
-    if(win.KeyDown(snake.key[1]))
+    if(win.KeyDown(snake.key[1])) and snake.velocity.x ~= -1
+
     then
         snake.velocity.x = 1
         snake.velocity.y = 0
     else
 
-        if(win.KeyDown(snake.key[2]))
+        if(win.KeyDown(snake.key[2])) and snake.velocity.x ~= 1
+
         then
             snake.velocity.x = -1
             snake.velocity.y = 0
         else
 
-            if(win.KeyDown(snake.key[3]))
+        if(win.KeyDown(snake.key[3])) and snake.velocity.y ~= -1
+
             then
                 snake.velocity.x = 0
                 snake.velocity.y = 1
@@ -98,6 +158,8 @@ else
         end
 
     end
+
+end
 
 end
 
@@ -144,6 +206,7 @@ map.Print(map.food.x,0,"-")
 map.Print(map.width+1,map.food.y,"|")
 map.Print(map.food.x,map.height+1,"-")
 
+winmm.PlayAsync("score.wav")
 Snake.Grow(snake)
 map.CreateFood()
 

@@ -1,4 +1,5 @@
 import_as("conio","con")
+import("winmm")
 con.SetTitle("Snake!")
 
 require "map"
@@ -8,11 +9,11 @@ map.Begin()
 
 import_as("windows","win")
 
-
+local number_of_snakes = 5
 
 local snakes = {}
 
-for i = 0,1,1
+for i = 0,number_of_snakes,1
 do
 snakes[i] = Snake.new()
 snakes[i].element[0] = {}
@@ -23,10 +24,11 @@ snakes[i].velocity.y = 0
 snakes[i].lastposition.x = 0
 snakes[i].lastposition.y = 0
 snakes[i].color = (i%10)+1
-
+snakes[i].pc = true
 end
 
-
+snakes[0].pc = false
+snakes[1].pc = false
 
 snakes[0].key[0] = 0x26
 snakes[0].key[1] = 0x27
@@ -38,6 +40,7 @@ snakes[1].key[1] = 0x44
 snakes[1].key[2] = 0x41
 snakes[1].key[3] = 0x53
 
+
 con.ShowCursor(false)
 
 while true
@@ -48,14 +51,14 @@ do
 --SnakeBlue.Update()  
 --SnakeRed.Update()
 
-for i = 0,1,1
+for i = 0,number_of_snakes,1
 do
 Snake.Update(snakes[i])
 end
 
 map.Draw()
 
-for i = 0,1,1
+for i = 0,number_of_snakes,1
 do
 Snake.Draw(snakes[i])
 end
@@ -69,14 +72,15 @@ con.Println("Player Blue:")
 con.Println("x: " .. snakes[0].element[0].x .. " y: " .. snakes[0].element[0].y .. " ")
 con.Println("size: " .. tostring(snakes[0].size) .. "   ")
 con.Endline()
-con.Endline()
 con.Println("Player Red:")
 con.Println("x: " .. snakes[1].element[0].x .. " y: " .. snakes[1].element[0].y .. " ")
 con.Println("size: " .. tostring(snakes[1].size) .. "   ")
+con.Endline()
+
 con.Gotoxy(map.width / 2,0)
 con.Print("cpu usage: " .. get_cpu() .. "  ")
 
-sleep(75000000)
+sleep(5000000)
 
 
 

@@ -1,0 +1,38 @@
+import_as("windows","win")
+import_as("conio","con")
+con.SetTitle("Diablo 2 Cursor fix")
+
+local diablo_window = win.Find("Diablo II","Diablo II")
+local foreground = win.GetForeground()
+
+if diablo_window == 0
+then
+    con.Println("Diablo 2 Window not found!")
+    con.Pause()
+    goto END
+end
+
+con.Println("Diablo 2 Window has been found!")
+
+while diablo_window ~= 0
+do
+
+if diablo_window == foreground
+then
+
+local x,y = win.CursorPosition()
+local bottom,left,right,top = win.GetRect(diablo_window)
+x = math.max(x,left)
+x = math.min(x,right)
+y = math.max(y,top+3)
+y = math.min(y,bottom-22)
+win.SetCursorPosition(x,y+22)
+else
+sleep(100000000)
+end
+sleep(20000000)
+diablo_window = win.Find("Diablo II","Diablo II")
+foreground = win.GetForeground()
+end
+
+::END::
