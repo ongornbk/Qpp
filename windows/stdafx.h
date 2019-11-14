@@ -17,6 +17,7 @@
 #include <unordered_map>
 #include <ctime>
 #include <sal.h>
+#include <stack>
 
 #if _WIN64 
 #define CALL_CONV __stdcall

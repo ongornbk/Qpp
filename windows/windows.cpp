@@ -22,6 +22,7 @@ extern "C"
 
 	long close(const long arg)
 	{
+
 		return 0;
 	}
 
@@ -56,33 +57,43 @@ extern "C"
 	return 2;
 	}
 
-	static int32_t _cdecl _lua_getforegroundwindow(lua_State* state)
+	static int32_t _cdecl _lua_getforegroundwindow(
+		struct lua_State* const state
+	)
 	{
 		lua_pushinteger(state, (lua_Integer)GetForegroundWindow());
 		return 1;
 	}
 
-	static int32_t _cdecl _lua_show(lua_State* state)
+	static int32_t _cdecl _lua_show(
+		struct lua_State* const state
+	)
 	{
 		lua_pushboolean(state, ShowWindow((HWND)lua_tointeger(state, 1),(int)lua_tointeger(state,2)));
 		return 1;
 	}
 
-	static int32_t _cdecl _lua_setactive(lua_State* state)
+	static int32_t _cdecl _lua_setactive(
+		struct lua_State* const state
+	)
 	{
 		HWND previous = SetActiveWindow((HWND)lua_tointeger(state, 1));
 		lua_pushinteger(state,(lua_Integer)previous);
 		return 1;
 	}
 
-	static int32_t _cdecl _lua_setfocus(lua_State* state)
+	static int32_t _cdecl _lua_setfocus(
+		struct lua_State* const state
+	)
 	{
 		HWND previous = SetFocus((HWND)lua_tointeger(state, 1));
 		lua_pushinteger(state,(lua_Integer)previous);
 		return 1;
 	}
 
-	static int32_t _cdecl _lua_setforeground(lua_State* state)
+	static int32_t _cdecl _lua_setforeground(
+		struct lua_State* const state
+	)
 	{
 		lua_pushboolean(state,(SetForegroundWindow((HWND)lua_tointeger(state, 1))));
 		return 1;
@@ -134,25 +145,33 @@ extern "C"
 		return 0;
 	}
 	
-	static int32_t _cdecl _lua_killtimer(lua_State* state)
+	static int32_t _cdecl _lua_killtimer(
+		struct lua_State* const state
+	)
 	{
-		KillTimer((HWND)lua_tointeger(state, 1), lua_tointeger(state, 2));
-		return 0;
+		lua_pushboolean(state,KillTimer((HWND)lua_tointeger(state, 1), lua_tointeger(state, 2)));
+		return 1;
 	}
 
-	static int32_t _cdecl _lua_keypressed(lua_State* state)
+	static int32_t _cdecl _lua_keypressed(
+		struct lua_State* const state
+	)
 	{
 		lua_pushboolean(state, ((GetKeyState((int)lua_tointeger(state, 1)) & (short)0x8000) != 0));
 		return 1;
 	}
 	
-	static int32_t _cdecl _lua_keydown(lua_State* state)
+	static int32_t _cdecl _lua_keydown(
+		struct lua_State* const state
+	)
 	{
 		lua_pushboolean(state, ((GetKeyState((int)lua_tointeger(state, 1)) & (short)0x100) != 0));
 		return 1;
 	}
 
-	static int32_t _cdecl _lua_getprocessid(lua_State* state)
+	static int32_t _cdecl _lua_getprocessid(
+		struct lua_State* const state
+	)
 	{
 		DWORD PID;
 		::GetWindowThreadProcessId((HWND)lua_tointeger(state, 1), &PID);
@@ -160,7 +179,9 @@ extern "C"
 		return 1;
 	}
 
-	static int32_t _cdecl _lua_getname(lua_State* state)
+	static int32_t _cdecl _lua_getname(
+		struct lua_State* const state
+	)
 	{
 		char name[100];
 		GetWindowTextA((HWND)lua_tointeger(state, 1), name, 100);
@@ -423,15 +444,15 @@ extern "C"
 	{
 		lua_pushboolean(state,
 			BitBlt(
-			(HDC)lua_tointeger(state,1),
-				(int)lua_tointeger(state, 2),
-				(int)lua_tointeger(state, 3),
-				(int)lua_tointeger(state, 4),
-				(int)lua_tointeger(state, 5),
-				(HDC)lua_tointeger(state, 6),
-				(int)lua_tointeger(state, 7),
-				(int)lua_tointeger(state, 8),
-				(DWORD)lua_tointeger(state, 9)));
+			(HDC)lua_tointeger(state,1),//HDC
+				(int)lua_tointeger(state, 2),// X
+				(int)lua_tointeger(state, 3),// y
+				(int)lua_tointeger(state, 4),// CX
+				(int)lua_tointeger(state, 5),// CY
+				(HDC)lua_tointeger(state, 6),// HDC SRC
+				(int)lua_tointeger(state, 7),// X1
+				(int)lua_tointeger(state, 8),// Y1
+				(DWORD)lua_tointeger(state, 9)));// DWORD RASTER...
 		return 1;
 	}
 
@@ -557,9 +578,22 @@ extern "C"
 	case WM_TIMER:
 		EventTimer = [](lua_State* state)
 		{
-			lua_pcall(state, 0, 0, 0);
+			lua_pcall(state, 0,0, 0);
 			lua_getglobal(state, lua_events[WM_TIMER].c_str());
-			lua_pcall(state, 0, 0,0);
+			lua_pushinteger(state, Window::GetStack().top());
+			Window::GetStack().pop();
+			lua_pcall(state, 1, 0,0);
+			return 0;
+		};
+		break;
+	case WM_KEYDOWN:
+		EventKeyDown = [](lua_State* state)
+		{
+			lua_pcall(state, 0, 0, 0);
+			lua_getglobal(state, lua_events[WM_KEYDOWN].c_str());
+			lua_pushinteger(state, Window::GetStack().top());
+			Window::GetStack().pop();
+			lua_pcall(state, 1, 0, 0);
 			return 0;
 		};
 		break;

@@ -1,12 +1,37 @@
 #include "stdafx.h"
 #include "Window.h"
 
-lua_State* Window::m_state = nullptr;
+#include <stack>
+
+struct lua_State* Window::m_state = nullptr;
+
+namespace
+{
+	static std::stack<lua_Integer> m_ownstack;
+}
 
 bool _stdcall HandleEvent(lua_CFunction const foo)
 {
 	if (foo == nullptr)
 		return true;
+	foo(Window::m_state);
+	return false;
+}
+
+bool _stdcall HandleTimer(lua_CFunction const foo,const lua_Integer id) // Temp
+{
+	if (foo == nullptr)
+		return true;
+	m_ownstack.push(id);
+	foo(Window::m_state);
+	return false;
+}
+
+bool _stdcall HandleKeyDown(lua_CFunction const foo, const lua_Integer id) //Temp
+{
+	if (foo == nullptr)
+		return true;
+	m_ownstack.push(id);
 	foo(Window::m_state);
 	return false;
 }
@@ -18,6 +43,7 @@ lua_CFunction EventHover = nullptr;
 lua_CFunction EventClose = nullptr;
 lua_CFunction EventQuit = nullptr;
 lua_CFunction EventCreate = nullptr;
+lua_CFunction EventKeyDown = nullptr;
 
 LRESULT __stdcall WindowProcedure(HWND window, uint32_t msg, WPARAM wp, LPARAM lp)
 
@@ -25,12 +51,16 @@ LRESULT __stdcall WindowProcedure(HWND window, uint32_t msg, WPARAM wp, LPARAM l
 	switch (msg)
 	
 	{
-	case WM_TIMER:
-		if (HandleEvent(EventTimer))
-			return DefWindowProc(window, msg, wp, lp);
-		return 0;
 	case WM_PAINT:
 		if (HandleEvent(EventPaint))
+			return DefWindowProc(window, msg, wp, lp);
+		return 0;
+	case WM_TIMER:
+		if (HandleTimer(EventTimer,(lua_Integer)wp))
+			return DefWindowProc(window, msg, wp, lp);
+		return 0;
+	case WM_KEYDOWN:
+		if (HandleKeyDown(EventKeyDown, (lua_Integer)wp))
 			return DefWindowProc(window, msg, wp, lp);
 		return 0;
 	case WM_MOUSEHOVER:
@@ -59,7 +89,9 @@ LRESULT __stdcall WindowProcedure(HWND window, uint32_t msg, WPARAM wp, LPARAM l
 
 }
 
-Window::Window(lua_State* state)
+Window::Window(
+	struct lua_State* const state
+)
 {
 	m_state = state;
 	const wchar_t* myclass = L"myclass";
@@ -92,4 +124,9 @@ Window::~Window()
 		//CloseHandle(window);
 		window = NULL;
 	}
+}
+
+std::stack<lua_Integer>& Window::GetStack()
+{
+	return m_ownstack;
 }
