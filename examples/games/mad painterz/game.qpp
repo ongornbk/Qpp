@@ -1,0 +1,99 @@
+
+
+import("windows")
+import("winmm")
+
+require "Sunflower/Sunflower"
+require "player"
+require "npc"
+
+Sunflower.Start("Mad Painterz",1)
+Sunflower.SetTimer(0,15)
+Sunflower.SetTimer(1,500)
+
+local number_of_players = 2
+
+local running = true
+local xm,ym
+
+local Players = {}
+
+function Timer(id)
+
+    if id == 0
+    then
+    Sunflower.Update()
+    end
+
+    if id == 1
+    then
+Npcs.ChangeDirection()
+    end
+    
+end
+
+Sunflower.OnTimer("Timer")
+
+
+
+Npcs.Initialize(12)
+
+
+
+Players[0] = Player.new()
+Players[0].position.x = 50
+Players[0].position.y = 50
+Players[0].color = 9
+Players[0].size = 30
+Players[0].sized2 = 15
+Players[0].key.left = 0x25
+Players[0].key.top = 0x26
+Players[0].key.right = 0x27
+Players[0].key.bottom = 0x28
+
+Players[1] = Player.new()
+Players[1].position.x = Sunflower.width - 50
+Players[1].position.y = Sunflower.height - 50
+Players[1].color = 0
+Players[1].size = 30
+Players[1].sized2 = 15
+Players[1].key.left = 0x41
+Players[1].key.top = 0x57
+Players[1].key.right = 0x44
+Players[1].key.bottom = 0x53
+
+
+function exit()
+running = false
+end
+
+function paint()
+Sunflower.BeginPaint()
+
+Sunflower.Fill(13)
+
+Player.Update(Players[0],0)
+Player.Update(Players[1],0)
+Npcs.Update(0)
+Npcs.IntersectTest(Players[0])
+Npcs.IntersectTest(Players[1])
+
+Player.Render(Players[0])
+Player.Render(Players[1])
+Npcs.Render()
+
+Sunflower.EndPaint()
+
+end
+
+Sunflower.OnClose("exit")
+Sunflower.OnPaint("paint")
+
+
+while running == true
+do
+Sunflower.Run()
+Sunflower.Proc()
+end
+
+Sunflower.Close()
